@@ -32,7 +32,7 @@ export default function Landing() {
               className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-xl"
             >
               <Sparkles className="mr-2 h-4 w-4 text-primary-foreground" />
-              The #1 Platform for UGC Creators
+              Made for Canadian Creators
             </motion.div>
             
             <motion.h1 
@@ -41,8 +41,8 @@ export default function Landing() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-6xl font-black tracking-tight sm:text-8xl lg:text-9xl text-white drop-shadow-2xl leading-[1.1]"
             >
-              Where <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-foreground to-white/80">Creators & Brands</span> <br className="hidden sm:block" />
-              Build Together
+              Connect with Canada's <br className="hidden sm:block" />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-foreground to-white/80">Top UGC Creators</span>
             </motion.h1>
             
             <motion.p 
@@ -51,8 +51,7 @@ export default function Landing() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-xl md:text-2xl text-white/90 max-w-3xl text-balance font-medium leading-relaxed drop-shadow-lg"
             >
-              The unified ecosystem for elite UGC creators and forward-thinking brands. 
-              Discover, collaborate, and scale your creative impact.
+              TrueNorthUGC is the premier platform for discovering authentic Canadian user-generated content creators. Find the perfect creator for your brand or showcase your talents to top companies.
             </motion.p>
             
             <motion.div 
