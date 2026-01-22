@@ -111,7 +111,7 @@ export default function Landing() {
 
       <footer className="py-12 border-t bg-background">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>© 2024 UGC Folio. All rights reserved.</p>
+          <p>© 2026 TrueNorthUGC. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <a href="#" className="hover:text-primary transition-colors">Privacy</a>
             <a href="#" className="hover:text-primary transition-colors">Terms</a>
