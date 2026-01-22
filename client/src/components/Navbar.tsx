@@ -79,11 +79,18 @@ export function Navbar() {
                   Sign In
                 </Button>
               </a>
-              <a href="/api/login">
-                <Button className="shadow-lg shadow-primary/20">
-                  Join as Creator
-                </Button>
-              </a>
+              <div className="flex items-center gap-2">
+                <a href="/api/login">
+                  <Button className="shadow-lg shadow-primary/20">
+                    Join as Creator
+                  </Button>
+                </a>
+                <a href="/api/login">
+                  <Button variant="outline" className="border-primary/30 hover:bg-primary/5">
+                    Join as Brand
+                  </Button>
+                </a>
+              </div>
             </div>
           )}
         </div>
