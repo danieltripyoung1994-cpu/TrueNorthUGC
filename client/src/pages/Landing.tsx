@@ -79,23 +79,41 @@ export default function Landing() {
 
       {/* Features Grid */}
       <section className="py-24 bg-secondary/30">
+        <div className="container mx-auto px-4 text-center mb-16">
+          <h2 className="text-4xl font-black mb-4">Creators Across Every Niche</h2>
+          <p className="text-xl text-muted-foreground">From fitness to tech, find specialists in any content category</p>
+        </div>
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="flex flex-wrap justify-center gap-4 mb-24">
+            {["Fitness", "Wellness", "Travel", "Tech", "Beauty", "Fashion", "Food", "Lifestyle", "Gaming", "Parenting"].map((niche) => (
+              <div key={niche} className="px-6 py-3 bg-background rounded-full border border-border/50 shadow-sm font-bold text-lg hover-elevate cursor-default">
+                {niche}
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black mb-4">Why TrueNorthUGC?</h2>
+            <p className="text-xl text-muted-foreground">We're building the bridge between Canadian creators and the brands that need them.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                icon: Users,
-                title: "Public Profile",
-                description: "Get a beautiful, shareable profile page that highlights your best work and social stats."
+                title: "Canadian Focus",
+                description: "Exclusively featuring creators from across Canada, understanding local culture and markets."
               },
               {
-                icon: TrendingUp,
-                title: "Brand Discovery",
-                description: "Get discovered by brands looking for authentic creators in your specific niche."
+                title: "Niche Matching",
+                description: "Filter by niche, location, and platform to find the perfect creator for your campaign."
               },
               {
-                icon: Sparkles,
-                title: "Showcase Portfolio",
-                description: "Display your best UGC videos and content in a high-quality, professional grid."
+                title: "Quality Content",
+                description: "Every creator is vetted to ensure high-quality, authentic content that resonates."
+              },
+              {
+                title: "Secure Platform",
+                description: "Direct communication with creators in a safe, professional environment."
               }
             ].map((feature, i) => (
               <motion.div
@@ -106,9 +124,6 @@ export default function Landing() {
                 transition={{ delay: i * 0.1 }}
                 className="bg-background rounded-3xl p-8 border border-border/50 shadow-sm hover:shadow-md transition-all"
               >
-                <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 text-primary">
-                  <feature.icon className="h-6 w-6" />
-                </div>
                 <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   {feature.description}
