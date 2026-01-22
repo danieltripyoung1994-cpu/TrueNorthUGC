@@ -292,6 +292,7 @@ export default function Landing() {
           </div>
           <div className="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-muted-foreground">
             <p>© 2026 TrueNorthUGC. All rights reserved.</p>
+            <p className="font-medium">Founded by Daniel Young.</p>
             <p className="flex items-center gap-1">Made with 🍁 in Canada</p>
           </div>
         </div>
