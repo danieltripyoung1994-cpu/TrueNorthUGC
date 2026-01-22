@@ -71,16 +71,16 @@ export function Navbar() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-4">
-              <Link href="/api/login">
+              <a href="/api/login">
                 <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
                   Sign In
                 </Button>
-              </Link>
-              <Link href="/api/login">
+              </a>
+              <a href="/api/login">
                 <Button className="shadow-lg shadow-primary/20">
                   Join as Creator
                 </Button>
-              </Link>
+              </a>
             </div>
           )}
         </div>
