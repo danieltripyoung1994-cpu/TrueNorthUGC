@@ -41,8 +41,8 @@ export default function Landing() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-6xl font-black tracking-tight sm:text-8xl lg:text-9xl text-white drop-shadow-2xl leading-[1.1]"
             >
-              Showcase your <br className="hidden sm:block" />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-foreground to-white/80">Creative Genius</span>
+              Where <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-foreground to-white/80">Creators & Brands</span> <br className="hidden sm:block" />
+              Build Together
             </motion.h1>
             
             <motion.p 
@@ -51,8 +51,8 @@ export default function Landing() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-xl md:text-2xl text-white/90 max-w-3xl text-balance font-medium leading-relaxed drop-shadow-lg"
             >
-              Build a stunning portfolio, connect with top brands, and grow your UGC career. 
-              The premium directory for elite content creators.
+              The unified ecosystem for elite UGC creators and forward-thinking brands. 
+              Discover, collaborate, and scale your creative impact.
             </motion.p>
             
             <motion.div 
