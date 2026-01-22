@@ -120,6 +120,65 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Brands Section */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row items-center gap-16">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="flex-1 space-y-8"
+            >
+              <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
+                Empowering <span className="text-primary">Brands</span> to Find the Perfect Voice
+              </h2>
+              <p className="text-xl text-muted-foreground leading-relaxed">
+                Stop scrolling and start scaling. Access our exclusive directory of vetted UGC creators who deliver high-converting content for your social campaigns.
+              </p>
+              <div className="space-y-4">
+                {[
+                  "Search by niche, location, and social metrics",
+                  "Direct access to creator portfolios and contact info",
+                  "Save time on creator outreach and vetting",
+                  "Find creators who actually match your brand's aesthetic"
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                      <ArrowRight className="h-4 w-4" />
+                    </div>
+                    <span className="font-medium">{item}</span>
+                  </div>
+                ))}
+              </div>
+              <Link href="/creators">
+                <Button size="lg" className="text-lg px-8 py-6 rounded-2xl shadow-xl shadow-primary/20">
+                  Find Your Next Creator
+                </Button>
+              </Link>
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="flex-1 relative"
+            >
+              <div className="aspect-square rounded-3xl bg-secondary/30 relative overflow-hidden border border-border/50 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent" />
+                <div className="absolute inset-0 flex items-center justify-center p-12">
+                   <div className="grid grid-cols-2 gap-4 w-full">
+                      <div className="h-32 bg-background rounded-2xl shadow-md border animate-pulse" />
+                      <div className="h-32 bg-background rounded-2xl shadow-md border animate-pulse delay-75" />
+                      <div className="h-32 bg-background rounded-2xl shadow-md border animate-pulse delay-150" />
+                      <div className="h-32 bg-background rounded-2xl shadow-md border animate-pulse delay-300" />
+                   </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       <footer className="py-12 border-t bg-background">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
           <p>© 2026 TrueNorthUGC. All rights reserved.</p>
