@@ -6,10 +6,10 @@ export function useCreators(filters?: { search?: string; niche?: string }) {
   return useQuery({
     queryKey: [api.creators.list.path, filters],
     queryFn: async () => {
-      const url = filters 
+      const url = filters
         ? `${api.creators.list.path}?${new URLSearchParams(filters as Record<string, string>).toString()}`
         : api.creators.list.path;
-        
+
       const res = await fetch(url, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch creators");
       return api.creators.list.responses[200].parse(await res.json());
@@ -23,10 +23,10 @@ export function useCreator(handle: string) {
     queryFn: async () => {
       const url = buildUrl(api.creators.getByHandle.path, { handle });
       const res = await fetch(url, { credentials: "include" });
-      
+
       if (res.status === 404) return null;
       if (!res.ok) throw new Error("Failed to fetch creator");
-      
+
       return api.creators.getByHandle.responses[200].parse(await res.json());
     },
     enabled: !!handle,
@@ -38,11 +38,11 @@ export function useMyCreatorProfile() {
     queryKey: [api.creators.me.path],
     queryFn: async () => {
       const res = await fetch(api.creators.me.path, { credentials: "include" });
-      
+
       if (res.status === 401) return null;
       if (res.status === 404) return null;
       if (!res.ok) throw new Error("Failed to fetch profile");
-      
+
       return api.creators.me.responses[200].parse(await res.json());
     },
     retry: false,
@@ -76,7 +76,9 @@ export function useUpdateCreatorProfile() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [api.creators.me.path] });
-      queryClient.invalidateQueries({ queryKey: [api.creators.getByHandle.path, data.handle] });
+      queryClient.invalidateQueries({
+        queryKey: [api.creators.getByHandle.path, data.handle],
+      });
       queryClient.invalidateQueries({ queryKey: [api.creators.list.path] });
       toast({
         title: "Profile Updated",
