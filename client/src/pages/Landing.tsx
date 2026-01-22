@@ -67,12 +67,12 @@ export default function Landing() {
                   <Search className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Link href="/api/login">
+              <a href="/api/login">
                 <Button size="lg" variant="outline" className="text-lg px-8 py-6 rounded-2xl border-2 bg-white/10 hover:bg-white/20 text-white border-white/40 backdrop-blur-sm">
                   Join as Creator
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-              </Link>
+              </a>
             </motion.div>
           </div>
         </div>
