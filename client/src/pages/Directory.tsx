@@ -76,10 +76,10 @@ export default function Directory() {
             <p className="text-destructive">Failed to load creators. Please try again.</p>
           </div>
         ) : creators?.length === 0 ? (
-          <div className="text-center py-20 bg-secondary/20 rounded-3xl">
+          <div className="text-center py-20 bg-secondary/10 rounded-3xl border border-dashed border-border">
             <Search className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
-            <h3 className="text-lg font-semibold">No creators found</h3>
-            <p className="text-muted-foreground">Try adjusting your search or filters.</p>
+            <h3 className="text-xl font-bold">No creators found</h3>
+            <p className="text-muted-foreground text-lg">Try adjusting your search or filters.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
