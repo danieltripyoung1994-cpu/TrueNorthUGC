@@ -22,7 +22,7 @@ export function Navbar() {
           <div className="bg-primary text-primary-foreground p-1.5 rounded-lg group-hover:rotate-6 transition-transform">
             <Sparkles className="h-5 w-5" />
           </div>
-          <span className="text-xl font-bold tracking-tight">UGC Folio</span>
+          <span className="text-xl font-bold tracking-tight">TrueNorthUGC</span>
         </Link>
 
         <div className="flex items-center gap-6">
