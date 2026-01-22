@@ -193,13 +193,79 @@ export default function Landing() {
         </div>
       </section>
 
-      <footer className="py-12 border-t bg-background">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>© 2026 TrueNorthUGC. All rights reserved.</p>
-          <div className="flex gap-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-primary transition-colors">Privacy</a>
-            <a href="#" className="hover:text-primary transition-colors">Terms</a>
-            <a href="#" className="hover:text-primary transition-colors">Twitter</a>
+      {/* CTA Section */}
+      <section className="py-24 bg-primary text-primary-foreground">
+        <div className="container mx-auto px-4 text-center max-w-4xl">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl font-black mb-6"
+          >
+            Ready to Get Started?
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-xl opacity-90 mb-10 leading-relaxed"
+          >
+            Whether you're a creator looking to grow your business or a brand seeking authentic content, TrueNorthUGC is your platform.
+          </motion.p>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <a href="/api/login">
+              <Button size="lg" variant="secondary" className="text-lg px-10 py-7 rounded-2xl w-full sm:w-auto">
+                Join as Creator
+              </Button>
+            </a>
+            <Link href="/creators">
+              <Button size="lg" variant="outline" className="text-lg px-10 py-7 rounded-2xl border-white/30 hover:bg-white/10 w-full sm:w-auto">
+                I'm a Brand
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      <footer className="py-24 border-t bg-background">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div className="col-span-1 md:col-span-2 space-y-6">
+              <div className="flex items-center gap-2">
+                <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-black text-xl">T</div>
+                <span className="text-2xl font-black tracking-tighter">TrueNorthUGC</span>
+              </div>
+              <p className="text-muted-foreground text-lg leading-relaxed max-w-sm">
+                Canada's premier platform connecting authentic UGC creators with brands looking for genuine content that resonates.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-bold text-lg mb-6">Platform</h4>
+              <ul className="space-y-4 text-muted-foreground">
+                <li><Link href="/creators" className="hover:text-primary transition-colors">Discover Creators</Link></li>
+                <li><a href="/api/login" className="hover:text-primary transition-colors">Join as Creator</a></li>
+                <li><Link href="/creators" className="hover:text-primary transition-colors">Find Creators</Link></li>
+                <li><a href="#" className="hover:text-primary transition-colors">About Us</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold text-lg mb-6">Legal</h4>
+              <ul className="space-y-4 text-muted-foreground">
+                <li><a href="#" className="hover:text-primary transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Terms of Service</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-muted-foreground">
+            <p>© 2026 TrueNorthUGC. All rights reserved.</p>
+            <p className="flex items-center gap-1">Made with 🍁 in Canada</p>
           </div>
         </div>
       </footer>
