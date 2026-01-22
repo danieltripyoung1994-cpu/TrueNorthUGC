@@ -148,13 +148,24 @@ export default function Landing() {
                 Empowering <span className="text-primary">Brands</span> to Find the Perfect Voice
               </h2>
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Stop scrolling and start scaling. Access our exclusive directory of vetted UGC creators who deliver high-converting content for your social campaigns.
+                Stop scrolling and start scaling. TrueNorthUGC is where top Canadian brands find vetted creators who deliver high-converting content.
               </p>
+              
               <div className="space-y-4">
+                <div className="p-6 bg-secondary/30 rounded-3xl border border-border/50">
+                  <h3 className="font-bold text-xl mb-2 flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                    For Brands: Showcase Your Vision
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Build your brand profile, post your requirements, and let the best Canadian creators come to you. Show creators exactly what your brand is about.
+                  </p>
+                </div>
+                
                 {[
-                  "Search by niche, location, and social metrics",
+                  "Create a dedicated brand profile",
+                  "Showcase your previous UGC collaborations",
                   "Direct access to creator portfolios and contact info",
-                  "Save time on creator outreach and vetting",
                   "Find creators who actually match your brand's aesthetic"
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
@@ -165,11 +176,19 @@ export default function Landing() {
                   </div>
                 ))}
               </div>
-              <Link href="/creators">
-                <Button size="lg" className="text-lg px-8 py-6 rounded-2xl shadow-xl shadow-primary/20">
-                  Find Your Next Creator
-                </Button>
-              </Link>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a href="/api/login">
+                  <Button size="lg" className="text-lg px-8 py-6 rounded-2xl shadow-xl shadow-primary/20">
+                    Register as a Brand
+                  </Button>
+                </a>
+                <Link href="/creators">
+                  <Button size="lg" variant="outline" className="text-lg px-8 py-6 rounded-2xl border-2">
+                    Browse Portfolios
+                  </Button>
+                </Link>
+              </div>
             </motion.div>
             <motion.div 
               initial={{ opacity: 0, x: 20 }}
@@ -179,12 +198,20 @@ export default function Landing() {
             >
               <div className="aspect-square rounded-3xl bg-secondary/30 relative overflow-hidden border border-border/50 shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent" />
-                <div className="absolute inset-0 flex items-center justify-center p-12">
-                   <div className="grid grid-cols-2 gap-4 w-full">
-                      <div className="h-32 bg-background rounded-2xl shadow-md border animate-pulse" />
-                      <div className="h-32 bg-background rounded-2xl shadow-md border animate-pulse delay-75" />
-                      <div className="h-32 bg-background rounded-2xl shadow-md border animate-pulse delay-150" />
-                      <div className="h-32 bg-background rounded-2xl shadow-md border animate-pulse delay-300" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-12 space-y-4">
+                   <div className="w-full h-1/2 bg-background rounded-2xl shadow-lg border p-6 space-y-4">
+                      <div className="h-4 w-1/3 bg-muted rounded animate-pulse" />
+                      <div className="h-8 w-full bg-muted/50 rounded animate-pulse" />
+                      <div className="grid grid-cols-3 gap-2">
+                        <div className="h-20 bg-muted/30 rounded-lg animate-pulse" />
+                        <div className="h-20 bg-muted/30 rounded-lg animate-pulse delay-75" />
+                        <div className="h-20 bg-muted/30 rounded-lg animate-pulse delay-150" />
+                      </div>
+                   </div>
+                   <div className="w-4/5 h-1/3 bg-background/80 rounded-2xl shadow-md border p-6 space-y-3 backdrop-blur-sm translate-x-8 -translate-y-4">
+                      <div className="h-3 w-1/4 bg-muted rounded animate-pulse" />
+                      <div className="h-4 w-full bg-muted/50 rounded animate-pulse" />
+                      <div className="h-4 w-2/3 bg-muted/50 rounded animate-pulse" />
                    </div>
                 </div>
               </div>
