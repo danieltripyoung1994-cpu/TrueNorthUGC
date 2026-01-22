@@ -25,9 +25,12 @@ export function Navbar() {
           <span className="text-xl font-bold tracking-tight">TrueNorthUGC</span>
         </Link>
 
-        <div className="flex items-center gap-12">
+        <div className="flex items-center gap-8">
           <Link href="/creators" className={`text-sm font-medium transition-colors hover:text-primary ${location === '/creators' ? 'text-primary' : 'text-muted-foreground'}`}>
             Browse Creators
+          </Link>
+          <Link href="/creators" className={`text-sm font-medium transition-colors hover:text-primary ${location === '/brands' ? 'text-primary' : 'text-muted-foreground'}`}>
+            Discover Brands
           </Link>
           
           {isLoading ? (
