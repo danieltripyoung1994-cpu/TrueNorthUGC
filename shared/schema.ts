@@ -1,18 +1,33 @@
-import { sql } from "drizzle-orm";
-import { pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, jsonb, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import { users } from "./models/auth";
 
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
+// Re-export auth models so they are available
+export * from "./models/auth";
+
+export const creators = pgTable("creators", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().unique(), // One profile per user
+  handle: text("handle").notNull().unique(),
+  name: text("name").notNull(),
+  bio: text("bio"),
+  profileImage: text("profile_image"),
+  niches: jsonb("niches").$type<string[]>().default([]),
+  socialLinks: jsonb("social_links").$type<{
+    tiktok?: string;
+    instagram?: string;
+    youtube?: string;
+  }>().default({}),
+  portfolio: jsonb("portfolio").$type<{
+    id: string;
+    title: string;
+    url: string; // Video URL
+    thumbnail?: string;
+  }[]>().default([]),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
-});
+export const insertCreatorSchema = createInsertSchema(creators).omit({ id: true });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export type Creator = typeof creators.$inferSelect;
+export type InsertCreator = z.infer<typeof insertCreatorSchema>;
