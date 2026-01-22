@@ -29,7 +29,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-xl"
+              className="inline-flex items-center rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-xl shadow-[0_0_20px_rgba(var(--primary),0.3)] animate-pulse"
             >
               <Sparkles className="mr-2 h-4 w-4 text-primary-foreground" />
               Made for Canadian Creators

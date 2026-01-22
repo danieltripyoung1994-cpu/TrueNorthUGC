@@ -19,10 +19,10 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="bg-primary text-primary-foreground p-1.5 rounded-lg group-hover:rotate-6 transition-transform">
+          <div className="bg-primary text-primary-foreground p-1.5 rounded-lg group-hover:rotate-6 transition-transform shadow-[0_0_15px_rgba(var(--primary),0.5)]">
             <Sparkles className="h-5 w-5" />
           </div>
-          <span className="text-xl font-bold tracking-tight">TrueNorthUGC</span>
+          <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80 drop-shadow-[0_0_8px_rgba(var(--primary),0.3)]">TrueNorthUGC</span>
         </Link>
 
         <div className="flex items-center gap-8">
