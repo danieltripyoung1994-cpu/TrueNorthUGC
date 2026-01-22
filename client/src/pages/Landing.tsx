@@ -11,7 +11,7 @@ export default function Landing() {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-20 pb-32 lg:pt-32 min-h-[80vh] flex items-center">
+      <section className="relative overflow-hidden min-h-[90vh] flex items-center pt-16">
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -20,57 +20,57 @@ export default function Landing() {
             backgroundPosition: 'center',
           }}
         >
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background z-0" />
         </div>
         
         <div className="container relative mx-auto px-4 z-10">
-          <div className="flex flex-col items-center text-center max-w-4xl mx-auto space-y-8">
+          <div className="flex flex-col items-center text-center max-w-5xl mx-auto space-y-10">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-medium text-white backdrop-blur-md"
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-xl"
             >
-              <Sparkles className="mr-2 h-3.5 w-3.5" />
+              <Sparkles className="mr-2 h-4 w-4 text-primary-foreground" />
               The #1 Platform for UGC Creators
             </motion.div>
             
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-5xl font-extrabold tracking-tight sm:text-7xl lg:text-8xl text-white drop-shadow-2xl"
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-6xl font-black tracking-tight sm:text-8xl lg:text-9xl text-white drop-shadow-2xl leading-[1.1]"
             >
               Showcase your <br className="hidden sm:block" />
-              <span className="text-primary-foreground">Creative Genius</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-foreground to-white/80">Creative Genius</span>
             </motion.h1>
             
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-xl text-white/90 max-w-2xl text-balance font-medium drop-shadow-md"
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-xl md:text-2xl text-white/90 max-w-3xl text-balance font-medium leading-relaxed drop-shadow-lg"
             >
               Build a stunning portfolio, connect with top brands, and grow your UGC career. 
-              The professional directory for modern content creators.
+              The premium directory for elite content creators.
             </motion.p>
             
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto"
             >
               <Link href="/creators">
-                <Button size="lg" className="text-lg px-8 py-6 rounded-2xl shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 transition-all">
+                <Button size="lg" className="text-xl px-10 py-8 rounded-3xl shadow-2xl shadow-primary/30 hover:scale-105 transition-all">
                   Browse Creators
-                  <Search className="ml-2 h-5 w-5" />
+                  <Search className="ml-3 h-6 w-6" />
                 </Button>
               </Link>
               <a href="/api/login">
-                <Button size="lg" variant="outline" className="text-lg px-8 py-6 rounded-2xl border-2 bg-white/10 hover:bg-white/20 text-white border-white/40 backdrop-blur-sm">
+                <Button size="lg" variant="outline" className="text-xl px-10 py-8 rounded-3xl border-2 bg-white/5 hover:bg-white/10 text-white border-white/30 backdrop-blur-xl hover:scale-105 transition-all">
                   Join as Creator
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <ArrowRight className="ml-3 h-6 w-6" />
                 </Button>
               </a>
             </motion.div>
