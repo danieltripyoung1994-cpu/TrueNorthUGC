@@ -58,6 +58,27 @@ export const api = {
       },
     },
   },
+  brands: {
+    me: {
+      method: 'GET' as const,
+      path: '/api/me/brand',
+      responses: {
+        200: z.custom<Brand>(),
+        404: errorSchemas.notFound,
+        401: errorSchemas.unauthorized,
+      },
+    },
+    updateMe: {
+      method: 'POST' as const,
+      path: '/api/me/brand',
+      input: insertBrandSchema.omit({ userId: true }),
+      responses: {
+        200: z.custom<Brand>(),
+        400: errorSchemas.validation,
+        401: errorSchemas.unauthorized,
+      },
+    },
+  },
 };
 
 export function buildUrl(path: string, params?: Record<string, string | number>): string {
