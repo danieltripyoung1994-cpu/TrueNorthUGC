@@ -124,25 +124,6 @@ export default function LaunchCampaign() {
 
             {/* Sidebar / Trust builders */}
             <aside className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">See Example Results</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="aspect-[9/16] bg-muted rounded-xl relative group overflow-hidden cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=300&h=533&fit=crop" className="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all" alt="UGC Example" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
-                        <Play className="h-6 w-6 text-white fill-white" />
-                      </div>
-                    </div>
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <Badge variant="secondary" className="bg-black/50 text-white backdrop-blur-sm border-0">SAMPLE - WATERMARKED</Badge>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
               <div className="space-y-4 p-4 border rounded-xl bg-muted/30">
                 <div className="flex items-start gap-3">
                   <ShieldCheck className="h-6 w-6 text-primary shrink-0" />
