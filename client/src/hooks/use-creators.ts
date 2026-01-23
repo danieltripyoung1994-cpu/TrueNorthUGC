@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, buildUrl, type InsertCreator } from "@shared/routes";
+import { api, buildUrl } from "@shared/routes";
+import { type InsertCreator } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 
 export function useCreators(filters?: { search?: string; niche?: string }) {

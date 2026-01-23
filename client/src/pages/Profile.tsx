@@ -51,7 +51,7 @@ export default function Profile() {
     );
   }
 
-  const isOwnProfile = user?.claims.sub === creator.userId;
+  const isOwnProfile = user?.id === creator.userId;
   const profileUrl = window.location.href;
 
   const shareToTwitter = () => {
