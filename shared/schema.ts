@@ -27,7 +27,22 @@ export const creators = pgTable("creators", {
   }[]>().default([]),
 });
 
+export const brands = pgTable("brands", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().unique(),
+  name: text("name").notNull(),
+  industry: text("industry"),
+  description: text("description"),
+  logo: text("logo"),
+  website: text("website"),
+  niches: jsonb("niches").$type<string[]>().default([]),
+});
+
 export const insertCreatorSchema = createInsertSchema(creators).omit({ id: true });
+export const insertBrandSchema = createInsertSchema(brands).omit({ id: true });
 
 export type Creator = typeof creators.$inferSelect;
 export type InsertCreator = z.infer<typeof insertCreatorSchema>;
+
+export type Brand = typeof brands.$inferSelect;
+export type InsertBrand = z.infer<typeof insertBrandSchema>;

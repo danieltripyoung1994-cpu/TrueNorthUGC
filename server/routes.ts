@@ -74,6 +74,39 @@ export async function registerRoutes(
     }
   });
 
+  // Brand Routes
+  app.get(api.brands.me.path, isAuthenticated, async (req, res) => {
+    const userId = (req.user as any).claims.sub;
+    const brand = await storage.getBrandByUserId(userId);
+    if (!brand) {
+      return res.status(404).json({ message: "Brand profile not found" });
+    }
+    res.json(brand);
+  });
+
+  app.post(api.brands.updateMe.path, isAuthenticated, async (req, res) => {
+    const userId = (req.user as any).claims.sub;
+    try {
+      const input = api.brands.updateMe.input.parse(req.body);
+      const existing = await storage.getBrandByUserId(userId);
+      let brand;
+      if (existing) {
+        brand = await storage.updateBrand(userId, input);
+      } else {
+        brand = await storage.createBrand({ ...input, userId });
+      }
+      res.json(brand);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({
+          message: err.errors[0].message,
+          field: err.errors[0].path.join('.'),
+        });
+      }
+      throw err;
+    }
+  });
+
   return httpServer;
 }
 
