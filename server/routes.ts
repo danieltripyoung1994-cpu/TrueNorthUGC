@@ -17,8 +17,8 @@ export async function registerRoutes(
 
   // List creators
   app.get(api.creators.list.path, async (req, res) => {
-    const search = req.query.search as string | undefined;
-    const niche = req.query.niche as string | undefined;
+    const search = (req.query.search as string) || undefined;
+    const niche = (req.query.niche as string) || undefined;
     const creators = await storage.getCreators(search, niche);
     res.json(creators);
   });

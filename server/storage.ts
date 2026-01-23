@@ -42,7 +42,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createCreator(insertCreator: InsertCreator): Promise<Creator> {
-    const [creator] = await db.insert(creators).values(insertCreator).returning();
+    const [creator] = await db.insert(creators).values([insertCreator]).returning();
     return creator;
   }
 
@@ -67,7 +67,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createBrand(insertBrand: InsertBrand): Promise<Brand> {
-    const [brand] = await db.insert(brands).values(insertBrand).returning();
+    const [brand] = await db.insert(brands).values([insertBrand]).returning();
     return brand;
   }
 
