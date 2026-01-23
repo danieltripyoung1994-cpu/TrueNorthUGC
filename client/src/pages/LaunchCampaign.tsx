@@ -12,17 +12,15 @@ export default function LaunchCampaign() {
     name: "Starter",
     price: "$499",
     features: [
-      "3 short-form UGC videos (15–30s)",
-      "Optimized for TikTok, Reels & ads",
-      "Creator matching included",
-      "1 light revision",
-      "Delivery in 7–10 days"
+      "Full access to contests and deals",
+      "Access a vetted network of creators",
+      "Access Spark Ad codes on winning submissions",
+      "Lifetime Access to Winning Submissions",
+      "Achieve Content-Market Fit Faster",
+      "Validate content organically"
     ],
-    upsells: [
-      { name: "Extra Video", price: "+$150" },
-      { name: "Raw Footage", price: "+$100" },
-      { name: "Ad Usage Rights", price: "+$200" }
-    ]
+    bonus: "Book a free onboarding call to get expert tips and maximize ROI by only paying for top-performing content.",
+    footer: "Cancel anytime"
   };
 
   return (
@@ -52,6 +50,7 @@ export default function LaunchCampaign() {
                     </div>
                     <div className="text-right">
                       <span className="text-3xl font-bold text-primary">{packageDetails.price}</span>
+                      <p className="text-xs text-muted-foreground">{packageDetails.footer}</p>
                     </div>
                   </div>
                 </CardHeader>
@@ -59,29 +58,27 @@ export default function LaunchCampaign() {
                   <div className="grid md:grid-cols-2 gap-8">
                     <div className="space-y-4">
                       <h3 className="font-semibold flex items-center gap-2 text-sm uppercase tracking-wider text-muted-foreground">
-                        Included in this package
+                        Here's what you'll get
                       </h3>
                       <ul className="space-y-3">
                         {packageDetails.features.map((feature) => (
                           <li key={feature} className="flex items-start gap-2">
                             <Check className="h-5 w-5 text-primary shrink-0" />
-                            <span>{feature}</span>
+                            <span className="text-sm font-medium">{feature}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
                     <div className="space-y-4">
-                      <h3 className="font-semibold flex items-center gap-2 text-sm uppercase tracking-wider text-muted-foreground">
-                        Available Add-ons
-                      </h3>
-                      <ul className="space-y-3">
-                        {packageDetails.upsells.map((upsell) => (
-                          <li key={upsell.name} className="flex items-center justify-between p-2 rounded-lg bg-muted/50 border border-border">
-                            <span className="text-sm font-medium">{upsell.name}</span>
-                            <span className="text-sm font-bold text-primary">{upsell.price}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      <div className="p-4 rounded-xl bg-primary/5 border border-primary/20 space-y-2">
+                        <h3 className="font-bold text-primary flex items-center gap-2">
+                          <Zap className="h-4 w-4" />
+                          BONUS
+                        </h3>
+                        <p className="text-sm leading-relaxed">
+                          {packageDetails.bonus}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
