@@ -32,7 +32,14 @@ export default function Pricing() {
       name: "Campaign Starter",
       price: "$499",
       description: "Get high-quality UGC for your brand",
-      features: ["3 Vetted UGC Videos", "Creator Matching", "Ad Usage Rights", "Fast 10-Day Delivery"],
+      features: [
+        "Full access to contests and deals",
+        "Vetted network of creators",
+        "Spark Ad codes on winning submissions",
+        "Lifetime Access to Winning Submissions",
+        "Achieve Content-Market Fit Faster",
+        "Validate content organically"
+      ],
       buttonText: "Start Campaign",
       variant: "default" as const,
       popular: true
