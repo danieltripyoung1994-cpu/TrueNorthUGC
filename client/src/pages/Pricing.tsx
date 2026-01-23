@@ -9,19 +9,31 @@ export default function Pricing() {
 
   const creatorTiers = [
     {
-      name: "Starter",
+      name: "Free",
       price: "$0",
-      description: "Basic profile for new creators",
-      features: ["Public Portfolio", "Up to 5 Portfolio Items", "Basic Analytics"],
+      description: "Start your creator journey",
+      features: [
+        "Make content",
+        "Access to all brands",
+        "Monetize your content",
+        "Explore paid opportunities"
+      ],
       buttonText: "Join for Free",
       variant: "outline" as const
     },
     {
-      name: "Pro",
-      price: "$19",
-      description: "Advanced tools for growing creators",
-      features: ["Unlimited Portfolio Items", "Detailed Performance Insights", "Verified Badge", "Priority Directory Listing"],
-      buttonText: "Upgrade to Pro",
+      name: "Exclusive",
+      price: "$19.99",
+      description: "Maximize your earnings and visibility",
+      features: [
+        "Unlimited access to brand deals",
+        "Verification badge",
+        "Top picks for brands",
+        "Top priority for all content",
+        "Retainer agreements",
+        "Tiered bonuses"
+      ],
+      buttonText: "Go Exclusive",
       variant: "default" as const,
       popular: true
     }
