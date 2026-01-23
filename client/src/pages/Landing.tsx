@@ -58,7 +58,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto"
+              className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto justify-center"
             >
               <Link href="/creators">
                 <Button size="lg" className="text-xl px-10 py-8 rounded-3xl shadow-2xl shadow-primary/30 hover:scale-105 transition-all">
@@ -66,9 +66,9 @@ export default function Landing() {
                   <Search className="ml-3 h-6 w-6" />
                 </Button>
               </Link>
-              <Link href="/creators">
+              <Link href="/pricing">
                 <Button size="lg" variant="outline" className="text-xl px-10 py-8 rounded-3xl border-2 bg-white/5 hover:bg-white/10 text-white border-white/30 backdrop-blur-xl hover:scale-105 transition-all">
-                  Discover Brands
+                  View Pricing
                   <ArrowRight className="ml-3 h-6 w-6" />
                 </Button>
               </Link>
@@ -177,15 +177,15 @@ export default function Landing() {
                 ))}
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a href="/api/login">
+            <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/api/login">
                   <Button size="lg" className="text-lg px-8 py-6 rounded-2xl shadow-xl shadow-primary/20">
                     Register as a Brand
                   </Button>
-                </a>
-                <Link href="/creators">
+                </Link>
+                <Link href="/pricing">
                   <Button size="lg" variant="outline" className="text-lg px-8 py-6 rounded-2xl border-2">
-                    Browse Portfolios
+                    View Pricing
                   </Button>
                 </Link>
               </div>
@@ -240,24 +240,18 @@ export default function Landing() {
           >
             Whether you're a creator looking to grow your business or a brand seeking authentic content, TrueNorthUGC is your platform.
           </motion.p>
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-          >
-            <a href="/api/login">
-              <Button size="lg" variant="secondary" className="text-lg px-10 py-7 rounded-2xl w-full sm:w-auto">
-                Join as Creator
-              </Button>
-            </a>
-            <Link href="/creators">
-              <Button size="lg" variant="outline" className="text-lg px-10 py-7 rounded-2xl border-white/30 hover:bg-white/10 w-full sm:w-auto">
-                I'm a Brand
-              </Button>
-            </Link>
-          </motion.div>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/api/login">
+                  <Button size="lg" variant="secondary" className="text-lg px-10 py-7 rounded-2xl w-full sm:w-auto">
+                    Join as Creator
+                  </Button>
+                </Link>
+                <Link href="/pricing">
+                  <Button size="lg" variant="outline" className="text-lg px-10 py-7 rounded-2xl border-white/30 hover:bg-white/10 w-full sm:w-auto">
+                    View Pricing
+                  </Button>
+                </Link>
+              </div>
         </div>
       </section>
 
@@ -277,9 +271,8 @@ export default function Landing() {
               <h4 className="font-bold text-lg mb-6">Platform</h4>
               <ul className="space-y-4 text-muted-foreground">
                 <li><Link href="/creators" className="hover:text-primary transition-colors">Discover Creators</Link></li>
+                <li><Link href="/pricing" className="hover:text-primary transition-colors">Pricing</Link></li>
                 <li><a href="/api/login" className="hover:text-primary transition-colors">Join as Creator</a></li>
-                <li><Link href="/creators" className="hover:text-primary transition-colors">Find Creators</Link></li>
-                <li><a href="#" className="hover:text-primary transition-colors">About Us</a></li>
               </ul>
             </div>
             <div>

@@ -29,20 +29,21 @@ export default function Pricing() {
 
   const brandTiers = [
     {
-      name: "Brand Basic",
-      price: "$49",
-      description: "Find your first UGC creators",
-      features: ["Search Directory", "Message up to 10 Creators/mo", "Basic Campaign Briefs"],
-      buttonText: "Get Access",
-      variant: "outline" as const
+      name: "Campaign Starter",
+      price: "$499",
+      description: "Get high-quality UGC for your brand",
+      features: ["3 Vetted UGC Videos", "Creator Matching", "Ad Usage Rights", "Fast 10-Day Delivery"],
+      buttonText: "Start Campaign",
+      variant: "default" as const,
+      popular: true
     },
     {
       name: "Enterprise",
-      price: "$199",
+      price: "Custom",
       description: "Scale your UGC strategy",
       features: ["Unlimited Messaging", "Advanced Filtering", "Custom Briefs", "Dedicated Support"],
       buttonText: "Contact Sales",
-      variant: "default" as const
+      variant: "outline" as const
     }
   ];
 
@@ -135,7 +136,7 @@ export default function Pricing() {
                     <Button 
                       className="w-full" 
                       variant={tier.variant}
-                      onClick={() => setLocation(tier.name === "Brand Basic" ? "/launch" : "/api/login")}
+                      onClick={() => setLocation(tier.name === "Campaign Starter" ? "/launch" : "/api/login")}
                     >
                       {tier.buttonText}
                     </Button>
