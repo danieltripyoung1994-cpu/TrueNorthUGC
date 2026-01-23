@@ -19,7 +19,6 @@ export default function LaunchCampaign() {
       "Achieve Content-Market Fit Faster",
       "Validate content organically"
     ],
-    bonus: "Book a free onboarding call to get expert tips and maximize ROI by only paying for top-performing content.",
     footer: "Cancel anytime"
   };
 
@@ -68,17 +67,6 @@ export default function LaunchCampaign() {
                           </li>
                         ))}
                       </ul>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="p-4 rounded-xl bg-primary/5 border border-primary/20 space-y-2">
-                        <h3 className="font-bold text-primary flex items-center gap-2">
-                          <Zap className="h-4 w-4" />
-                          BONUS
-                        </h3>
-                        <p className="text-sm leading-relaxed">
-                          {packageDetails.bonus}
-                        </p>
-                      </div>
                     </div>
                   </div>
                 </CardContent>
