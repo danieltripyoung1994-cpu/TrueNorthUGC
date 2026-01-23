@@ -49,7 +49,8 @@ export class DatabaseStorage implements IStorage {
   async updateCreator(userId: string, updates: Partial<InsertCreator>): Promise<Creator> {
     const existing = await this.getCreatorByUserId(userId);
     if (!existing) {
-       throw new Error("Creator not found");
+       // Auto-create if not exists during update
+       return await this.createCreator({ ...updates as any, userId });
     }
 
     const [updated] = await db
