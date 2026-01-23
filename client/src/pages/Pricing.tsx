@@ -31,11 +31,15 @@ export default function Pricing() {
         "Top picks for brands",
         "Top priority for all content",
         "Retainer agreements",
-        "Tiered bonuses"
+        "Tiered bonuses",
+        "Exclusive creator community access",
+        "Personal brand manager",
+        "Advanced performance analytics"
       ],
       buttonText: "Go Exclusive",
       variant: "default" as const,
-      popular: true
+      popular: true,
+      highlight: true
     }
   ];
 
@@ -50,11 +54,14 @@ export default function Pricing() {
         "Spark Ad codes on winning submissions",
         "Lifetime Access to Winning Submissions",
         "Achieve Content-Market Fit Faster",
-        "Validate content organically"
+        "Validate content organically",
+        "Dedicated campaign manager",
+        "Custom content brief assistance"
       ],
       buttonText: "Start Campaign",
       variant: "default" as const,
-      popular: true
+      popular: true,
+      highlight: true
     },
     {
       name: "Enterprise",
@@ -87,37 +94,40 @@ export default function Pricing() {
             </div>
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {creatorTiers.map((tier) => (
-                <Card key={tier.name} className={`flex flex-col relative ${tier.popular ? 'border-primary shadow-lg shadow-primary/10' : ''}`}>
+                <Card key={tier.name} className={`flex flex-col relative transition-all duration-300 ${tier.popular ? 'border-primary shadow-2xl shadow-primary/20 scale-105 z-10' : 'hover:border-primary/50'}`}>
                   {tier.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
-                      Most Popular
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-sm font-bold tracking-wide uppercase shadow-lg">
+                      Recommended
                     </div>
                   )}
-                  <CardHeader>
-                    <CardTitle className="text-2xl">{tier.name}</CardTitle>
-                    <CardDescription>{tier.description}</CardDescription>
+                  <CardHeader className={`${tier.popular ? 'bg-primary/5' : ''}`}>
+                    <CardTitle className="text-3xl font-black">{tier.name}</CardTitle>
+                    <CardDescription className="text-base">{tier.description}</CardDescription>
                   </CardHeader>
-                  <CardContent className="flex-1 space-y-6">
+                  <CardContent className="flex-1 space-y-8 pt-6">
                     <div className="flex items-baseline gap-1">
-                      <span className="text-4xl font-bold">{tier.price}</span>
-                      <span className="text-muted-foreground">/month</span>
+                      <span className="text-5xl font-black text-primary">{tier.price}</span>
+                      <span className="text-muted-foreground font-medium">/month</span>
                     </div>
-                    <ul className="space-y-3">
+                    <ul className="space-y-4">
                       {tier.features.map((feature) => (
-                        <li key={feature} className="flex items-center gap-2">
-                          <Check className="h-4 w-4 text-primary shrink-0" />
-                          <span className="text-sm">{feature}</span>
+                        <li key={feature} className="flex items-start gap-3">
+                          <div className={`mt-1 h-5 w-5 rounded-full flex items-center justify-center shrink-0 ${tier.popular ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary'}`}>
+                            <Check className="h-3.5 w-3.5 stroke-[3]" />
+                          </div>
+                          <span className={`text-sm ${tier.popular ? 'font-semibold' : 'font-medium'}`}>{feature}</span>
                         </li>
                       ))}
                     </ul>
                   </CardContent>
-                  <CardFooter>
+                  <CardFooter className={`pt-6 ${tier.popular ? 'bg-primary/5' : ''}`}>
                     <Button 
-                      className="w-full" 
+                      className={`w-full h-14 text-lg font-bold rounded-2xl transition-all ${tier.popular ? 'shadow-xl shadow-primary/30 hover:scale-[1.02]' : ''}`} 
                       variant={tier.variant}
                       onClick={() => setLocation("/api/login")}
                     >
                       {tier.buttonText}
+                      {tier.popular && <Sparkles className="ml-2 h-5 w-5" />}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -132,32 +142,40 @@ export default function Pricing() {
             </div>
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {brandTiers.map((tier) => (
-                <Card key={tier.name} className="flex flex-col">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">{tier.name}</CardTitle>
-                    <CardDescription>{tier.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex-1 space-y-6">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-4xl font-bold">{tier.price}</span>
-                      <span className="text-muted-foreground">/month</span>
+                <Card key={tier.name} className={`flex flex-col relative transition-all duration-300 ${tier.popular ? 'border-primary shadow-2xl shadow-primary/20 scale-105 z-10' : 'hover:border-primary/50'}`}>
+                  {tier.popular && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-sm font-bold tracking-wide uppercase shadow-lg">
+                      Best Value
                     </div>
-                    <ul className="space-y-3">
+                  )}
+                  <CardHeader className={`${tier.popular ? 'bg-primary/5' : ''}`}>
+                    <CardTitle className="text-3xl font-black">{tier.name}</CardTitle>
+                    <CardDescription className="text-base">{tier.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-1 space-y-8 pt-6">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-5xl font-black text-primary">{tier.price}</span>
+                      {tier.price !== "Custom" && <span className="text-muted-foreground font-medium">/month</span>}
+                    </div>
+                    <ul className="space-y-4">
                       {tier.features.map((feature) => (
-                        <li key={feature} className="flex items-center gap-2">
-                          <Check className="h-4 w-4 text-primary shrink-0" />
-                          <span className="text-sm">{feature}</span>
+                        <li key={feature} className="flex items-start gap-3">
+                          <div className={`mt-1 h-5 w-5 rounded-full flex items-center justify-center shrink-0 ${tier.popular ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary'}`}>
+                            <Check className="h-3.5 w-3.5 stroke-[3]" />
+                          </div>
+                          <span className={`text-sm ${tier.popular ? 'font-semibold' : 'font-medium'}`}>{feature}</span>
                         </li>
                       ))}
                     </ul>
                   </CardContent>
-                  <CardFooter>
+                  <CardFooter className={`pt-6 ${tier.popular ? 'bg-primary/5' : ''}`}>
                     <Button 
-                      className="w-full" 
+                      className={`w-full h-14 text-lg font-bold rounded-2xl transition-all ${tier.popular ? 'shadow-xl shadow-primary/30 hover:scale-[1.02]' : ''}`} 
                       variant={tier.variant}
                       onClick={() => setLocation(tier.name === "Campaign Starter" ? "/launch" : "/api/login")}
                     >
                       {tier.buttonText}
+                      {tier.popular && <Sparkles className="ml-2 h-5 w-5" />}
                     </Button>
                   </CardFooter>
                 </Card>
