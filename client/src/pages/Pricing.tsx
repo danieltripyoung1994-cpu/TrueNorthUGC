@@ -135,7 +135,7 @@ export default function Pricing() {
                     <Button 
                       className="w-full" 
                       variant={tier.variant}
-                      onClick={() => setLocation("/api/login")}
+                      onClick={() => setLocation(tier.name === "Brand Basic" ? "/launch" : "/api/login")}
                     >
                       {tier.buttonText}
                     </Button>
