@@ -31,8 +31,8 @@ export function Navbar() {
           <Link href="/creators" className={`text-sm font-medium transition-colors hover:text-primary ${location === '/creators' ? 'text-primary' : 'text-muted-foreground'}`}>
             Browse Creators
           </Link>
-          <Link href="/creators" className={`text-sm font-medium transition-colors hover:text-primary ${location === '/brands' ? 'text-primary' : 'text-muted-foreground'}`}>
-            Discover Brands
+          <Link href="/pricing" className={`text-sm font-medium transition-colors hover:text-primary ${location === '/pricing' ? 'text-primary' : 'text-muted-foreground'}`}>
+            Pricing
           </Link>
           
           {isLoading ? (
