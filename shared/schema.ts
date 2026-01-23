@@ -18,6 +18,7 @@ export const creators = pgTable("creators", {
     tiktok?: string;
     instagram?: string;
     youtube?: string;
+    twitter?: string;
   }>().default({}),
   portfolio: jsonb("portfolio").$type<{
     id: string;
