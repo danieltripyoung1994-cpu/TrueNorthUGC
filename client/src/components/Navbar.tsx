@@ -32,7 +32,7 @@ export function Navbar() {
             Browse Creators
           </Link>
           <Link href="/pricing" className={`text-sm font-medium transition-colors hover:text-primary ${location === '/pricing' ? 'text-primary' : 'text-muted-foreground'}`}>
-            Pricing
+            Campaigns
           </Link>
           
           {isLoading ? (
