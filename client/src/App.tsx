@@ -8,6 +8,7 @@ import Landing from "@/pages/Landing";
 import Directory from "@/pages/Directory";
 import Profile from "@/pages/Profile";
 import Dashboard from "@/pages/Dashboard";
+import Pricing from "@/pages/Pricing";
 
 function Router() {
   return (
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/creators" component={Directory} />
       <Route path="/creators/:handle" component={Profile} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/pricing" component={Pricing} />
       <Route component={NotFound} />
     </Switch>
   );
