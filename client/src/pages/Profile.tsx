@@ -196,7 +196,10 @@ export default function Profile() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
                         <div className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-700 bg-[url('https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&auto=format&fit=crop')] bg-cover bg-center">
                           <div className="w-16 h-16 rounded-full bg-primary/90 text-primary-foreground flex items-center justify-center shadow-2xl transform scale-0 group-hover:scale-100 transition-transform duration-500 z-20 backdrop-blur-sm">
-                            <Play className="h-8 w-8 fill-current ml-1" />
+                            import { motion } from "framer-motion";
+                            import { Card } from "@/components/ui/card";
+                            import { Play } from "lucide-react";
+                            className="h-8 w-8 fill-current ml-1" />
                           </div>
                         </div>
                         <div className="absolute bottom-6 left-6 right-6 z-20 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
