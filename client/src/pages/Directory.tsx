@@ -26,9 +26,9 @@ export default function Directory() {
       <main className="container mx-auto px-4 py-12">
         <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
           <div className="space-y-2 max-w-xl">
-            <h1 className="text-4xl font-bold tracking-tight">Discover Creators</h1>
-            <p className="text-muted-foreground text-lg">
-              Find the perfect content creator for your brand from our curated community.
+            <h1 className="text-5xl font-black tracking-tighter">Discover Talent</h1>
+            <p className="text-muted-foreground text-xl">
+              Partner with vetted Canadian creators to scale your brand's presence.
             </p>
           </div>
         </div>
