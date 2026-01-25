@@ -6,6 +6,20 @@ import { users } from "./models/auth";
 // Re-export auth models so they are available
 export * from "./models/auth";
 
+export const offers = pgTable("offers", {
+  id: serial("id").primaryKey(),
+  target: text("target").notNull(), // "creator" or "brand"
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  discount: text("discount"),
+  code: text("code"),
+  active: text("active").default("true"),
+});
+
+export const insertOfferSchema = createInsertSchema(offers).omit({ id: true });
+export type Offer = typeof offers.$inferSelect;
+export type InsertOffer = z.infer<typeof insertOfferSchema>;
+
 export const creators = pgTable("creators", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").notNull().unique(), // One profile per user

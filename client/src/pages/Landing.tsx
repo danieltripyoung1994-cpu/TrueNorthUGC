@@ -68,7 +68,7 @@ export default function Landing() {
               </Link>
               <Link href="/pricing">
                 <Button size="lg" variant="outline" className="text-xl px-10 py-8 rounded-3xl border-2 bg-white/5 hover:bg-white/10 text-white border-white/30 backdrop-blur-xl hover:scale-105 transition-all">
-                  View Pricing
+                  Exclusive Offers
                   <ArrowRight className="ml-3 h-6 w-6" />
                 </Button>
               </Link>
