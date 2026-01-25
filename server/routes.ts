@@ -119,36 +119,8 @@ export async function registerRoutes(
 
 // Seed function
 async function seedDatabase() {
-  const existing = await storage.getCreators();
-  if (existing.length === 0) {
-    // ... existing seed code ...
-    
-    // Seed some offers
-    await storage.createOffer({
-      target: "creator",
-      title: "Creator Pro Launch Offer",
-      description: "Get verified and unlock advanced analytics with our partner program.",
-      discount: "50% OFF",
-      code: "TRUENORTH50",
-    });
-
-    await storage.createOffer({
-      target: "brand",
-      title: "Brand Enterprise Pilot",
-      description: "Exclusive access to our AI matching engine for your first campaign.",
-      discount: "FREE MONTH",
-      code: "OFFICIAL2026",
-    });
-  }
-}
-    // Since we need valid userIds (which are usually UUIDs from Auth), we can't easily seed 
-    // realistic creator profiles linked to real users without creating users first.
-    // However, for the directory page to look good, we can seed some "orphan" creators 
-    // or just rely on the user to create one.
-    // To make the directory populated, I'll seed some with fake user IDs.
-    // These won't be editable unless I login with that specific UUID (impossible).
-    // But they will show up in the directory.
-    
+  const existingCreators = await storage.getCreators();
+  if (existingCreators.length === 0) {
     await storage.createCreator({
       userId: "seed-user-1",
       handle: "sarahfitness",
@@ -185,6 +157,25 @@ async function seedDatabase() {
       socialLinks: { tiktok: "https://tiktok.com" },
       portfolio: [],
       profileImage: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop"
+    });
+  }
+
+  const existingOffers = await storage.getOffers();
+  if (existingOffers.length === 0) {
+    await storage.createOffer({
+      target: "creator",
+      title: "Creator Pro Launch Offer",
+      description: "Get verified and unlock advanced analytics with our partner program.",
+      discount: "50% OFF",
+      code: "TRUENORTH50",
+    });
+
+    await storage.createOffer({
+      target: "brand",
+      title: "Brand Enterprise Pilot",
+      description: "Exclusive access to our AI matching engine for your first campaign.",
+      discount: "FREE MONTH",
+      code: "OFFICIAL2026",
     });
   }
 }
