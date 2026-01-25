@@ -1,9 +1,11 @@
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles, Star, Crown, Zap } from "lucide-react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { Offer } from "@shared/schema";
 
 const container = {
   hidden: { opacity: 0 },
@@ -22,6 +24,12 @@ const item = {
 
 export default function Pricing() {
   const [, setLocation] = useLocation();
+  const { data: offers } = useQuery<Offer[]>({
+    queryKey: ["/api/offers"],
+  });
+
+  const creatorOffers = offers?.filter(o => o.target === "creator") || [];
+  const brandOffers = offers?.filter(o => o.target === "brand") || [];
 
   const creatorTiers = [
     {
@@ -92,74 +100,109 @@ export default function Pricing() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="container mx-auto px-4 py-16">
+      <main className="container mx-auto px-4 py-24">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center max-w-3xl mx-auto mb-16 space-y-4"
+          className="text-center max-w-3xl mx-auto mb-24 space-y-6"
         >
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-            Simple, Transparent <span className="text-primary">Pricing</span>
+          <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary backdrop-blur-xl shadow-sm">
+            <Star className="mr-2 h-4 w-4" />
+            Official Partnership Programs
+          </div>
+          <h1 className="text-5xl font-black tracking-tighter sm:text-7xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
+            Choose Your <span className="text-primary italic">Success</span> Path
           </h1>
-          <p className="text-xl text-muted-foreground">
-            Whether you're a creator looking to showcase your work or a brand looking to scale, we have a plan for you.
+          <p className="text-xl text-muted-foreground leading-relaxed">
+            Whether you're a creator looking to showcase your work or a brand looking to scale, our official programs offer exclusive tools for elite performance.
           </p>
         </motion.div>
 
-        <div className="space-y-24">
+        <div className="space-y-32">
+          {/* Creators Section */}
           <section>
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="flex items-center gap-2 mb-8"
+              className="flex items-center gap-4 mb-12"
             >
-              <Sparkles className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">For Creators</h2>
+              <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+                <Zap className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-black tracking-tight">For Creators</h2>
+                <p className="text-muted-foreground">Monetize your talent with elite brand deals</p>
+              </div>
             </motion.div>
+            
             <motion.div 
               variants={container}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto"
+              className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto"
             >
               {creatorTiers.map((tier) => (
                 <motion.div key={tier.name} variants={item}>
-                  <Card className={`flex flex-col h-full relative transition-all duration-300 ${tier.popular ? 'border-primary shadow-2xl shadow-primary/20 scale-105 z-10' : 'hover:border-primary/50'}`}>
+                  <Card className={`flex flex-col h-full relative overflow-hidden transition-all duration-500 rounded-[2.5rem] ${tier.popular ? 'border-primary/20 shadow-2xl shadow-primary/10 scale-105 z-10' : 'hover:border-primary/50'}`}>
                     {tier.popular && (
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-sm font-bold tracking-wide uppercase shadow-lg">
-                        Recommended
+                      <div className="absolute top-6 right-6">
+                        <Badge className="bg-primary text-primary-foreground font-bold px-4 py-1 rounded-full uppercase tracking-widest text-[10px]">
+                          Popular
+                        </Badge>
                       </div>
                     )}
-                    <CardHeader className={`${tier.popular ? 'bg-primary/5' : ''}`}>
-                      <CardTitle className="text-3xl font-black">{tier.name}</CardTitle>
-                      <CardDescription className="text-base">{tier.description}</CardDescription>
+                    <CardHeader className="p-10 pb-6">
+                      <CardTitle className="text-4xl font-black">{tier.name}</CardTitle>
+                      <CardDescription className="text-lg font-medium">{tier.description}</CardDescription>
                     </CardHeader>
-                    <CardContent className="flex-1 space-y-8 pt-6">
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-5xl font-black text-primary">{tier.price}</span>
-                        <span className="text-muted-foreground font-medium">/month</span>
+                    <CardContent className="flex-1 space-y-10 px-10">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-6xl font-black text-primary tracking-tighter">{tier.price}</span>
+                        <span className="text-muted-foreground font-semibold">/month</span>
                       </div>
-                      <ul className="space-y-4">
-                        {tier.features.map((feature) => (
-                          <li key={feature} className="flex items-start gap-3">
-                            <div className={`mt-1 h-5 w-5 rounded-full flex items-center justify-center shrink-0 ${tier.popular ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary'}`}>
-                              <Check className="h-3.5 w-3.5 stroke-[3]" />
+
+                      {tier.name === "Exclusive" && creatorOffers.length > 0 && (
+                        <div className="p-6 rounded-3xl bg-primary/5 border border-primary/10 relative overflow-hidden group">
+                          <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <Crown size={80} />
+                          </div>
+                          <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2">Limited Time Offer</p>
+                          {creatorOffers.map(offer => (
+                            <div key={offer.id}>
+                              <p className="font-bold text-lg leading-tight mb-1">{offer.title}</p>
+                              <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{offer.description}</p>
+                              <div className="flex items-center justify-between gap-4">
+                                <span className="text-3xl font-black text-primary">{offer.discount}</span>
+                                <div className="bg-background px-4 py-2 rounded-xl border-2 border-primary/20 text-sm font-mono font-bold tracking-wider">
+                                  {offer.code}
+                                </div>
+                              </div>
                             </div>
-                            <span className={`text-sm ${tier.popular ? 'font-semibold' : 'font-medium'}`}>{feature}</span>
+                          ))}
+                        </div>
+                      )}
+
+                      <ul className="space-y-5">
+                        {tier.features.map((feature) => (
+                          <li key={feature} className="flex items-start gap-4 text-sm font-medium leading-relaxed">
+                            <div className="mt-0.5 h-5 w-5 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
+                              <Check className="h-3 w-3 text-green-500 stroke-[4]" />
+                            </div>
+                            <span>{feature}</span>
                           </li>
                         ))}
                       </ul>
                     </CardContent>
-                    <CardFooter className={`pt-6 ${tier.popular ? 'bg-primary/5' : ''}`}>
+                    <CardFooter className="p-10 pt-6">
                       <Button 
-                        className={`w-full h-14 text-lg font-bold rounded-2xl transition-all ${tier.popular ? 'shadow-xl shadow-primary/30 hover:scale-[1.02]' : ''}`} 
+                        className={`w-full h-16 text-xl font-black rounded-3xl transition-all ${tier.popular ? 'shadow-2xl shadow-primary/40 hover:scale-[1.02]' : ''}`} 
                         variant={tier.variant}
                         onClick={() => setLocation("/api/login")}
                       >
                         {tier.buttonText}
-                        {tier.popular && <Sparkles className="ml-2 h-5 w-5" />}
+                        <ArrowRight className="ml-2 h-6 w-6" />
                       </Button>
                     </CardFooter>
                   </Card>
@@ -168,59 +211,90 @@ export default function Pricing() {
             </motion.div>
           </section>
 
+          {/* Brands Section */}
           <section>
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="flex items-center gap-2 mb-8"
+              className="flex items-center gap-4 mb-12"
             >
-              <Sparkles className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">For Brands</h2>
+              <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+                <Crown className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-black tracking-tight">For Brands</h2>
+                <p className="text-muted-foreground">Scale your impact with top-tier Canadian creators</p>
+              </div>
             </motion.div>
+
             <motion.div 
               variants={container}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto"
+              className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto"
             >
               {brandTiers.map((tier) => (
                 <motion.div key={tier.name} variants={item}>
-                  <Card className={`flex flex-col h-full relative transition-all duration-300 ${tier.popular ? 'border-primary shadow-2xl shadow-primary/20 scale-105 z-10' : 'hover:border-primary/50'}`}>
+                  <Card className={`flex flex-col h-full relative overflow-hidden transition-all duration-500 rounded-[2.5rem] ${tier.popular ? 'border-primary/20 shadow-2xl shadow-primary/10 scale-105 z-10' : 'hover:border-primary/50'}`}>
                     {tier.popular && (
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-sm font-bold tracking-wide uppercase shadow-lg">
-                        Best Value
+                      <div className="absolute top-6 right-6">
+                        <Badge className="bg-primary text-primary-foreground font-bold px-4 py-1 rounded-full uppercase tracking-widest text-[10px]">
+                          Best Value
+                        </Badge>
                       </div>
                     )}
-                    <CardHeader className={`${tier.popular ? 'bg-primary/5' : ''}`}>
-                      <CardTitle className="text-3xl font-black">{tier.name}</CardTitle>
-                      <CardDescription className="text-base">{tier.description}</CardDescription>
+                    <CardHeader className="p-10 pb-6">
+                      <CardTitle className="text-4xl font-black">{tier.name}</CardTitle>
+                      <CardDescription className="text-lg font-medium">{tier.description}</CardDescription>
                     </CardHeader>
-                    <CardContent className="flex-1 space-y-8 pt-6">
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-5xl font-black text-primary">{tier.price}</span>
-                        {tier.price !== "Custom" && <span className="text-muted-foreground font-medium">/month</span>}
+                    <CardContent className="flex-1 space-y-10 px-10">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-6xl font-black text-primary tracking-tighter">{tier.price}</span>
+                        {tier.price !== "Custom" && <span className="text-muted-foreground font-semibold">/month</span>}
                       </div>
-                      <ul className="space-y-4">
-                        {tier.features.map((feature) => (
-                          <li key={feature} className="flex items-start gap-3">
-                            <div className={`mt-1 h-5 w-5 rounded-full flex items-center justify-center shrink-0 ${tier.popular ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary'}`}>
-                              <Check className="h-3.5 w-3.5 stroke-[3]" />
+
+                      {tier.name === "Campaign Starter" && brandOffers.length > 0 && (
+                        <div className="p-6 rounded-3xl bg-primary/5 border border-primary/10 relative overflow-hidden group">
+                          <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <Star size={80} />
+                          </div>
+                          <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2">Exclusive Partner Program</p>
+                          {brandOffers.map(offer => (
+                            <div key={offer.id}>
+                              <p className="font-bold text-lg leading-tight mb-1">{offer.title}</p>
+                              <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{offer.description}</p>
+                              <div className="flex items-center justify-between gap-4">
+                                <span className="text-3xl font-black text-primary">{offer.discount}</span>
+                                <div className="bg-background px-4 py-2 rounded-xl border-2 border-primary/20 text-sm font-mono font-bold tracking-wider">
+                                  {offer.code}
+                                </div>
+                              </div>
                             </div>
-                            <span className={`text-sm ${tier.popular ? 'font-semibold' : 'font-medium'}`}>{feature}</span>
+                          ))}
+                        </div>
+                      )}
+
+                      <ul className="space-y-5">
+                        {tier.features.map((feature) => (
+                          <li key={feature} className="flex items-start gap-4 text-sm font-medium leading-relaxed">
+                            <div className="mt-0.5 h-5 w-5 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
+                              <Check className="h-3 w-3 text-green-500 stroke-[4]" />
+                            </div>
+                            <span>{feature}</span>
                           </li>
                         ))}
                       </ul>
                     </CardContent>
-                    <CardFooter className={`pt-6 ${tier.popular ? 'bg-primary/5' : ''}`}>
+                    <CardFooter className="p-10 pt-6">
                       <Button 
-                        className={`w-full h-14 text-lg font-bold rounded-2xl transition-all ${tier.popular ? 'shadow-xl shadow-primary/30 hover:scale-[1.02]' : ''}`} 
+                        className={`w-full h-16 text-xl font-black rounded-3xl transition-all ${tier.popular ? 'shadow-2xl shadow-primary/40 hover:scale-[1.02]' : ''}`} 
                         variant={tier.variant}
                         onClick={() => setLocation(tier.name === "Campaign Starter" ? "/launch" : "/api/login")}
                       >
                         {tier.buttonText}
-                        {tier.popular && <Sparkles className="ml-2 h-5 w-5" />}
+                        <ArrowRight className="ml-2 h-6 w-6" />
                       </Button>
                     </CardFooter>
                   </Card>

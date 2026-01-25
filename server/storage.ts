@@ -1,4 +1,4 @@
-import { creators, brands, type Creator, type InsertCreator, type Brand, type InsertBrand } from "@shared/schema";
+import { creators, brands, offers, type Creator, type InsertCreator, type Brand, type InsertBrand, type Offer, type InsertOffer } from "@shared/schema";
 import { db } from "./db";
 import { eq, ilike, or } from "drizzle-orm";
 
@@ -13,9 +13,25 @@ export interface IStorage {
   getBrandByUserId(userId: string): Promise<Brand | undefined>;
   createBrand(brand: InsertBrand): Promise<Brand>;
   updateBrand(userId: string, updates: Partial<InsertBrand>): Promise<Brand>;
+
+  // Offer operations
+  getOffers(target?: string): Promise<Offer[]>;
+  createOffer(offer: InsertOffer): Promise<Offer>;
 }
 
 export class DatabaseStorage implements IStorage {
+  async getOffers(target?: string): Promise<Offer[]> {
+    if (target) {
+      return await db.select().from(offers).where(eq(offers.target, target));
+    }
+    return await db.select().from(offers);
+  }
+
+  async createOffer(insertOffer: InsertOffer): Promise<Offer> {
+    const [offer] = await db.insert(offers).values([insertOffer]).returning();
+    return offer;
+  }
+
   async getCreators(search?: string, niche?: string): Promise<Creator[]> {
     const conditions = [];
     if (search) {
