@@ -273,6 +273,7 @@ export default function Landing() {
                 <li><Link href="/creators" className="hover:text-primary transition-colors">Discover Creators</Link></li>
                 <li><Link href="/pricing" className="hover:text-primary transition-colors">Pricing</Link></li>
                 <li><a href="/api/login" className="hover:text-primary transition-colors">Join as Creator</a></li>
+                <li><a href="mailto:TrueNorthUGCcanada@gmail.com" className="hover:text-primary transition-colors">Contact Support</a></li>
               </ul>
             </div>
             <div>

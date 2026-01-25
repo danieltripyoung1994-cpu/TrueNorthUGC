@@ -161,8 +161,29 @@ export default function Pricing() {
                     <CardContent className="flex-1 space-y-10 px-10">
                       <div className="flex items-baseline gap-2">
                         <span className="text-6xl font-black text-primary tracking-tighter">{tier.price}</span>
-                        <span className="text-muted-foreground font-semibold">/month</span>
+                        {tier.price !== "Custom" && <span className="text-muted-foreground font-semibold">/month</span>}
                       </div>
+
+                      {tier.name === "Enterprise" && (
+                        <div className="p-6 rounded-3xl bg-secondary/30 border border-border/50">
+                          <p className="text-sm font-medium text-muted-foreground mb-4">For custom enterprise solutions and payment links, please contact our official support team.</p>
+                          <a 
+                            href="mailto:TrueNorthUGCcanada@gmail.com" 
+                            className="text-primary font-bold hover:underline break-all text-sm"
+                          >
+                            TrueNorthUGCcanada@gmail.com
+                          </a>
+                          <div className="mt-6">
+                            <Button 
+                              variant="outline" 
+                              className="w-full h-12 rounded-xl border-2 font-bold"
+                              onClick={() => window.location.href = "mailto:TrueNorthUGCcanada@gmail.com"}
+                            >
+                              Request Payment Link
+                            </Button>
+                          </div>
+                        </div>
+                      )}
 
                       {tier.name === "Exclusive" && creatorOffers.length > 0 && (
                         <div className="p-6 rounded-3xl bg-primary/5 border border-primary/10 relative overflow-hidden group">
@@ -274,6 +295,27 @@ export default function Pricing() {
                               </div>
                             </div>
                           ))}
+                        </div>
+                      )}
+
+                      {tier.name === "Enterprise" && (
+                        <div className="p-6 rounded-3xl bg-secondary/30 border border-border/50">
+                          <p className="text-sm font-medium text-muted-foreground mb-4">For custom enterprise solutions and payment links, please contact our official support team.</p>
+                          <a 
+                            href="mailto:TrueNorthUGCcanada@gmail.com" 
+                            className="text-primary font-bold hover:underline break-all text-sm"
+                          >
+                            TrueNorthUGCcanada@gmail.com
+                          </a>
+                          <div className="mt-6">
+                            <Button 
+                              variant="outline" 
+                              className="w-full h-12 rounded-xl border-2 font-bold"
+                              onClick={() => window.location.href = "mailto:TrueNorthUGCcanada@gmail.com"}
+                            >
+                              Request Payment Link
+                            </Button>
+                          </div>
                         </div>
                       )}
 
