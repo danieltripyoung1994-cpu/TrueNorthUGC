@@ -41,8 +41,8 @@ export default function Landing() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-6xl font-black tracking-tight sm:text-8xl lg:text-9xl text-white drop-shadow-2xl leading-[1.1]"
             >
-              Connect with Canada's <br className="hidden sm:block" />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-foreground to-white/80">Top UGC Creators</span>
+              Canada's <br className="hidden sm:block" />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">UGC Marketplace</span>
             </motion.h1>
             
             <motion.p 

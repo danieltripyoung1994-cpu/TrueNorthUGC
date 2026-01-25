@@ -114,8 +114,8 @@ export default function Dashboard() {
           className="max-w-4xl mx-auto space-y-8"
         >
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold">Dashboard</h1>
-            <Button variant="outline" onClick={() => logout()} data-testid="button-logout" className="hover-elevate">
+            <h1 className="text-4xl font-black tracking-tighter">Dashboard</h1>
+            <Button variant="outline" onClick={() => logout()} data-testid="button-logout" className="hover-elevate rounded-xl px-6 h-11 font-bold">
               <LogOut className="mr-2 h-4 w-4" />
               Sign Out
             </Button>
