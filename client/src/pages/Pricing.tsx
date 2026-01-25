@@ -1,11 +1,12 @@
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Sparkles, Star, Crown, Zap } from "lucide-react";
+import { Check, Sparkles, Star, Crown, Zap, ArrowRight } from "lucide-react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { Offer } from "@shared/schema";
+import { Badge } from "@/components/ui/badge";
 
 const container = {
   hidden: { opacity: 0 },

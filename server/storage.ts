@@ -54,12 +54,12 @@ export class DatabaseStorage implements IStorage {
 
   async getCreatorByUserId(userId: string): Promise<Creator | undefined> {
     const [creator] = await db.select().from(creators).where(eq(creators.userId, userId));
-    return creator;
+    return creator ? { ...creator, niches: creator.niches as string[] } : undefined;
   }
 
   async createCreator(insertCreator: InsertCreator): Promise<Creator> {
     const [creator] = await db.insert(creators).values([insertCreator]).returning();
-    return creator;
+    return { ...creator, niches: creator.niches as string[] };
   }
 
   async updateCreator(userId: string, updates: Partial<InsertCreator>): Promise<Creator> {
@@ -74,18 +74,18 @@ export class DatabaseStorage implements IStorage {
       .set(updates)
       .where(eq(creators.userId, userId))
       .returning();
-    return updated;
+    return { ...updated, niches: updated.niches as string[] };
   }
 
   // Brand Implementations
   async getBrandByUserId(userId: string): Promise<Brand | undefined> {
     const [brand] = await db.select().from(brands).where(eq(brands.userId, userId));
-    return brand;
+    return brand ? { ...brand, niches: brand.niches as string[] } : undefined;
   }
 
   async createBrand(insertBrand: InsertBrand): Promise<Brand> {
     const [brand] = await db.insert(brands).values([insertBrand]).returning();
-    return brand;
+    return { ...brand, niches: brand.niches as string[] };
   }
 
   async updateBrand(userId: string, updates: Partial<InsertBrand>): Promise<Brand> {
@@ -99,7 +99,7 @@ export class DatabaseStorage implements IStorage {
       .set(updates)
       .where(eq(brands.userId, userId))
       .returning();
-    return updated;
+    return { ...updated, niches: updated.niches as string[] };
   }
 }
 
