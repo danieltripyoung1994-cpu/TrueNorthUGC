@@ -178,11 +178,11 @@ export default function Landing() {
               </div>
               
             <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/api/login">
+                <a href="/api/login">
                   <Button size="lg" className="text-lg px-8 py-6 rounded-2xl shadow-xl shadow-primary/20">
                     Register as a Brand
                   </Button>
-                </Link>
+                </a>
                 <Link href="/pricing">
                   <Button size="lg" variant="outline" className="text-lg px-8 py-6 rounded-2xl border-2">
                     View Pricing
@@ -241,11 +241,11 @@ export default function Landing() {
             Whether you're a creator looking to grow your business or a brand seeking authentic content, TrueNorthUGC is your platform.
           </motion.p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/api/login">
+                <a href="/api/login">
                   <Button size="lg" variant="secondary" className="text-lg px-10 py-7 rounded-2xl w-full sm:w-auto">
                     Join as Creator
                   </Button>
-                </Link>
+                </a>
                 <Link href="/pricing">
                   <Button size="lg" variant="outline" className="text-lg px-10 py-7 rounded-2xl border-white/30 hover:bg-white/10 w-full sm:w-auto">
                     View Pricing

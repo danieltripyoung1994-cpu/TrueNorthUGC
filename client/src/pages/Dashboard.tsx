@@ -174,7 +174,7 @@ export default function Dashboard() {
                           name="name"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Name</FormLabel>
+                              <FormLabel>Full Name / Company Name</FormLabel>
                               <FormControl>
                                 <Input placeholder={roleSelection === "creator" ? "Your Stage Name" : "Company Name"} {...field} className="h-12" />
                               </FormControl>
@@ -188,9 +188,24 @@ export default function Dashboard() {
                             name="handle"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Handle</FormLabel>
+                                <FormLabel>Unique Handle</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="username" {...field} className="h-12" />
+                                  <Input placeholder="username (e.g. creative_creator)" {...field} className="h-12" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        )}
+                        {roleSelection === "brand" && (
+                          <FormField
+                            control={brandForm.control}
+                            name="industry"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Industry</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="e.g. Beauty, Tech, Fitness" {...field} className="h-12" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -199,7 +214,7 @@ export default function Dashboard() {
                         )}
                         <Button type="submit" className="w-full h-12 text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending}>
                           {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                          Start Profile
+                          Create Official Profile
                         </Button>
                         <Button variant="ghost" className="w-full" onClick={() => setRoleSelection(null)}>Back</Button>
                       </form>
