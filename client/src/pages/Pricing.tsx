@@ -221,7 +221,7 @@ export default function Pricing() {
                       <Button 
                         className={`w-full h-16 text-xl font-black rounded-3xl transition-all ${tier.popular ? 'shadow-2xl shadow-primary/40 hover:scale-[1.02]' : ''}`} 
                         variant={tier.variant}
-                        onClick={() => setLocation("/api/login")}
+                        onClick={() => window.location.href = "/api/login"}
                       >
                         {tier.buttonText}
                         <ArrowRight className="ml-2 h-6 w-6" />
@@ -334,7 +334,13 @@ export default function Pricing() {
                       <Button 
                         className={`w-full h-16 text-xl font-black rounded-3xl transition-all ${tier.popular ? 'shadow-2xl shadow-primary/40 hover:scale-[1.02]' : ''}`} 
                         variant={tier.variant}
-                        onClick={() => setLocation(tier.name === "Campaign Starter" ? "/launch" : "/api/login")}
+                        onClick={() => {
+                          if (tier.name === "Campaign Starter") {
+                            setLocation("/launch");
+                          } else {
+                            window.location.href = "/api/login";
+                          }
+                        }}
                       >
                         {tier.buttonText}
                         <ArrowRight className="ml-2 h-6 w-6" />
