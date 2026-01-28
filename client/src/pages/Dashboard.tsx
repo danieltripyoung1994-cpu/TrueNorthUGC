@@ -36,8 +36,8 @@ export default function Dashboard() {
       bio: "",
       profileImage: "",
       niches: [] as string[],
-      socialLinks: { tiktok: "", instagram: "", youtube: "", twitter: "" },
-      portfolio: [] as { id: string; title: string; url: string; thumbnail?: string; }[],
+      socialLinks: { tiktok: "", instagram: "", youtube: "", twitter: "" } as Record<string, string>,
+      portfolio: [] as any[],
       location: "",
       languages: [] as string[],
       experienceLevel: "Beginner"
@@ -54,7 +54,7 @@ export default function Dashboard() {
       website: "",
       niches: [] as string[],
       location: "",
-      socialLinks: { instagram: "", twitter: "", linkedin: "" }
+      socialLinks: { instagram: "", twitter: "", linkedin: "" } as Record<string, string>
     }
   });
 
