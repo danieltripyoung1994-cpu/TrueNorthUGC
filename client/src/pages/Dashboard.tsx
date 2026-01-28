@@ -35,11 +35,11 @@ export default function Dashboard() {
       name: "",
       bio: "",
       profileImage: "",
-      niches: [],
+      niches: [] as string[],
       socialLinks: { tiktok: "", instagram: "", youtube: "", twitter: "" },
-      portfolio: [],
+      portfolio: [] as { id: string; title: string; url: string; thumbnail?: string; }[],
       location: "",
-      languages: [],
+      languages: [] as string[],
       experienceLevel: "Beginner"
     }
   });
@@ -52,7 +52,7 @@ export default function Dashboard() {
       description: "",
       logo: "",
       website: "",
-      niches: [],
+      niches: [] as string[],
       location: "",
       socialLinks: { instagram: "", twitter: "", linkedin: "" }
     }
