@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Search, TrendingUp, Users } from "lucide-react";
+import { ArrowRight, Search, TrendingUp, Users, Sparkles } from "lucide-react";
 import banffBg from "@assets/stock_images/scenic_background_of_f3c6840b.jpg";
 import logoPng from "@assets/Photoroom_20260124_081931_1769558537558.png";
 
