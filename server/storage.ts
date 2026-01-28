@@ -54,15 +54,21 @@ export class DatabaseStorage implements IStorage {
 
   async getCreatorByUserId(userId: string): Promise<Creator | undefined> {
     const [creator] = await db.select().from(creators).where(eq(creators.userId, userId));
-    return creator ? { ...creator, niches: creator.niches as string[] } : undefined;
+    return creator ? { 
+      ...creator, 
+      niches: (creator.niches as string[]) || [], 
+      languages: (creator.languages as string[]) || [],
+      portfolio: (creator.portfolio as any[]) || []
+    } : undefined;
   }
 
   async createCreator(insertCreator: InsertCreator): Promise<Creator> {
     const [creator] = await db.insert(creators).values([insertCreator]).returning();
     return { 
       ...creator, 
-      niches: creator.niches as string[],
-      languages: creator.languages as string[]
+      niches: (creator.niches as string[]) || [],
+      languages: (creator.languages as string[]) || [],
+      portfolio: (creator.portfolio as any[]) || []
     };
   }
 
@@ -80,8 +86,9 @@ export class DatabaseStorage implements IStorage {
       .returning();
     return { 
       ...updated, 
-      niches: updated.niches as string[],
-      languages: updated.languages as string[]
+      niches: (updated.niches as string[]) || [],
+      languages: (updated.languages as string[]) || [],
+      portfolio: (updated.portfolio as any[]) || []
     };
   }
 
