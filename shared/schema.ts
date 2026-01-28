@@ -40,6 +40,9 @@ export const creators = pgTable("creators", {
     url: string; // Video URL
     thumbnail?: string;
   }[]>().default([]),
+  location: text("location"),
+  languages: jsonb("languages").$type<string[]>().default([]),
+  experienceLevel: text("experience_level"), // e.g., Beginner, Pro, Elite
 });
 
 export const brands = pgTable("brands", {
@@ -51,6 +54,12 @@ export const brands = pgTable("brands", {
   logo: text("logo"),
   website: text("website"),
   niches: jsonb("niches").$type<string[]>().default([]),
+  location: text("location"),
+  socialLinks: jsonb("social_links").$type<{
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+  }>().default({}),
 });
 
 export const insertCreatorSchema = createInsertSchema(creators).omit({ id: true });

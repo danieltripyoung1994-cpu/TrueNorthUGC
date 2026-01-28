@@ -37,7 +37,10 @@ export default function Dashboard() {
       profileImage: "",
       niches: [],
       socialLinks: { tiktok: "", instagram: "", youtube: "", twitter: "" },
-      portfolio: []
+      portfolio: [],
+      location: "",
+      languages: [],
+      experienceLevel: "Beginner"
     }
   });
 
@@ -49,7 +52,9 @@ export default function Dashboard() {
       description: "",
       logo: "",
       website: "",
-      niches: []
+      niches: [],
+      location: "",
+      socialLinks: { instagram: "", twitter: "", linkedin: "" }
     }
   });
 
@@ -62,7 +67,10 @@ export default function Dashboard() {
         profileImage: creatorProfile.profileImage || "",
         niches: creatorProfile.niches || [],
         socialLinks: creatorProfile.socialLinks || { tiktok: "", instagram: "", youtube: "", twitter: "" },
-        portfolio: creatorProfile.portfolio || []
+        portfolio: creatorProfile.portfolio || [],
+        location: (creatorProfile as any).location || "",
+        languages: (creatorProfile as any).languages || [],
+        experienceLevel: (creatorProfile as any).experienceLevel || "Beginner"
       });
     }
   }, [creatorProfile, creatorForm]);
@@ -75,7 +83,9 @@ export default function Dashboard() {
         description: brandProfile.description || "",
         logo: brandProfile.logo || "",
         website: brandProfile.website || "",
-        niches: brandProfile.niches || []
+        niches: brandProfile.niches || [],
+        location: (brandProfile as any).location || "",
+        socialLinks: (brandProfile as any).socialLinks || { instagram: "", twitter: "", linkedin: "" }
       });
     }
   }, [brandProfile, brandForm]);
@@ -92,14 +102,32 @@ export default function Dashboard() {
 
   const onCreatorSubmit = async (data: any) => {
     try {
-      await updateCreator.mutateAsync(data);
+      // Filter out empty social links
+      const socialLinks = { ...data.socialLinks };
+      Object.keys(socialLinks).forEach(key => {
+        if (!socialLinks[key]) delete socialLinks[key];
+      });
+
+      await updateCreator.mutateAsync({
+        ...data,
+        socialLinks
+      });
       setIsEditDialogOpen(false);
     } catch (e) {}
   };
 
   const onBrandSubmit = async (data: any) => {
     try {
-      await updateBrand(data);
+      // Filter out empty social links
+      const socialLinks = { ...data.socialLinks };
+      Object.keys(socialLinks).forEach(key => {
+        if (!socialLinks[key]) delete socialLinks[key];
+      });
+
+      await updateBrand({
+        ...data,
+        socialLinks
+      });
       setIsEditDialogOpen(false);
     } catch (e) {}
   };
@@ -278,7 +306,7 @@ export default function Dashboard() {
                                     <Camera className="h-4 w-4" /> Profile Picture URL
                                   </FormLabel>
                                   <FormControl>
-                                    <Input placeholder="https://..." {...field} />
+                                    <Input placeholder="https://..." {...field} value={field.value || ""} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -305,6 +333,32 @@ export default function Dashboard() {
                                   <FormLabel>Bio</FormLabel>
                                   <FormControl>
                                     <Textarea className="h-32 resize-none" placeholder="Tell brands about yourself..." {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={creatorForm.control}
+                              name="location"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Location (City, Province)</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="e.g. Toronto, ON" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={creatorForm.control}
+                              name="experienceLevel"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Experience Level</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Beginner, Pro, etc." {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -444,6 +498,32 @@ export default function Dashboard() {
                               <FormLabel>Industry</FormLabel>
                               <FormControl>
                                 <Input placeholder="e.g. Beauty, Tech, Fitness" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={brandForm.control}
+                          name="location"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Headquarters Location</FormLabel>
+                              <FormControl>
+                                <Input placeholder="e.g. Vancouver, BC" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={brandForm.control}
+                          name="website"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Website URL</FormLabel>
+                              <FormControl>
+                                <Input placeholder="https://..." {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>

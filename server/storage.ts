@@ -59,7 +59,11 @@ export class DatabaseStorage implements IStorage {
 
   async createCreator(insertCreator: InsertCreator): Promise<Creator> {
     const [creator] = await db.insert(creators).values([insertCreator]).returning();
-    return { ...creator, niches: creator.niches as string[] };
+    return { 
+      ...creator, 
+      niches: creator.niches as string[],
+      languages: creator.languages as string[]
+    };
   }
 
   async updateCreator(userId: string, updates: Partial<InsertCreator>): Promise<Creator> {
@@ -74,7 +78,11 @@ export class DatabaseStorage implements IStorage {
       .set(updates)
       .where(eq(creators.userId, userId))
       .returning();
-    return { ...updated, niches: updated.niches as string[] };
+    return { 
+      ...updated, 
+      niches: updated.niches as string[],
+      languages: updated.languages as string[]
+    };
   }
 
   // Brand Implementations
