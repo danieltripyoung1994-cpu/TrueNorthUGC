@@ -2,8 +2,9 @@ import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Search, Sparkles, TrendingUp, Users } from "lucide-react";
+import { ArrowRight, Search, TrendingUp, Users } from "lucide-react";
 import banffBg from "@assets/stock_images/scenic_background_of_f3c6840b.jpg";
+import logoPng from "@assets/Photoroom_20260124_081931_1769558537558.png";
 
 export default function Landing() {
   return (
@@ -36,12 +37,13 @@ export default function Landing() {
               }}
               className="inline-flex items-center rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-xl shadow-[0_0_20px_rgba(var(--primary),0.3)]"
             >
-              <motion.div
+              <motion.img
+                src={logoPng}
+                alt=""
+                className="mr-2 h-6 w-auto"
                 animate={{ rotate: [0, 15, -15, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <Sparkles className="mr-2 h-4 w-4 text-primary-foreground" />
-              </motion.div>
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              />
               Made for Canadian Creators
             </motion.div>
             
@@ -289,7 +291,7 @@ export default function Landing() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 md:col-span-2 space-y-6">
               <div className="flex items-center gap-2">
-                <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-black text-xl">T</div>
+                <img src={logoPng} alt="TrueNorthUGC Logo" className="h-12 w-auto" />
                 <span className="text-2xl font-black tracking-tighter">TrueNorthUGC</span>
               </div>
               <p className="text-muted-foreground text-lg leading-relaxed max-w-sm">

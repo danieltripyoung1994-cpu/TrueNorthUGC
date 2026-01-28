@@ -9,7 +9,8 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Loader2, LogOut, User, LayoutDashboard, Sparkles } from "lucide-react";
+import { Loader2, LogOut, User, LayoutDashboard } from "lucide-react";
+import logoPng from "@assets/Photoroom_20260124_081931_1769558537558.png";
 
 export function Navbar() {
   const [location] = useLocation();
@@ -21,9 +22,7 @@ export function Navbar() {
         <Link href="/" className="flex items-center gap-2 group relative">
           <div className="absolute -inset-4 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
           <div className="absolute -inset-2 bg-primary/10 blur-lg rounded-full animate-pulse pointer-events-none" />
-          <div className="bg-primary text-primary-foreground p-1.5 rounded-lg group-hover:rotate-6 transition-transform shadow-[0_0_15px_rgba(var(--primary),0.5)]">
-            <Sparkles className="h-5 w-5" />
-          </div>
+          <img src={logoPng} alt="TrueNorthUGC Logo" className="h-10 w-auto group-hover:rotate-6 transition-transform drop-shadow-[0_0_8px_rgba(var(--primary),0.3)]" />
           <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80 drop-shadow-[0_0_8px_rgba(var(--primary),0.3)]">TrueNorthUGC</span>
         </Link>
 
