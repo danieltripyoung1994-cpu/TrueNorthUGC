@@ -42,7 +42,7 @@ export default function Profile() {
         <Navbar />
         <main className="container mx-auto px-4 py-12 text-center">
           <h1 className="text-2xl font-bold">Profile not found</h1>
-          <Button variant="link" onClick={() => setLocation("/")} className="mt-4">
+          <Button variant="ghost" onClick={() => setLocation("/")} className="mt-4">
             Go back home
           </Button>
         </main>
@@ -89,6 +89,7 @@ export default function Profile() {
                 src={creator.profileImage || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop"} 
                 className="w-48 h-48 rounded-[2.5rem] object-cover shadow-2xl border-8 border-background group-hover:scale-105 transition-transform duration-500"
                 alt={creator.name}
+                loading="lazy"
               />
               <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </motion.div>
@@ -132,7 +133,7 @@ export default function Profile() {
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full shadow-lg hover:bg-primary hover:text-primary-foreground transition-all">
+                    <Button variant="outline" size="icon" className="rounded-full shadow-lg">
                       <Share2 className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>

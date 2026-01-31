@@ -1,27 +1,40 @@
+import { lazy, Suspense } from "react";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import Landing from "@/pages/Landing";
-import Directory from "@/pages/Directory";
-import Profile from "@/pages/Profile";
-import Dashboard from "@/pages/Dashboard";
-import Pricing from "@/pages/Pricing";
-import LaunchCampaign from "@/pages/LaunchCampaign";
+import { Loader2 } from "lucide-react";
+
+const Landing = lazy(() => import("@/pages/Landing"));
+const Directory = lazy(() => import("@/pages/Directory"));
+const Profile = lazy(() => import("@/pages/Profile"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const Pricing = lazy(() => import("@/pages/Pricing"));
+const LaunchCampaign = lazy(() => import("@/pages/LaunchCampaign"));
+const NotFound = lazy(() => import("@/pages/not-found"));
+
+function PageLoader() {
+  return (
+    <div className="flex justify-center items-center min-h-screen">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  );
+}
 
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={Landing} />
-      <Route path="/creators" component={Directory} />
-      <Route path="/creators/:handle" component={Profile} />
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/pricing" component={Pricing} />
-      <Route path="/launch" component={LaunchCampaign} />
-      <Route component={NotFound} />
-    </Switch>
+    <Suspense fallback={<PageLoader />}>
+      <Switch>
+        <Route path="/" component={Landing} />
+        <Route path="/creators" component={Directory} />
+        <Route path="/creators/:handle" component={Profile} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/pricing" component={Pricing} />
+        <Route path="/launch" component={LaunchCampaign} />
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 
