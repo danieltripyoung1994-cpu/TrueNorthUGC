@@ -111,12 +111,12 @@ export default function Pricing() {
         <motion.div 
           animate={{ rotate: 360 }}
           transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-          className="absolute top-20 -right-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10"
+          className="absolute top-20 -right-32 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl -z-10"
         />
         <motion.div 
           animate={{ rotate: -360 }}
           transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
-          className="absolute top-1/2 -left-32 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl -z-10"
+          className="absolute top-1/2 -left-32 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl -z-10"
         />
         
         <motion.div 
@@ -129,7 +129,7 @@ export default function Pricing() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary backdrop-blur-xl shadow-lg animate-pulse-glow"
+            className="inline-flex items-center rounded-full border border-pink-500/30 bg-pink-500/10 px-5 py-2 text-sm font-semibold text-pink-400 backdrop-blur-xl shadow-lg shadow-pink-500/20 animate-pulse-glow"
           >
             <motion.div
               animate={{ rotate: [0, 360] }}
@@ -150,7 +150,7 @@ export default function Pricing() {
               animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
               transition={{ duration: 5, repeat: Infinity }}
               style={{ backgroundSize: "200% auto" }}
-              className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-400 to-primary inline-block italic"
+              className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 inline-block italic"
             >
               Success
             </motion.span>
@@ -178,13 +178,13 @@ export default function Pricing() {
             >
               <motion.div 
                 whileHover={{ scale: 1.1, rotate: 5 }}
-                className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center flex-shrink-0 shadow-lg"
+                className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/10 flex items-center justify-center flex-shrink-0 shadow-lg shadow-pink-500/10"
               >
                 <motion.div
                   animate={{ rotate: [0, 360] }}
                   transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                 >
-                  <Zap className="h-6 w-6 sm:h-7 sm:w-7 text-primary" />
+                  <Zap className="h-6 w-6 sm:h-7 sm:w-7 text-pink-500" />
                 </motion.div>
               </motion.div>
               <div>
@@ -207,16 +207,16 @@ export default function Pricing() {
                   whileHover={{ y: -8, scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <Card className={`flex flex-col h-full relative overflow-hidden transition-all duration-500 rounded-2xl sm:rounded-[2.5rem] group ${tier.popular ? 'border-primary/30 shadow-2xl shadow-primary/15 md:scale-105 z-10' : 'hover:border-primary/50 hover:shadow-xl'}`}>
+                  <Card className={`flex flex-col h-full relative overflow-hidden transition-all duration-500 rounded-2xl sm:rounded-[2.5rem] group bg-card/50 backdrop-blur-sm border-white/10 ${tier.popular ? 'border-pink-500/50 shadow-2xl shadow-pink-500/20 md:scale-105 z-10' : 'hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20'}`}>
                     {/* Animated gradient overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     {tier.popular && (
                       <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
                         <motion.div
                           animate={{ scale: [1, 1.05, 1] }}
                           transition={{ duration: 2, repeat: Infinity }}
                         >
-                          <Badge className="bg-gradient-to-r from-primary to-blue-500 text-primary-foreground font-bold px-3 sm:px-4 py-1 rounded-full uppercase tracking-widest text-[10px] shadow-lg">
+                          <Badge className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold px-3 sm:px-4 py-1 rounded-full uppercase tracking-widest text-[10px] shadow-lg shadow-pink-500/30">
                             Popular
                           </Badge>
                         </motion.div>
@@ -228,7 +228,7 @@ export default function Pricing() {
                     </CardHeader>
                     <CardContent className="flex-1 space-y-6 sm:space-y-10 px-6 sm:px-10">
                       <div className="flex items-baseline gap-2">
-                        <span className="text-4xl sm:text-5xl md:text-6xl font-black text-primary tracking-tighter">{tier.price}</span>
+                        <span className="text-4xl sm:text-5xl md:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-500 tracking-tighter">{tier.price}</span>
                         {tier.price !== "Custom" && <span className="text-sm sm:text-base text-muted-foreground font-semibold">/month</span>}
                       </div>
 
@@ -254,18 +254,18 @@ export default function Pricing() {
                       )}
 
                       {tier.name === "Exclusive" && creatorOffers.length > 0 && (
-                        <div className="p-6 rounded-3xl bg-primary/5 border border-primary/10 relative overflow-hidden group">
+                        <div className="p-6 rounded-3xl bg-pink-500/5 border border-pink-500/20 relative overflow-hidden group backdrop-blur-sm">
                           <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
                             <Crown size={80} />
                           </div>
-                          <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2">Limited Time Offer</p>
+                          <p className="text-[10px] font-black text-pink-500 uppercase tracking-[0.2em] mb-2">Limited Time Offer</p>
                           {creatorOffers.map(offer => (
                             <div key={offer.id}>
                               <p className="font-bold text-lg leading-tight mb-1">{offer.title}</p>
                               <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{offer.description}</p>
                               <div className="flex items-center justify-between gap-4">
-                                <span className="text-3xl font-black text-primary">{offer.discount}</span>
-                                <div className="bg-background px-4 py-2 rounded-xl border-2 border-primary/20 text-sm font-mono font-bold tracking-wider">
+                                <span className="text-3xl font-black text-pink-500">{offer.discount}</span>
+                                <div className="bg-background/50 backdrop-blur-sm px-4 py-2 rounded-xl border-2 border-pink-500/30 text-sm font-mono font-bold tracking-wider">
                                   {offer.code}
                                 </div>
                               </div>
@@ -277,8 +277,8 @@ export default function Pricing() {
                       <ul className="space-y-5">
                         {tier.features.map((feature) => (
                           <li key={feature} className="flex items-start gap-4 text-sm font-medium leading-relaxed">
-                            <div className="mt-0.5 h-5 w-5 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
-                              <Check className="h-3 w-3 text-green-500 stroke-[4]" />
+                            <div className="mt-0.5 h-5 w-5 rounded-full bg-pink-500/10 flex items-center justify-center shrink-0">
+                              <Check className="h-3 w-3 text-pink-500 stroke-[4]" />
                             </div>
                             <span>{feature}</span>
                           </li>
@@ -287,7 +287,7 @@ export default function Pricing() {
                     </CardContent>
                     <CardFooter className="p-10 pt-6">
                       <Button 
-                        className={`w-full h-16 text-xl font-black rounded-3xl transition-all ${tier.popular ? 'shadow-2xl shadow-primary/40 hover:scale-[1.02]' : ''}`} 
+                        className={`w-full h-16 text-xl font-black rounded-3xl transition-all ${tier.popular ? 'bg-gradient-to-r from-pink-500 to-purple-500 border-0 shadow-2xl shadow-pink-500/40 hover:scale-[1.02] hover:shadow-pink-500/50' : ''}`} 
                         variant={tier.variant}
                         onClick={() => window.location.href = "/api/login"}
                       >
@@ -309,8 +309,8 @@ export default function Pricing() {
               viewport={{ once: true }}
               className="flex items-center gap-4 mb-12"
             >
-              <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-                <Crown className="h-6 w-6 text-primary" />
+              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/10 flex items-center justify-center shadow-lg shadow-pink-500/10">
+                <Crown className="h-6 w-6 text-pink-500" />
               </div>
               <div>
                 <h2 className="text-3xl font-black tracking-tight">For Brands</h2>
@@ -327,10 +327,10 @@ export default function Pricing() {
             >
               {brandTiers.map((tier) => (
                 <motion.div key={tier.name} variants={item}>
-                  <Card className={`flex flex-col h-full relative overflow-hidden transition-all duration-500 rounded-[2.5rem] ${tier.popular ? 'border-primary/20 shadow-2xl shadow-primary/10 scale-105 z-10' : 'hover:border-primary/50'}`}>
+                  <Card className={`flex flex-col h-full relative overflow-hidden transition-all duration-500 rounded-[2.5rem] bg-card/50 backdrop-blur-sm border-white/10 ${tier.popular ? 'border-pink-500/50 shadow-2xl shadow-pink-500/20 scale-105 z-10' : 'hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20'}`}>
                     {tier.popular && (
                       <div className="absolute top-6 right-6">
-                        <Badge className="bg-primary text-primary-foreground font-bold px-4 py-1 rounded-full uppercase tracking-widest text-[10px]">
+                        <Badge className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold px-4 py-1 rounded-full uppercase tracking-widest text-[10px] shadow-lg shadow-pink-500/30">
                           Best Value
                         </Badge>
                       </div>
@@ -341,23 +341,23 @@ export default function Pricing() {
                     </CardHeader>
                     <CardContent className="flex-1 space-y-10 px-10">
                       <div className="flex items-baseline gap-2">
-                        <span className="text-6xl font-black text-primary tracking-tighter">{tier.price}</span>
+                        <span className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-500 tracking-tighter">{tier.price}</span>
                         {tier.price !== "Custom" && <span className="text-muted-foreground font-semibold">/month</span>}
                       </div>
 
                       {tier.name === "Campaign Starter" && brandOffers.length > 0 && (
-                        <div className="p-6 rounded-3xl bg-primary/5 border border-primary/10 relative overflow-hidden group">
+                        <div className="p-6 rounded-3xl bg-pink-500/5 border border-pink-500/20 relative overflow-hidden group backdrop-blur-sm">
                           <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
                             <Star size={80} />
                           </div>
-                          <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2">Exclusive Partner Program</p>
+                          <p className="text-[10px] font-black text-pink-500 uppercase tracking-[0.2em] mb-2">Exclusive Partner Program</p>
                           {brandOffers.map(offer => (
                             <div key={offer.id}>
                               <p className="font-bold text-lg leading-tight mb-1">{offer.title}</p>
                               <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{offer.description}</p>
                               <div className="flex items-center justify-between gap-4">
-                                <span className="text-3xl font-black text-primary">{offer.discount}</span>
-                                <div className="bg-background px-4 py-2 rounded-xl border-2 border-primary/20 text-sm font-mono font-bold tracking-wider">
+                                <span className="text-3xl font-black text-pink-500">{offer.discount}</span>
+                                <div className="bg-background/50 backdrop-blur-sm px-4 py-2 rounded-xl border-2 border-pink-500/30 text-sm font-mono font-bold tracking-wider">
                                   {offer.code}
                                 </div>
                               </div>
@@ -390,8 +390,8 @@ export default function Pricing() {
                       <ul className="space-y-5">
                         {tier.features.map((feature) => (
                           <li key={feature} className="flex items-start gap-4 text-sm font-medium leading-relaxed">
-                            <div className="mt-0.5 h-5 w-5 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
-                              <Check className="h-3 w-3 text-green-500 stroke-[4]" />
+                            <div className="mt-0.5 h-5 w-5 rounded-full bg-pink-500/10 flex items-center justify-center shrink-0">
+                              <Check className="h-3 w-3 text-pink-500 stroke-[4]" />
                             </div>
                             <span>{feature}</span>
                           </li>
@@ -400,7 +400,7 @@ export default function Pricing() {
                     </CardContent>
                     <CardFooter className="p-10 pt-6">
                       <Button 
-                        className={`w-full h-16 text-xl font-black rounded-3xl transition-all ${tier.popular ? 'shadow-2xl shadow-primary/40 hover:scale-[1.02]' : ''}`} 
+                        className={`w-full h-16 text-xl font-black rounded-3xl transition-all ${tier.popular ? 'bg-gradient-to-r from-pink-500 to-purple-500 border-0 shadow-2xl shadow-pink-500/40 hover:scale-[1.02] hover:shadow-pink-500/50' : ''}`} 
                         variant={tier.variant}
                         onClick={() => {
                           if (tier.name === "Campaign Starter") {
