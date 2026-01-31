@@ -16,18 +16,42 @@ class AuthStorage implements IAuthStorage {
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
-    const [user] = await db
-      .insert(users)
-      .values(userData)
-      .onConflictDoUpdate({
-        target: users.id,
-        set: {
-          ...userData,
-          updatedAt: new Date(),
-        },
-      })
-      .returning();
-    return user;
+    try {
+      const [user] = await db
+        .insert(users)
+        .values(userData)
+        .onConflictDoUpdate({
+          target: users.id,
+          set: {
+            ...userData,
+            updatedAt: new Date(),
+          },
+        })
+        .returning();
+      return user;
+    } catch (error: any) {
+      // Handle duplicate email gracefully - if email exists for different user, 
+      // just return the existing user by ID or update without email
+      if (error.code === '23505' && error.constraint?.includes('email')) {
+        console.warn('Email conflict during upsert, attempting to find user by ID');
+        if (!userData.id) throw error;
+        const existingUser = await this.getUser(userData.id);
+        if (existingUser) {
+          return existingUser;
+        }
+        // If user doesn't exist by ID, create without the conflicting email
+        const [userWithoutEmail] = await db
+          .insert(users)
+          .values({ ...userData, email: null })
+          .onConflictDoUpdate({
+            target: users.id,
+            set: { ...userData, email: null, updatedAt: new Date() },
+          })
+          .returning();
+        return userWithoutEmail;
+      }
+      throw error;
+    }
   }
 }
 

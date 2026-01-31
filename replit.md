@@ -50,7 +50,7 @@ Preferred communication style: Simple, everyday language.
 - **Profile Customization**: Complete profile editing with profile picture, bio, social links, portfolio videos, and more
 - **Code Splitting**: React.lazy for optimized page loading
 - **Campaigns System**: Brands can post and manage campaigns with title, description, budget, niches, deliverables, deadline, and location. Creators can discover active campaigns at /campaigns.
-- **PayPal Payments**: Secure PayPal integration with 20% platform fee (80% to creator, 20% to platform). Server-side transaction recording with verified amounts. All payments go to platform's PayPal account.
+- **PayPal Payments**: Secure PayPal integration with 20% platform fee (80% to creator, 20% to platform). Server-side transaction recording with verified amounts. All payments go to platform's PayPal account. The platform owner manually pays creators their 80% share.
 - **Testimonials Section**: Landing page features success stories from creators and brands
 - **Featured Campaigns**: Landing page displays active campaigns with empty state handling
 - **Reviews System**: Creators and brands can leave reviews and ratings after collaborations
