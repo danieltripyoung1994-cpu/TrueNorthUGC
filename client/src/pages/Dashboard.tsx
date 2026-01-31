@@ -4,7 +4,7 @@ import { useMyCreatorProfile, useUpdateCreatorProfile } from "@/hooks/use-creato
 import { useBrand } from "@/hooks/use-brand";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Plus, LogOut, Building, User, Instagram, Music2, Globe, Camera } from "lucide-react";
+import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera } from "lucide-react";
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -143,7 +143,7 @@ export default function Dashboard() {
         >
           <div className="flex justify-between items-center">
             <h1 className="text-4xl font-black tracking-tighter">Dashboard</h1>
-            <Button variant="outline" onClick={() => logout()} data-testid="button-logout" className="hover-elevate rounded-xl px-6 h-11 font-bold">
+            <Button size="lg" variant="outline" onClick={() => logout()} data-testid="button-logout" className="hover-elevate rounded-xl px-6 font-bold">
               <LogOut className="mr-2 h-4 w-4" />
               Sign Out
             </Button>
@@ -195,22 +195,22 @@ export default function Dashboard() {
                     <CardTitle>{roleSelection === "creator" ? "Create Creator Profile" : "Create Brand Profile"}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <Form {...(roleSelection === "creator" ? creatorForm : brandForm)}>
-                      <form onSubmit={(roleSelection === "creator" ? creatorForm : brandForm).handleSubmit(roleSelection === "creator" ? onCreatorSubmit : onBrandSubmit)} className="space-y-4">
-                        <FormField
-                          control={(roleSelection === "creator" ? creatorForm : brandForm).control}
-                          name="name"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Full Name / Company Name</FormLabel>
-                              <FormControl>
-                                <Input placeholder={roleSelection === "creator" ? "Your Stage Name" : "Company Name"} {...field} className="h-12" />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        {roleSelection === "creator" && (
+                    {roleSelection === "creator" ? (
+                      <Form {...creatorForm}>
+                        <form onSubmit={creatorForm.handleSubmit(onCreatorSubmit)} className="space-y-4">
+                          <FormField
+                            control={creatorForm.control}
+                            name="name"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Full Name / Company Name</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Your Stage Name" {...field} className="h-12" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
                           <FormField
                             control={creatorForm.control}
                             name="handle"
@@ -224,8 +224,29 @@ export default function Dashboard() {
                               </FormItem>
                             )}
                           />
-                        )}
-                        {roleSelection === "brand" && (
+                          <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending}>
+                            {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            Create Official Profile
+                          </Button>
+                          <Button type="button" variant="ghost" className="w-full" onClick={() => setRoleSelection(null)}>Back</Button>
+                        </form>
+                      </Form>
+                    ) : (
+                      <Form {...brandForm}>
+                        <form onSubmit={brandForm.handleSubmit(onBrandSubmit)} className="space-y-4">
+                          <FormField
+                            control={brandForm.control}
+                            name="name"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Full Name / Company Name</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Company Name" {...field} className="h-12" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
                           <FormField
                             control={brandForm.control}
                             name="industry"
@@ -239,14 +260,14 @@ export default function Dashboard() {
                               </FormItem>
                             )}
                           />
-                        )}
-                        <Button type="submit" className="w-full h-12 text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending}>
-                          {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                          Create Official Profile
-                        </Button>
-                        <Button variant="ghost" className="w-full" onClick={() => setRoleSelection(null)}>Back</Button>
-                      </form>
-                    </Form>
+                          <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending}>
+                            {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            Create Official Profile
+                          </Button>
+                          <Button type="button" variant="ghost" className="w-full" onClick={() => setRoleSelection(null)}>Back</Button>
+                        </form>
+                      </Form>
+                    )}
                   </CardContent>
                 </Card>
               </motion.div>
@@ -285,7 +306,7 @@ export default function Dashboard() {
 
                 <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button size="lg" className="w-full h-14 text-lg font-bold shadow-xl shadow-primary/20 hover:scale-[1.01] transition-transform" data-testid="button-edit-creator">
+                    <Button size="lg" className="w-full text-lg font-bold shadow-xl shadow-primary/20 hover:scale-[1.01] transition-transform" data-testid="button-edit-creator">
                       Edit Profile & Socials
                     </Button>
                   </DialogTrigger>
@@ -414,7 +435,7 @@ export default function Dashboard() {
                             />
                           </div>
                         </div>
-                        <Button type="submit" className="w-full h-12 font-bold" disabled={updateCreator.isPending}>
+                        <Button size="lg" type="submit" className="w-full font-bold" disabled={updateCreator.isPending}>
                           {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                           Save Changes
                         </Button>
@@ -454,7 +475,7 @@ export default function Dashboard() {
 
                 <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button size="lg" className="w-full h-14 text-lg font-bold shadow-xl shadow-primary/20 hover:scale-[1.01] transition-transform" data-testid="button-edit-brand">
+                    <Button size="lg" className="w-full text-lg font-bold shadow-xl shadow-primary/20 hover:scale-[1.01] transition-transform" data-testid="button-edit-brand">
                       Edit Brand Settings
                     </Button>
                   </DialogTrigger>
@@ -542,7 +563,7 @@ export default function Dashboard() {
                             </FormItem>
                           )}
                         />
-                        <Button type="submit" className="w-full h-12 font-bold">
+                        <Button size="lg" type="submit" className="w-full font-bold">
                           Update Brand Profile
                         </Button>
                       </form>
