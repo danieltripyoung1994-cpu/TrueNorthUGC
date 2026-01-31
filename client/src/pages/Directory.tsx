@@ -76,10 +76,10 @@ export default function Directory() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 hover:shadow-lg hover:shadow-pink-500/20 transition-all duration-300"
             >
-              <Users className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Creator Directory</span>
+              <Users className="h-4 w-4 text-pink-500" />
+              <span className="text-sm font-medium text-pink-500">Creator Directory</span>
             </motion.div>
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
@@ -88,7 +88,7 @@ export default function Directory() {
               className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter"
             >
               Discover{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-500">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">
                 Talent
               </span>
             </motion.h1>
@@ -108,14 +108,14 @@ export default function Directory() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-card border rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-8 sm:mb-12 shadow-sm"
+          className="bg-card/50 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-8 sm:mb-12 shadow-lg hover:shadow-pink-500/10 transition-all duration-300"
         >
           <div className="flex flex-col gap-3 sm:gap-4">
             <div className="relative w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
                 placeholder="Search by name or handle..." 
-                className="pl-9 h-11 sm:h-12 bg-background border-border/50 focus:border-primary text-base"
+                className="pl-9 h-11 sm:h-12 bg-background/50 backdrop-blur-sm border-white/10 focus:border-pink-500/50 focus:ring-pink-500/20 text-base"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 data-testid="input-search-creators"
@@ -123,32 +123,32 @@ export default function Directory() {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex gap-2 sm:gap-3">
               <Select value={niche} onValueChange={setNiche}>
-                <SelectTrigger className="w-full lg:w-[160px] h-11 sm:h-12 bg-background border-border/50 text-sm sm:text-base" data-testid="select-niche">
+                <SelectTrigger className="w-full lg:w-[160px] h-11 sm:h-12 bg-background/50 backdrop-blur-sm border-white/10 hover:border-pink-500/30 text-sm sm:text-base transition-colors" data-testid="select-niche">
                   <SelectValue placeholder="Niche" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-card/95 backdrop-blur-sm border-white/10">
                   {NICHES.map((n) => (
                     <SelectItem key={n} value={n}>{n}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <Select value={location} onValueChange={setLocation}>
-                <SelectTrigger className="w-full lg:w-[180px] h-11 sm:h-12 bg-background border-border/50 text-sm sm:text-base" data-testid="select-location">
+                <SelectTrigger className="w-full lg:w-[180px] h-11 sm:h-12 bg-background/50 backdrop-blur-sm border-white/10 hover:border-pink-500/30 text-sm sm:text-base transition-colors" data-testid="select-location">
                   <MapPin className="h-4 w-4 mr-1 sm:mr-2 text-muted-foreground flex-shrink-0" />
                   <SelectValue placeholder="Location" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-card/95 backdrop-blur-sm border-white/10">
                   {LOCATIONS.map((loc) => (
                     <SelectItem key={loc} value={loc}>{loc}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <Select value={experienceLevel} onValueChange={setExperienceLevel}>
-                <SelectTrigger className="w-full lg:w-[160px] h-11 sm:h-12 bg-background border-border/50 text-sm sm:text-base col-span-2 sm:col-span-1" data-testid="select-experience">
+                <SelectTrigger className="w-full lg:w-[160px] h-11 sm:h-12 bg-background/50 backdrop-blur-sm border-white/10 hover:border-pink-500/30 text-sm sm:text-base col-span-2 sm:col-span-1 transition-colors" data-testid="select-experience">
                   <Star className="h-4 w-4 mr-1 sm:mr-2 text-muted-foreground flex-shrink-0" />
                   <SelectValue placeholder="Experience" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-card/95 backdrop-blur-sm border-white/10">
                   {EXPERIENCE_LEVELS.map((exp) => (
                     <SelectItem key={exp} value={exp}>{exp}</SelectItem>
                   ))}
@@ -163,7 +163,7 @@ export default function Directory() {
                     setLocation("All Locations");
                     setExperienceLevel("All Levels");
                   }}
-                  className="h-12 px-4 text-muted-foreground hover:text-destructive"
+                  className="h-12 px-4 text-muted-foreground hover:text-pink-500 hover:bg-pink-500/10 transition-colors"
                   data-testid="button-clear-filters"
                 >
                   <FilterX className="mr-2 h-4 w-4" />
@@ -204,7 +204,7 @@ export default function Directory() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              className="text-center py-12 sm:py-20 bg-gradient-to-br from-secondary/20 to-secondary/5 rounded-2xl sm:rounded-3xl border border-dashed border-border mx-2 sm:mx-0"
+              className="text-center py-12 sm:py-20 bg-gradient-to-br from-pink-500/10 via-purple-500/5 to-cyan-400/5 rounded-2xl sm:rounded-3xl border border-dashed border-white/10 mx-2 sm:mx-0"
             >
               <motion.div
                 animate={{ y: [0, -5, 0] }}

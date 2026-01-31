@@ -228,8 +228,8 @@ export default function Dashboard() {
           className="max-w-4xl mx-auto space-y-6 sm:space-y-8"
         >
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter">Dashboard</h1>
-            <Button variant="outline" onClick={() => logout()} data-testid="button-logout" className="hover-elevate rounded-xl px-4 sm:px-6 font-bold">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Dashboard</h1>
+            <Button variant="outline" onClick={() => logout()} data-testid="button-logout" className="hover-elevate rounded-xl px-4 sm:px-6 font-bold border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20">
               <LogOut className="mr-2 h-4 w-4" />
               Sign Out
             </Button>
@@ -265,10 +265,10 @@ export default function Dashboard() {
                   >
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                       <div>
-                        <h2 className="text-xl font-bold">My Campaigns</h2>
+                        <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">My Campaigns</h2>
                         <p className="text-muted-foreground text-sm">Manage your brand campaigns</p>
                       </div>
-                      <Button onClick={handleCreateCampaign} data-testid="button-create-campaign">
+                      <Button onClick={handleCreateCampaign} data-testid="button-create-campaign" className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 border-0">
                         <Plus className="mr-2 h-4 w-4" />
                         Create Campaign
                       </Button>
@@ -276,12 +276,12 @@ export default function Dashboard() {
 
                     {loadingCampaigns ? (
                       <div className="flex justify-center items-center h-40">
-                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
                       </div>
                     ) : myCampaigns && myCampaigns.length > 0 ? (
                       <div className="space-y-4">
                         {myCampaigns.map((campaign) => (
-                          <Card key={campaign.id} className="hover:border-primary/50 transition-colors" data-testid={`card-my-campaign-${campaign.id}`}>
+                          <Card key={campaign.id} className="bg-card/50 backdrop-blur-sm border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20 transition-all" data-testid={`card-my-campaign-${campaign.id}`}>
                             <CardContent className="p-4 sm:p-6">
                               <div className="flex flex-col sm:flex-row justify-between gap-4">
                                 <div className="flex-1 min-w-0 space-y-2">
@@ -360,12 +360,12 @@ export default function Dashboard() {
                         ))}
                       </div>
                     ) : (
-                      <Card className="border-2 border-dashed">
+                      <Card className="border-2 border-dashed border-white/10 bg-card/50 backdrop-blur-sm">
                         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                          <Megaphone className="h-12 w-12 text-muted-foreground/50 mb-4" />
+                          <Megaphone className="h-12 w-12 text-pink-500/50 mb-4" />
                           <h3 className="font-bold text-lg">No campaigns yet</h3>
                           <p className="text-muted-foreground text-sm mb-4">Create your first campaign to start connecting with creators</p>
-                          <Button onClick={handleCreateCampaign} data-testid="button-create-first-campaign">
+                          <Button onClick={handleCreateCampaign} data-testid="button-create-first-campaign" className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 border-0">
                             <Plus className="mr-2 h-4 w-4" />
                             Create Your First Campaign
                           </Button>
@@ -412,27 +412,27 @@ export default function Dashboard() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
               >
-                <Card className="border-2 border-dashed">
+                <Card className="border-2 border-dashed border-white/10 bg-card/50 backdrop-blur-sm">
                   <CardHeader className="text-center">
-                    <CardTitle className="text-2xl">Choose your path</CardTitle>
+                    <CardTitle className="text-2xl bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Choose your path</CardTitle>
                   </CardHeader>
                   <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 p-8">
                     <Button 
                       variant="outline" 
-                      className="h-auto py-8 flex-col gap-4 text-xl hover-elevate group transition-all"
+                      className="h-auto py-8 flex-col gap-4 text-xl hover-elevate group transition-all border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20"
                       onClick={() => setRoleSelection("creator")}
                       data-testid="button-select-creator"
                     >
-                      <User className="h-12 w-12 text-primary group-hover:scale-110 transition-transform" />
+                      <User className="h-12 w-12 text-pink-500 group-hover:scale-110 transition-transform" />
                       I am a Creator
                     </Button>
                     <Button 
                       variant="outline" 
-                      className="h-auto py-8 flex-col gap-4 text-xl hover-elevate group transition-all"
+                      className="h-auto py-8 flex-col gap-4 text-xl hover-elevate group transition-all border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20"
                       onClick={() => setRoleSelection("brand")}
                       data-testid="button-select-brand"
                     >
-                      <Building className="h-12 w-12 text-primary group-hover:scale-110 transition-transform" />
+                      <Building className="h-12 w-12 text-pink-500 group-hover:scale-110 transition-transform" />
                       I am a Brand
                     </Button>
                   </CardContent>
@@ -445,9 +445,9 @@ export default function Dashboard() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
               >
-                <Card className="shadow-lg">
+                <Card className="shadow-lg bg-card/50 backdrop-blur-sm border-white/10">
                   <CardHeader>
-                    <CardTitle>{roleSelection === "creator" ? "Create Creator Profile" : "Create Brand Profile"}</CardTitle>
+                    <CardTitle className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">{roleSelection === "creator" ? "Create Creator Profile" : "Create Brand Profile"}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     {roleSelection === "creator" ? (
@@ -479,7 +479,7 @@ export default function Dashboard() {
                               </FormItem>
                             )}
                           />
-                          <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending} data-testid="button-create-creator-profile">
+                          <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-pink-500/20 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 border-0" disabled={updateCreator.isPending} data-testid="button-create-creator-profile">
                             {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             Create Official Profile
                           </Button>
@@ -515,7 +515,7 @@ export default function Dashboard() {
                               </FormItem>
                             )}
                           />
-                          <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending} data-testid="button-create-brand-profile">
+                          <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-pink-500/20 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 border-0" disabled={updateCreator.isPending} data-testid="button-create-brand-profile">
                             {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             Create Official Profile
                           </Button>
@@ -533,9 +533,9 @@ export default function Dashboard() {
                 animate={{ opacity: 1 }}
                 className="space-y-6"
               >
-                <Card className="overflow-hidden hover:border-primary/50 transition-colors">
+                <Card className="overflow-hidden bg-card/50 backdrop-blur-sm border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20 transition-all">
                   <CardHeader>
-                    <CardTitle>Creator Profile Overview</CardTitle>
+                    <CardTitle className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Creator Profile Overview</CardTitle>
                   </CardHeader>
                   <CardContent className="flex justify-between items-center">
                     <div className="flex items-center gap-4">
@@ -553,7 +553,7 @@ export default function Dashboard() {
                     </div>
                     <div className="flex gap-2">
                       <Link href={`/creators/${creatorProfile.handle}`}>
-                        <Button variant="outline" className="hover-elevate" data-testid="link-view-profile">View Public Profile</Button>
+                        <Button variant="outline" className="hover-elevate border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20" data-testid="link-view-profile">View Public Profile</Button>
                       </Link>
                     </div>
                   </CardContent>
@@ -561,13 +561,13 @@ export default function Dashboard() {
 
                 <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button size="lg" className="w-full text-lg font-bold shadow-xl shadow-primary/20 hover:scale-[1.01] transition-transform" data-testid="button-edit-creator">
+                    <Button size="lg" className="w-full text-lg font-bold shadow-xl shadow-pink-500/20 hover:scale-[1.01] transition-transform bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 border-0" data-testid="button-edit-creator">
                       Edit Profile & Socials
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl">
+                  <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-card/80 backdrop-blur-xl border-white/10">
                     <DialogHeader>
-                      <DialogTitle className="text-2xl font-black">Customize Your Profile</DialogTitle>
+                      <DialogTitle className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Customize Your Profile</DialogTitle>
                     </DialogHeader>
                     <Form {...creatorForm}>
                       <form onSubmit={creatorForm.handleSubmit(onCreatorSubmit)} className="space-y-6 pt-4">
@@ -823,7 +823,7 @@ export default function Dashboard() {
                           </div>
                         </div>
                         
-                        <Button size="lg" type="submit" className="w-full font-bold" disabled={updateCreator.isPending}>
+                        <Button size="lg" type="submit" className="w-full font-bold bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 border-0" disabled={updateCreator.isPending}>
                           {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                           Save Changes
                         </Button>
@@ -839,9 +839,9 @@ export default function Dashboard() {
                 animate={{ opacity: 1 }}
                 className="space-y-6"
               >
-                <Card className="overflow-hidden hover:border-primary/50 transition-colors">
+                <Card className="overflow-hidden bg-card/50 backdrop-blur-sm border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20 transition-all">
                   <CardHeader>
-                    <CardTitle>Brand Profile Overview</CardTitle>
+                    <CardTitle className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Brand Profile Overview</CardTitle>
                   </CardHeader>
                   <CardContent className="flex justify-between items-center">
                     <div className="flex items-center gap-4">
@@ -857,19 +857,19 @@ export default function Dashboard() {
                         <p className="text-sm text-muted-foreground">{brandProfile?.industry || "Brand"}</p>
                       </div>
                     </div>
-                    <Button variant="outline" className="hover-elevate" data-testid="button-view-brand">Brand Dashboard</Button>
+                    <Button variant="outline" className="hover-elevate border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20" data-testid="button-view-brand">Brand Dashboard</Button>
                   </CardContent>
                 </Card>
 
                 <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button size="lg" className="w-full text-lg font-bold shadow-xl shadow-primary/20 hover:scale-[1.01] transition-transform" data-testid="button-edit-brand">
+                    <Button size="lg" className="w-full text-lg font-bold shadow-xl shadow-pink-500/20 hover:scale-[1.01] transition-transform bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 border-0" data-testid="button-edit-brand">
                       Edit Brand Settings
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-xl rounded-3xl">
+                  <DialogContent className="max-w-xl rounded-3xl bg-card/80 backdrop-blur-xl border-white/10">
                     <DialogHeader>
-                      <DialogTitle className="text-2xl font-black">Brand Details</DialogTitle>
+                      <DialogTitle className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Brand Details</DialogTitle>
                     </DialogHeader>
                     <Form {...brandForm}>
                       <form onSubmit={brandForm.handleSubmit(onBrandSubmit)} className="space-y-4 pt-4">
@@ -1057,7 +1057,7 @@ export default function Dashboard() {
                             )}
                           />
                         </div>
-                        <Button size="lg" type="submit" className="w-full font-bold">
+                        <Button size="lg" type="submit" className="w-full font-bold bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 border-0">
                           Update Brand Profile
                         </Button>
                       </form>
@@ -1080,27 +1080,27 @@ export default function Dashboard() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                 >
-                  <Card className="border-2 border-dashed">
+                  <Card className="border-2 border-dashed border-white/10 bg-card/50 backdrop-blur-sm">
                     <CardHeader className="text-center">
-                      <CardTitle className="text-2xl">Choose your path</CardTitle>
+                      <CardTitle className="text-2xl bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Choose your path</CardTitle>
                     </CardHeader>
                     <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 p-8">
                       <Button 
                         variant="outline" 
-                        className="h-auto py-8 flex-col gap-4 text-xl hover-elevate group transition-all"
+                        className="h-auto py-8 flex-col gap-4 text-xl hover-elevate group transition-all border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20"
                         onClick={() => setRoleSelection("creator")}
                         data-testid="button-select-creator"
                       >
-                        <User className="h-12 w-12 text-primary group-hover:scale-110 transition-transform" />
+                        <User className="h-12 w-12 text-pink-500 group-hover:scale-110 transition-transform" />
                         I am a Creator
                       </Button>
                       <Button 
                         variant="outline" 
-                        className="h-auto py-8 flex-col gap-4 text-xl hover-elevate group transition-all"
+                        className="h-auto py-8 flex-col gap-4 text-xl hover-elevate group transition-all border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20"
                         onClick={() => setRoleSelection("brand")}
                         data-testid="button-select-brand"
                       >
-                        <Building className="h-12 w-12 text-primary group-hover:scale-110 transition-transform" />
+                        <Building className="h-12 w-12 text-pink-500 group-hover:scale-110 transition-transform" />
                         I am a Brand
                       </Button>
                     </CardContent>
@@ -1113,9 +1113,9 @@ export default function Dashboard() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                 >
-                  <Card className="shadow-lg">
+                  <Card className="shadow-lg bg-card/50 backdrop-blur-sm border-white/10">
                     <CardHeader>
-                      <CardTitle>{roleSelection === "creator" ? "Create Creator Profile" : "Create Brand Profile"}</CardTitle>
+                      <CardTitle className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">{roleSelection === "creator" ? "Create Creator Profile" : "Create Brand Profile"}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       {roleSelection === "creator" ? (
@@ -1147,7 +1147,7 @@ export default function Dashboard() {
                                 </FormItem>
                               )}
                             />
-                            <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending} data-testid="button-create-creator-profile">
+                            <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-pink-500/20 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 border-0" disabled={updateCreator.isPending} data-testid="button-create-creator-profile">
                               {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                               Create Official Profile
                             </Button>
@@ -1183,7 +1183,7 @@ export default function Dashboard() {
                                 </FormItem>
                               )}
                             />
-                            <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending} data-testid="button-create-brand-profile">
+                            <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-pink-500/20 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 border-0" disabled={updateCreator.isPending} data-testid="button-create-brand-profile">
                               {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                               Create Official Profile
                             </Button>

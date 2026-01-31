@@ -62,14 +62,14 @@ export default function Profile() {
       <div className="min-h-screen bg-background">
         <Navbar />
         <main className="container mx-auto px-4 py-12 text-center">
-          <h1 className="text-2xl font-bold" data-testid="text-profile-not-found">Profile not found</h1>
+          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400" data-testid="text-profile-not-found">Profile not found</h1>
           <p className="text-muted-foreground mt-2 mb-4">This creator profile doesn't exist or may have been removed.</p>
           <div className="flex gap-2 justify-center">
-            <Button variant="ghost" onClick={() => setLocation("/")} data-testid="button-go-home">
+            <Button variant="ghost" onClick={() => setLocation("/")} className="hover:text-pink-500" data-testid="button-go-home">
               Go back home
             </Button>
             {user && (
-              <Button onClick={() => setLocation("/dashboard")} data-testid="button-create-profile">
+              <Button onClick={() => setLocation("/dashboard")} className="bg-gradient-to-r from-pink-500 to-purple-500 hover:shadow-lg hover:shadow-pink-500/20 border-0 text-white" data-testid="button-create-profile">
                 Create your profile
               </Button>
             )}
@@ -123,12 +123,12 @@ export default function Profile() {
       <Navbar />
       <main className="container mx-auto px-4 py-12 relative">
         <motion.div
-          className="absolute top-20 right-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl -z-10"
+          className="absolute top-20 right-10 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl -z-10"
           animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 8, repeat: Infinity }}
         />
         <motion.div
-          className="absolute bottom-40 left-10 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl -z-10"
+          className="absolute bottom-40 left-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -z-10"
           animate={{ scale: [1.1, 1, 1.1], opacity: [0.5, 0.3, 0.5] }}
           transition={{ duration: 10, repeat: Infinity }}
         />
@@ -147,23 +147,23 @@ export default function Profile() {
             >
               <img 
                 src={creator.profileImage || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop"} 
-                className="w-48 h-48 rounded-[2.5rem] object-cover shadow-2xl border-8 border-background group-hover:scale-105 transition-transform duration-500"
+                className="w-48 h-48 rounded-[2.5rem] object-cover shadow-2xl border-4 border-white/10 group-hover:scale-105 group-hover:shadow-pink-500/30 transition-all duration-500"
                 alt={creator.name}
                 loading="lazy"
               />
-              <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-t from-pink-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </motion.div>
             <div className="space-y-6 flex-1">
               <div className="flex justify-between items-start gap-4">
                 <div className="space-y-2">
                   <div className="flex items-center gap-4 flex-wrap">
-                    <h1 className="text-5xl font-black tracking-tighter">{creator.name}</h1>
+                    <h1 className="text-5xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">{creator.name}</h1>
                     {isOwnProfile && (
                       <Button 
                         variant="secondary" 
                         size="icon" 
                         onClick={() => setLocation("/dashboard")}
-                        className="rounded-full h-10 w-10 hover-elevate shadow-md"
+                        className="rounded-full h-10 w-10 bg-gradient-to-r from-pink-500 to-purple-500 hover:shadow-lg hover:shadow-pink-500/20 border-0 text-white"
                         data-testid="button-edit-profile"
                       >
                         <Settings className="h-5 w-5" />
@@ -178,7 +178,7 @@ export default function Profile() {
                           href={creator.socialLinks.instagram} 
                           target="_blank" 
                           rel="noreferrer" 
-                          className="text-muted-foreground hover:text-primary transition-colors"
+                          className="text-muted-foreground hover:text-pink-500 transition-colors"
                           whileHover={{ scale: 1.2, rotate: 5 }}
                           whileTap={{ scale: 0.9 }}
                         >
@@ -190,7 +190,7 @@ export default function Profile() {
                           href={creator.socialLinks.tiktok} 
                           target="_blank" 
                           rel="noreferrer" 
-                          className="text-muted-foreground hover:text-primary transition-colors"
+                          className="text-muted-foreground hover:text-pink-500 transition-colors"
                           whileHover={{ scale: 1.2, rotate: -5 }}
                           whileTap={{ scale: 0.9 }}
                         >
@@ -202,7 +202,7 @@ export default function Profile() {
                           href={creator.socialLinks.youtube} 
                           target="_blank" 
                           rel="noreferrer" 
-                          className="text-muted-foreground hover:text-primary transition-colors"
+                          className="text-muted-foreground hover:text-pink-500 transition-colors"
                           whileHover={{ scale: 1.2, rotate: 5 }}
                           whileTap={{ scale: 0.9 }}
                         >
@@ -214,11 +214,11 @@ export default function Profile() {
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full shadow-lg">
-                      <Share2 className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="rounded-full shadow-lg bg-card/50 backdrop-blur-sm border-white/10 hover:shadow-pink-500/20 hover:border-pink-500/30">
+                      <Share2 className="h-4 w-4 text-pink-500" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="rounded-2xl p-2 min-w-[160px] shadow-2xl border-primary/10">
+                  <DropdownMenuContent align="end" className="rounded-2xl p-2 min-w-[160px] shadow-2xl bg-card/50 backdrop-blur-sm border-white/10">
                     <DropdownMenuItem onClick={shareToInstagram} className="cursor-pointer gap-3 rounded-xl p-3 font-medium" data-testid="share-instagram">
                       <SiInstagram className="h-4 w-4 text-pink-500" />
                       Instagram
@@ -240,7 +240,7 @@ export default function Profile() {
                       Facebook
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={copyToClipboard} className="cursor-pointer gap-3 rounded-xl p-3 font-medium" data-testid="share-copy-link">
-                      <LinkIcon className="h-4 w-4 text-primary" />
+                      <LinkIcon className="h-4 w-4 text-pink-500" />
                       Copy Link
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -248,7 +248,7 @@ export default function Profile() {
               </div>
               <div className="flex flex-wrap gap-2">
                 {creator.niches?.map(niche => (
-                  <Badge key={niche} variant="secondary" className="px-4 py-1 rounded-full font-bold uppercase text-[10px] tracking-widest bg-primary/10 text-primary border-none">
+                  <Badge key={niche} variant="secondary" className="px-4 py-1 rounded-full font-bold uppercase text-[10px] tracking-widest bg-card/50 backdrop-blur-sm border border-white/10 text-pink-400">
                     {niche}
                   </Badge>
                 ))}
@@ -289,10 +289,10 @@ export default function Profile() {
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <h2 className="text-3xl font-black tracking-tighter flex items-center gap-2">
-                    <Video className="h-6 w-6 text-primary" />
-                    Portfolio
+                    <Video className="h-6 w-6 text-pink-500" />
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Portfolio</span>
                   </h2>
-                  <div className="h-px bg-muted flex-1" />
+                  <div className="h-px bg-gradient-to-r from-pink-500/50 via-purple-500/50 to-transparent flex-1" />
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -303,7 +303,7 @@ export default function Profile() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.1 * idx }}
                     >
-                      <Card className="overflow-hidden rounded-2xl">
+                      <Card className="overflow-hidden rounded-2xl bg-card/50 backdrop-blur-sm border-white/10 hover:shadow-lg hover:shadow-pink-500/20 hover:border-pink-500/30 transition-all duration-300">
                         <div className="aspect-video">
                           {item.url.includes('youtube.com') || item.url.includes('youtu.be') ? (
                             <iframe
@@ -383,10 +383,10 @@ export default function Profile() {
             <div className="space-y-8">
               <div className="flex items-center gap-4">
                 <h2 className="text-3xl font-black tracking-tighter flex items-center gap-2">
-                  <Star className="h-6 w-6 text-yellow-400 fill-yellow-400" />
-                  Reviews
+                  <Star className="h-6 w-6 text-pink-500 fill-pink-500" />
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Reviews</span>
                 </h2>
-                <div className="h-px bg-muted flex-1" />
+                <div className="h-px bg-gradient-to-r from-pink-500/50 via-purple-500/50 to-transparent flex-1" />
               </div>
               <ReviewsSection
                 userId={creator.userId}
