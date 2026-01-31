@@ -147,15 +147,15 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-6 sm:py-12">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-4xl mx-auto space-y-8"
+          className="max-w-4xl mx-auto space-y-6 sm:space-y-8"
         >
-          <div className="flex justify-between items-center">
-            <h1 className="text-4xl font-black tracking-tighter">Dashboard</h1>
-            <Button size="lg" variant="outline" onClick={() => logout()} data-testid="button-logout" className="hover-elevate rounded-xl px-6 font-bold">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter">Dashboard</h1>
+            <Button variant="outline" onClick={() => logout()} data-testid="button-logout" className="hover-elevate rounded-xl px-4 sm:px-6 font-bold">
               <LogOut className="mr-2 h-4 w-4" />
               Sign Out
             </Button>
@@ -163,14 +163,14 @@ export default function Dashboard() {
 
           {hasProfile && (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="mb-6">
-                <TabsTrigger value="profile" className="gap-2" data-testid="tab-profile">
+              <TabsList className="mb-4 sm:mb-6 w-full sm:w-auto">
+                <TabsTrigger value="profile" className="gap-1 sm:gap-2 flex-1 sm:flex-none" data-testid="tab-profile">
                   <Settings className="h-4 w-4" />
-                  Profile
+                  <span>Profile</span>
                 </TabsTrigger>
-                <TabsTrigger value="messages" className="gap-2" data-testid="tab-messages">
+                <TabsTrigger value="messages" className="gap-1 sm:gap-2 flex-1 sm:flex-none" data-testid="tab-messages">
                   <Mail className="h-4 w-4" />
-                  Messages
+                  <span>Messages</span>
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="messages">
