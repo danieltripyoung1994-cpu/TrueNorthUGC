@@ -148,3 +148,24 @@ export const transactions = pgTable("transactions", {
 export const insertTransactionSchema = createInsertSchema(transactions).omit({ id: true });
 export type Transaction = typeof transactions.$inferSelect;
 export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
+
+// Campaigns for brands to post opportunities for creators
+export const campaigns = pgTable("campaigns", {
+  id: serial("id").primaryKey(),
+  brandUserId: varchar("brand_user_id").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  requirements: text("requirements"), // What the brand is looking for
+  budget: text("budget"), // Budget range e.g., "$500-$1000"
+  niches: jsonb("niches").$type<string[]>().default([]),
+  deliverables: jsonb("deliverables").$type<string[]>().default([]), // e.g., ["1 TikTok video", "2 Instagram stories"]
+  deadline: text("deadline"), // Application deadline
+  status: text("status").notNull().default("active"), // active, paused, closed
+  location: text("location"), // Target location for creators
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at"),
+});
+
+export const insertCampaignSchema = createInsertSchema(campaigns).omit({ id: true });
+export type Campaign = typeof campaigns.$inferSelect;
+export type InsertCampaign = z.infer<typeof insertCampaignSchema>;

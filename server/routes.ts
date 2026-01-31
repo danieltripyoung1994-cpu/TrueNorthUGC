@@ -462,6 +462,107 @@ export async function registerRoutes(
     }
   });
 
+  // Campaign Routes
+  // Get all active campaigns (public)
+  app.get("/api/campaigns", async (req, res) => {
+    try {
+      const status = req.query.status as string | undefined;
+      const campaigns = await storage.getCampaigns(status || "active");
+      res.json(campaigns);
+    } catch (error: any) {
+      console.error("Failed to fetch campaigns:", error);
+      res.status(500).json({ message: error.message || "Failed to fetch campaigns" });
+    }
+  });
+
+  // Get a specific campaign
+  app.get("/api/campaigns/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const campaign = await storage.getCampaignById(id);
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
+      res.json(campaign);
+    } catch (error: any) {
+      console.error("Failed to fetch campaign:", error);
+      res.status(500).json({ message: error.message || "Failed to fetch campaign" });
+    }
+  });
+
+  // Get my campaigns (for brands)
+  app.get("/api/campaigns/my/list", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any).claims.sub;
+      const campaigns = await storage.getCampaignsByBrand(userId);
+      res.json(campaigns);
+    } catch (error: any) {
+      console.error("Failed to fetch my campaigns:", error);
+      res.status(500).json({ message: error.message || "Failed to fetch campaigns" });
+    }
+  });
+
+  // Create a campaign (brands only)
+  app.post("/api/campaigns", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any).claims.sub;
+      
+      // Check if user has a brand profile
+      const brand = await storage.getBrandByUserId(userId);
+      if (!brand) {
+        return res.status(403).json({ message: "Only brands can create campaigns" });
+      }
+
+      const campaignData = {
+        ...req.body,
+        brandUserId: userId,
+        createdAt: new Date().toISOString(),
+      };
+
+      const campaign = await storage.createCampaign(campaignData);
+      res.status(201).json(campaign);
+    } catch (error: any) {
+      console.error("Failed to create campaign:", error);
+      res.status(500).json({ message: error.message || "Failed to create campaign" });
+    }
+  });
+
+  // Update a campaign
+  app.patch("/api/campaigns/:id", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any).claims.sub;
+      const idParam = req.params.id;
+      const id = parseInt(Array.isArray(idParam) ? idParam[0] : idParam);
+
+      const campaign = await storage.updateCampaign(id, userId, req.body);
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found or you don't have permission" });
+      }
+      res.json(campaign);
+    } catch (error: any) {
+      console.error("Failed to update campaign:", error);
+      res.status(500).json({ message: error.message || "Failed to update campaign" });
+    }
+  });
+
+  // Delete a campaign
+  app.delete("/api/campaigns/:id", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any).claims.sub;
+      const idParam = req.params.id;
+      const id = parseInt(Array.isArray(idParam) ? idParam[0] : idParam);
+
+      const deleted = await storage.deleteCampaign(id, userId);
+      if (!deleted) {
+        return res.status(404).json({ message: "Campaign not found or you don't have permission" });
+      }
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error("Failed to delete campaign:", error);
+      res.status(500).json({ message: error.message || "Failed to delete campaign" });
+    }
+  });
+
   return httpServer;
 }
 
