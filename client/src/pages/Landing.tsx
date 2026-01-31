@@ -51,7 +51,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-              className="text-6xl font-black tracking-tight sm:text-8xl lg:text-9xl text-white drop-shadow-2xl leading-[1.1]"
+              className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white drop-shadow-2xl leading-[1.1]"
             >
               Canada's <br className="hidden sm:block" />
               <motion.span 
@@ -70,7 +70,7 @@ export default function Landing() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1.5, delay: 0.5 }}
-              className="text-xl md:text-2xl text-white/90 max-w-3xl text-balance font-medium leading-relaxed drop-shadow-lg"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 max-w-3xl text-balance font-medium leading-relaxed drop-shadow-lg px-4 sm:px-0"
             >
               TrueNorthUGC is the premier platform for discovering authentic Canadian user-generated content creators. Find the perfect creator for your brand or showcase your talents to top companies.
             </motion.p>
@@ -79,21 +79,21 @@ export default function Landing() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
-              className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto justify-center"
+              className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto justify-center px-4 sm:px-0"
             >
-              <Link href="/creators">
-                <Button size="lg" className="text-xl px-10 py-8 rounded-3xl shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all">
+              <Link href="/creators" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full sm:w-auto text-base sm:text-lg md:text-xl px-6 sm:px-10 py-6 sm:py-8 rounded-2xl sm:rounded-3xl shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all">
                   Browse Creators
                   <motion.div
                     animate={{ x: [0, 5, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
                   >
-                    <Search className="ml-3 h-6 w-6" />
+                    <Search className="ml-2 sm:ml-3 h-5 w-5 sm:h-6 sm:w-6" />
                   </motion.div>
                 </Button>
               </Link>
-              <Link href="/pricing">
-                <Button size="lg" variant="outline" className="text-xl px-10 py-8 rounded-3xl border-2 bg-white/5 hover:bg-white/10 text-white border-white/30 backdrop-blur-xl hover:scale-105 active:scale-95 transition-all">
+              <Link href="/pricing" className="w-full sm:w-auto">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto text-base sm:text-lg md:text-xl px-6 sm:px-10 py-6 sm:py-8 rounded-2xl sm:rounded-3xl border-2 bg-white/5 hover:bg-white/10 text-white border-white/30 backdrop-blur-xl hover:scale-105 active:scale-95 transition-all">
                   Exclusive Offers
                   <motion.div
                     animate={{ scale: [1, 1.2, 1] }}

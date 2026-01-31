@@ -67,15 +67,15 @@ function MessageItem({ message, type }: { message: Message; type: "inbox" | "sen
       layout
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`border rounded-md p-4 hover-elevate cursor-pointer transition-all ${
+      className={`border rounded-md p-3 sm:p-4 hover-elevate cursor-pointer transition-all ${
         isUnread && type === "inbox" ? "bg-primary/5 border-primary/20" : "bg-card"
       }`}
       onClick={handleExpand}
       data-testid={`message-item-${message.id}`}
     >
-      <div className="flex justify-between items-start gap-4">
+      <div className="flex justify-between items-start gap-2 sm:gap-4">
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
             {isUnread && type === "inbox" && (
               <Badge variant="default" className="text-xs">New</Badge>
             )}
@@ -187,23 +187,24 @@ export function Messages() {
 
   return (
     <Card className="border-0 shadow-none">
-      <CardHeader className="pb-4">
-        <div className="flex justify-between items-center gap-4 flex-wrap">
-          <CardTitle className="flex items-center gap-2">
-            <Mail className="h-5 w-5" />
+      <CardHeader className="px-0 sm:px-6 pb-4">
+        <div className="flex justify-between items-center gap-2 sm:gap-4 flex-wrap">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
             Messages
             {unreadCount > 0 && (
-              <Badge variant="default" className="ml-2">{unreadCount} unread</Badge>
+              <Badge variant="default" className="ml-1 sm:ml-2 text-xs">{unreadCount} unread</Badge>
             )}
           </CardTitle>
           <Dialog open={composeOpen} onOpenChange={setComposeOpen}>
             <DialogTrigger asChild>
-              <Button data-testid="button-compose-message">
-                <Plus className="mr-2 h-4 w-4" />
-                Compose
+              <Button size="sm" className="h-9" data-testid="button-compose-message">
+                <Plus className="mr-1 sm:mr-2 h-4 w-4" />
+                <span className="hidden xs:inline">Compose</span>
+                <span className="xs:hidden">New</span>
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-lg mx-4 sm:mx-auto">
               <DialogHeader>
                 <DialogTitle>New Message</DialogTitle>
               </DialogHeader>
@@ -280,19 +281,19 @@ export function Messages() {
           </Dialog>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-0 sm:px-6">
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "inbox" | "sent")}>
-          <TabsList className="mb-4">
-            <TabsTrigger value="inbox" className="gap-2" data-testid="tab-inbox">
+          <TabsList className="mb-4 w-full sm:w-auto">
+            <TabsTrigger value="inbox" className="gap-1 sm:gap-2 flex-1 sm:flex-none" data-testid="tab-inbox">
               <Inbox className="h-4 w-4" />
-              Inbox
+              <span>Inbox</span>
               {unreadCount > 0 && (
                 <Badge variant="secondary" className="ml-1 text-xs">{unreadCount}</Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="sent" className="gap-2" data-testid="tab-sent">
+            <TabsTrigger value="sent" className="gap-1 sm:gap-2 flex-1 sm:flex-none" data-testid="tab-sent">
               <Send className="h-4 w-4" />
-              Sent
+              <span>Sent</span>
             </TabsTrigger>
           </TabsList>
           <TabsContent value="inbox" className="space-y-3">

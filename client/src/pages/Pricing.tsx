@@ -114,26 +114,26 @@ export default function Pricing() {
           <h1 className="text-5xl font-black tracking-tighter sm:text-7xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
             Choose Your <span className="text-primary italic">Success</span> Path
           </h1>
-          <p className="text-xl text-muted-foreground leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
             Whether you're a creator looking to showcase your work or a brand looking to scale, our official programs offer exclusive tools for elite performance.
           </p>
         </motion.div>
 
-        <div className="space-y-32">
+        <div className="space-y-16 sm:space-y-24 md:space-y-32">
           {/* Creators Section */}
           <section>
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="flex items-center gap-4 mb-12"
+              className="flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12"
             >
-              <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-                <Zap className="h-6 w-6 text-primary" />
+              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
               </div>
               <div>
-                <h2 className="text-3xl font-black tracking-tight">For Creators</h2>
-                <p className="text-muted-foreground">Monetize your talent with elite brand deals</p>
+                <h2 className="text-2xl sm:text-3xl font-black tracking-tight">For Creators</h2>
+                <p className="text-sm sm:text-base text-muted-foreground">Monetize your talent with elite brand deals</p>
               </div>
             </motion.div>
             
@@ -142,26 +142,26 @@ export default function Pricing() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto"
+              className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto"
             >
               {creatorTiers.map((tier) => (
                 <motion.div key={tier.name} variants={item}>
-                  <Card className={`flex flex-col h-full relative overflow-hidden transition-all duration-500 rounded-[2.5rem] ${tier.popular ? 'border-primary/20 shadow-2xl shadow-primary/10 scale-105 z-10' : 'hover:border-primary/50'}`}>
+                  <Card className={`flex flex-col h-full relative overflow-hidden transition-all duration-500 rounded-2xl sm:rounded-[2.5rem] ${tier.popular ? 'border-primary/20 shadow-2xl shadow-primary/10 md:scale-105 z-10' : 'hover:border-primary/50'}`}>
                     {tier.popular && (
-                      <div className="absolute top-6 right-6">
-                        <Badge className="bg-primary text-primary-foreground font-bold px-4 py-1 rounded-full uppercase tracking-widest text-[10px]">
+                      <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+                        <Badge className="bg-primary text-primary-foreground font-bold px-3 sm:px-4 py-1 rounded-full uppercase tracking-widest text-[10px]">
                           Popular
                         </Badge>
                       </div>
                     )}
-                    <CardHeader className="p-10 pb-6">
-                      <CardTitle className="text-4xl font-black">{tier.name}</CardTitle>
-                      <CardDescription className="text-lg font-medium">{tier.description}</CardDescription>
+                    <CardHeader className="p-6 sm:p-10 pb-4 sm:pb-6">
+                      <CardTitle className="text-2xl sm:text-3xl md:text-4xl font-black">{tier.name}</CardTitle>
+                      <CardDescription className="text-base sm:text-lg font-medium">{tier.description}</CardDescription>
                     </CardHeader>
-                    <CardContent className="flex-1 space-y-10 px-10">
+                    <CardContent className="flex-1 space-y-6 sm:space-y-10 px-6 sm:px-10">
                       <div className="flex items-baseline gap-2">
-                        <span className="text-6xl font-black text-primary tracking-tighter">{tier.price}</span>
-                        {tier.price !== "Custom" && <span className="text-muted-foreground font-semibold">/month</span>}
+                        <span className="text-4xl sm:text-5xl md:text-6xl font-black text-primary tracking-tighter">{tier.price}</span>
+                        {tier.price !== "Custom" && <span className="text-sm sm:text-base text-muted-foreground font-semibold">/month</span>}
                       </div>
 
                       {tier.name === "Enterprise" && (
