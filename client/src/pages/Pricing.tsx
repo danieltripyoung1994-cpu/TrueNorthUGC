@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
+import { usePageMeta } from "@/hooks/use-page-meta";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Sparkles, Star, Crown, Zap, ArrowRight } from "lucide-react";
 import { useLocation } from "wouter";
@@ -24,6 +25,10 @@ const item = {
 };
 
 export default function Pricing() {
+  usePageMeta({ 
+    title: "Pricing", 
+    description: "Flexible pricing plans for creators and brands. Choose the perfect plan to grow your UGC business on TrueNorthUGC." 
+  });
   const [, setLocation] = useLocation();
   const { data: offers } = useQuery<Offer[]>({
     queryKey: ["/api/offers"],

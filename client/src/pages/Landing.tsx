@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
+import { usePageMeta } from "@/hooks/use-page-meta";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,6 +25,10 @@ const GlowOrb = ({ className, prefersReducedMotion }: { className?: string; pref
 );
 
 export default function Landing() {
+  usePageMeta({ 
+    title: "TrueNorthUGC", 
+    description: "Connect with top Canadian UGC creators and brands. Find campaigns, build your portfolio, and grow your creator business with TrueNorthUGC." 
+  });
   const prefersReducedMotion = useReducedMotion();
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -772,8 +777,8 @@ export default function Landing() {
             <div>
               <h4 className="font-bold text-lg mb-6">Legal</h4>
               <ul className="space-y-4 text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition-colors animated-underline">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors animated-underline">Terms of Service</a></li>
+                <li><a href="mailto:TrueNorthUGCcanada@gmail.com?subject=Privacy%20Policy%20Request" className="hover:text-primary transition-colors animated-underline">Privacy Policy</a></li>
+                <li><a href="mailto:TrueNorthUGCcanada@gmail.com?subject=Terms%20of%20Service%20Request" className="hover:text-primary transition-colors animated-underline">Terms of Service</a></li>
               </ul>
             </div>
           </motion.div>

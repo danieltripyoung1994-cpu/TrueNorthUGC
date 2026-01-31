@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
+import { usePageMeta } from "@/hooks/use-page-meta";
 import { CreatorCard } from "@/components/CreatorCard";
 import { useCreators } from "@/hooks/use-creators";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,10 @@ const LOCATIONS = ["All Locations", "Ontario", "British Columbia", "Alberta", "Q
 const EXPERIENCE_LEVELS = ["All Levels", "Beginner", "Intermediate", "Pro", "Elite"];
 
 export default function Directory() {
+  usePageMeta({ 
+    title: "Browse Creators", 
+    description: "Discover talented Canadian UGC creators. Filter by niche, location, and experience level to find the perfect match for your brand." 
+  });
   const [search, setSearch] = useState("");
   const [niche, setNiche] = useState<string>("All");
   const [location, setLocation] = useState<string>("All Locations");

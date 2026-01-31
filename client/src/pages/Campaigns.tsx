@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
+import { usePageMeta } from "@/hooks/use-page-meta";
 import { CampaignCard } from "@/components/CampaignCard";
 import { useCampaigns } from "@/hooks/use-campaigns";
 import { type Campaign, type Brand } from "@shared/schema";
@@ -15,6 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 
 const NICHES = ["All", "Fitness", "Beauty", "Tech", "Travel", "Food", "Fashion", "Lifestyle", "Gaming"];
+
 
 const CAMPAIGN_TYPE_LABELS: Record<string, string> = {
   product_review: "Product Review",
@@ -87,6 +89,10 @@ function useBrandByUserId(userId: string | null) {
 }
 
 export default function Campaigns() {
+  usePageMeta({ 
+    title: "Campaigns", 
+    description: "Explore active brand campaigns looking for talented Canadian UGC creators. Apply to campaigns and start earning." 
+  });
   const [search, setSearch] = useState("");
   const [niche, setNiche] = useState<string>("All");
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
