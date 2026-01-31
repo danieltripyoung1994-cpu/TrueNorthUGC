@@ -4,7 +4,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { CreditCard, Loader2, CheckCircle, AlertCircle, DollarSign } from "lucide-react";
+import { CreditCard, Loader2, CheckCircle, AlertCircle, DollarSign, Edit2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
 declare global {
@@ -21,31 +23,37 @@ declare global {
 interface PaymentButtonProps {
   creatorUserId: string;
   creatorName: string;
-  amount: number;
+  amount?: number;
   description?: string;
   onSuccess?: (transaction: any) => void;
   onError?: (error: any) => void;
   disabled?: boolean;
   buttonText?: string;
+  allowCustomAmount?: boolean;
 }
 
 export default function PaymentButton({
   creatorUserId,
   creatorName,
-  amount,
+  amount: initialAmount = 50,
   description = "Creator service payment",
   onSuccess,
   onError,
   disabled = false,
   buttonText = "Pay Creator",
+  allowCustomAmount = true,
 }: PaymentButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<"idle" | "processing" | "success" | "error">("idle");
   const [paypalLoaded, setPaypalLoaded] = useState(false);
   const [paypalConfigured, setPaypalConfigured] = useState(false);
+  const [customAmount, setCustomAmount] = useState(initialAmount.toString());
   const { toast } = useToast();
 
+  const parsedAmount = parseFloat(customAmount);
+  const isValidAmount = !isNaN(parsedAmount) && parsedAmount >= 1;
+  const amount = isValidAmount ? parsedAmount : initialAmount;
   const platformFee = Math.round(amount * 0.20 * 100) / 100;
   const creatorPayout = Math.round((amount - platformFee) * 100) / 100;
 
@@ -63,7 +71,14 @@ export default function PaymentButton({
   }, []);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      // Reset states when dialog closes
+      setPaypalLoaded(false);
+      setPaymentStatus("idle");
+      return;
+    }
+    
+    let cleanup: (() => void) | undefined;
     
     const loadPayPalSDK = async () => {
       try {
@@ -73,10 +88,12 @@ export default function PaymentButton({
             ? "https://www.paypal.com/web-sdk/v6/core"
             : "https://www.sandbox.paypal.com/web-sdk/v6/core";
           script.async = true;
-          script.onload = () => initPayPal();
+          script.onload = async () => {
+            cleanup = await initPayPal();
+          };
           document.body.appendChild(script);
         } else {
-          await initPayPal();
+          cleanup = await initPayPal();
         }
       } catch (e) {
         console.error("Failed to load PayPal SDK", e);
@@ -84,6 +101,10 @@ export default function PaymentButton({
     };
 
     loadPayPalSDK();
+    
+    return () => {
+      if (cleanup) cleanup();
+    };
   }, [isOpen]);
 
   const createOrder = async () => {
@@ -260,11 +281,34 @@ export default function PaymentButton({
           </DialogHeader>
 
           <div className="space-y-4 py-4">
+            {allowCustomAmount && (
+              <div className="space-y-2">
+                <Label htmlFor="payment-amount">Payment Amount (CAD)</Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <Input
+                    id="payment-amount"
+                    type="number"
+                    min="1"
+                    step="0.01"
+                    value={customAmount}
+                    onChange={(e) => setCustomAmount(e.target.value)}
+                    className={`pl-7 ${!isValidAmount ? "border-destructive" : ""}`}
+                    placeholder="Enter amount"
+                    data-testid="input-payment-amount"
+                  />
+                </div>
+                {!isValidAmount && (
+                  <p className="text-xs text-destructive">Please enter a valid amount (minimum $1.00)</p>
+                )}
+              </div>
+            )}
+            
             <Card>
               <CardContent className="pt-4 space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground">Service</span>
-                  <span className="font-medium">{description}</span>
+                  <span className="font-medium text-right max-w-[200px] truncate">{description}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between items-center">
@@ -274,7 +318,7 @@ export default function PaymentButton({
                 <Separator />
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between items-center text-muted-foreground">
-                    <span>Creator receives</span>
+                    <span>Creator receives (80%)</span>
                     <span className="text-foreground">${creatorPayout.toFixed(2)} CAD</span>
                   </div>
                   <div className="flex justify-between items-center text-muted-foreground">

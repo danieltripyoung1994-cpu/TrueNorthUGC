@@ -17,6 +17,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { ReviewsSection, RatingSummary } from "@/components/Reviews";
+import PaymentButton from "@/components/PaymentButton";
 
 export default function Profile() {
   const { handle } = useParams();
@@ -162,6 +163,28 @@ export default function Profile() {
                 ))}
               </div>
               <p className="text-xl leading-relaxed text-muted-foreground max-w-2xl font-medium">{creator.bio}</p>
+              
+              {/* Payment Button - visible to brands viewing creator profiles */}
+              {!isOwnProfile && user && myBrand && (
+                <div className="pt-4">
+                  <PaymentButton
+                    creatorUserId={creator.userId}
+                    creatorName={creator.name}
+                    description={`Payment to ${creator.name} for UGC services`}
+                    buttonText="Pay Creator"
+                    allowCustomAmount={true}
+                    onSuccess={(transaction) => {
+                      toast({
+                        title: "Payment Complete",
+                        description: `Successfully paid $${transaction.amount} CAD to ${creator.name}. Platform fee: $${transaction.platformFee} CAD.`,
+                      });
+                    }}
+                  />
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Pay directly through PayPal. 20% platform fee applies.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
           
