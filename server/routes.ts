@@ -2,6 +2,7 @@ import type { Express } from "express";
 import type { Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
+import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { sendBulkEmails } from "./gmail";
@@ -14,6 +15,9 @@ export async function registerRoutes(
   // Auth setup
   await setupAuth(app);
   registerAuthRoutes(app);
+
+  // Object Storage routes for file uploads
+  registerObjectStorageRoutes(app);
 
   // Creator Routes
 
