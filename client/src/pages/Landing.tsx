@@ -147,7 +147,6 @@ export default function Landing() {
             alt=""
             loading="eager"
             decoding="async"
-            fetchPriority="high"
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background z-0" />

@@ -415,7 +415,7 @@ export default function Dashboard() {
                   <CardContent className="space-y-6">
                     {roleSelection === "creator" ? (
                       <Form {...creatorForm}>
-                        <form onSubmit={creatorForm.handleSubmit(onCreatorSubmit)} className="space-y-4">
+                        <form onSubmit={creatorForm.handleSubmit(onCreatorSubmit)} className="space-y-4" data-testid="form-creator-profile">
                           <FormField
                             control={creatorForm.control}
                             name="name"
@@ -423,7 +423,7 @@ export default function Dashboard() {
                               <FormItem>
                                 <FormLabel>Full Name / Company Name</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="Your Stage Name" {...field} className="h-12" />
+                                  <Input placeholder="Your Stage Name" {...field} className="h-12" data-testid="input-creator-name" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -436,22 +436,22 @@ export default function Dashboard() {
                               <FormItem>
                                 <FormLabel>Unique Handle</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="username (e.g. creative_creator)" {...field} className="h-12" />
+                                  <Input placeholder="username (e.g. creative_creator)" {...field} className="h-12" data-testid="input-creator-handle" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
                             )}
                           />
-                          <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending}>
+                          <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending} data-testid="button-create-creator-profile">
                             {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             Create Official Profile
                           </Button>
-                          <Button type="button" variant="ghost" className="w-full" onClick={() => setRoleSelection(null)}>Back</Button>
+                          <Button type="button" variant="ghost" className="w-full" onClick={() => setRoleSelection(null)} data-testid="button-creator-form-back">Back</Button>
                         </form>
                       </Form>
                     ) : (
                       <Form {...brandForm}>
-                        <form onSubmit={brandForm.handleSubmit(onBrandSubmit)} className="space-y-4">
+                        <form onSubmit={brandForm.handleSubmit(onBrandSubmit)} className="space-y-4" data-testid="form-brand-profile">
                           <FormField
                             control={brandForm.control}
                             name="name"
@@ -459,7 +459,7 @@ export default function Dashboard() {
                               <FormItem>
                                 <FormLabel>Full Name / Company Name</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="Company Name" {...field} className="h-12" />
+                                  <Input placeholder="Company Name" {...field} className="h-12" data-testid="input-brand-name" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -472,17 +472,17 @@ export default function Dashboard() {
                               <FormItem>
                                 <FormLabel>Industry</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="e.g. Beauty, Tech, Fitness" {...field} className="h-12" />
+                                  <Input placeholder="e.g. Beauty, Tech, Fitness" {...field} className="h-12" data-testid="input-brand-industry" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
                             )}
                           />
-                          <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending}>
+                          <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending} data-testid="button-create-brand-profile">
                             {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             Create Official Profile
                           </Button>
-                          <Button type="button" variant="ghost" className="w-full" onClick={() => setRoleSelection(null)}>Back</Button>
+                          <Button type="button" variant="ghost" className="w-full" onClick={() => setRoleSelection(null)} data-testid="button-brand-form-back">Back</Button>
                         </form>
                       </Form>
                     )}
@@ -938,7 +938,95 @@ export default function Dashboard() {
                     </CardContent>
                   </Card>
                 </motion.div>
-              ) : null}
+              ) : (
+                <motion.div
+                  key="form"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                >
+                  <Card className="shadow-lg">
+                    <CardHeader>
+                      <CardTitle>{roleSelection === "creator" ? "Create Creator Profile" : "Create Brand Profile"}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      {roleSelection === "creator" ? (
+                        <Form {...creatorForm}>
+                          <form onSubmit={creatorForm.handleSubmit(onCreatorSubmit)} className="space-y-4" data-testid="form-creator-profile">
+                            <FormField
+                              control={creatorForm.control}
+                              name="name"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Full Name / Stage Name</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Your Name" {...field} className="h-12" data-testid="input-creator-name" />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={creatorForm.control}
+                              name="handle"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Unique Handle</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="username (e.g. creative_creator)" {...field} className="h-12" data-testid="input-creator-handle" />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending} data-testid="button-create-creator-profile">
+                              {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                              Create Official Profile
+                            </Button>
+                            <Button type="button" variant="ghost" className="w-full" onClick={() => setRoleSelection(null)} data-testid="button-creator-form-back">Back</Button>
+                          </form>
+                        </Form>
+                      ) : (
+                        <Form {...brandForm}>
+                          <form onSubmit={brandForm.handleSubmit(onBrandSubmit)} className="space-y-4" data-testid="form-brand-profile">
+                            <FormField
+                              control={brandForm.control}
+                              name="name"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Company Name</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Company Name" {...field} className="h-12" data-testid="input-brand-name" />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={brandForm.control}
+                              name="industry"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Industry</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="e.g. Beauty, Tech, Fitness" {...field} className="h-12" data-testid="input-brand-industry" />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <Button size="lg" type="submit" className="w-full text-lg shadow-lg shadow-primary/20" disabled={updateCreator.isPending} data-testid="button-create-brand-profile">
+                              {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                              Create Official Profile
+                            </Button>
+                            <Button type="button" variant="ghost" className="w-full" onClick={() => setRoleSelection(null)} data-testid="button-brand-form-back">Back</Button>
+                          </form>
+                        </Form>
+                      )}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
             </AnimatePresence>
           )}
         </motion.div>
