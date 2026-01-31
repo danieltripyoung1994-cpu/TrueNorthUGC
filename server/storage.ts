@@ -1,6 +1,6 @@
-import { creators, brands, offers, messages, notifications, type Creator, type InsertCreator, type Brand, type InsertBrand, type Offer, type InsertOffer, type Message, type InsertMessage, type Notification, type InsertNotification } from "@shared/schema";
+import { creators, brands, offers, messages, notifications, users, type Creator, type InsertCreator, type Brand, type InsertBrand, type Offer, type InsertOffer, type Message, type InsertMessage, type Notification, type InsertNotification, type User } from "@shared/schema";
 import { db } from "./db";
-import { eq, ilike, or, desc, and } from "drizzle-orm";
+import { eq, ilike, or, desc, and, isNotNull } from "drizzle-orm";
 
 export interface IStorage {
   getCreators(search?: string, niche?: string): Promise<Creator[]>;
@@ -28,6 +28,9 @@ export interface IStorage {
   markNotificationRead(id: number, userId: string): Promise<Notification | undefined>;
   markAllNotificationsRead(userId: string): Promise<void>;
   getUnreadCount(userId: string): Promise<number>;
+
+  // Users
+  getAllUsersWithEmail(): Promise<User[]>;
 }
 
 type CreatorSocialLinks = { tiktok?: string; instagram?: string; youtube?: string; twitter?: string; facebook?: string; canva?: string };
@@ -259,6 +262,10 @@ export class DatabaseStorage implements IStorage {
     const unread = await db.select().from(notifications)
       .where(and(eq(notifications.userId, userId), eq(notifications.read, "false")));
     return unread.length;
+  }
+
+  async getAllUsersWithEmail(): Promise<User[]> {
+    return await db.select().from(users).where(isNotNull(users.email));
   }
 }
 

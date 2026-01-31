@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { api } from "@shared/routes";
 import { z } from "zod";
+import { sendBulkEmails } from "./gmail";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -209,6 +210,41 @@ export async function registerRoutes(
     const userId = (req.user as any).claims.sub;
     await storage.markAllNotificationsRead(userId);
     res.json({ success: true });
+  });
+
+  // Admin endpoint to send broadcast emails to all users
+  app.post("/api/admin/broadcast-email", isAuthenticated, async (req, res) => {
+    try {
+      const { subject, body } = req.body;
+      
+      if (!subject || !body) {
+        return res.status(400).json({ message: "Subject and body are required" });
+      }
+      
+      // Get all users with emails
+      const allUsers = await storage.getAllUsersWithEmail();
+      const emails = allUsers.map(u => u.email).filter((e): e is string => !!e);
+      
+      if (emails.length === 0) {
+        return res.status(400).json({ message: "No users with email addresses found" });
+      }
+      
+      const results = await sendBulkEmails(emails, subject, body);
+      
+      const successCount = results.filter(r => r.success).length;
+      const failCount = results.filter(r => !r.success).length;
+      
+      res.json({
+        message: `Sent ${successCount} emails successfully, ${failCount} failed`,
+        total: emails.length,
+        successCount,
+        failCount,
+        details: results
+      });
+    } catch (error: any) {
+      console.error("Broadcast email error:", error);
+      res.status(500).json({ message: error.message || "Failed to send emails" });
+    }
   });
 
   return httpServer;
