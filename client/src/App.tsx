@@ -27,6 +27,7 @@ function Router() {
     <Suspense fallback={<PageLoader />}>
       <Switch>
         <Route path="/" component={Landing} />
+        <Route path="/directory" component={Directory} />
         <Route path="/creators" component={Directory} />
         <Route path="/creators/:handle" component={Profile} />
         <Route path="/dashboard" component={Dashboard} />
