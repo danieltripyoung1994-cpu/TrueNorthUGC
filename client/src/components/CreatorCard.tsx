@@ -1,10 +1,11 @@
 import { Link } from "wouter";
+import { motion } from "framer-motion";
 import { type Creator } from "@shared/schema";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Instagram, Youtube, Video } from "lucide-react";
+import { ExternalLink, Instagram, Youtube, Video, Sparkles } from "lucide-react";
 
 interface CreatorCardProps {
   creator: Creator;
@@ -12,8 +13,23 @@ interface CreatorCardProps {
 
 export function CreatorCard({ creator }: CreatorCardProps) {
   return (
-    <Card className="group overflow-hidden border-border/50 bg-card hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
-      <div className="h-24 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent" />
+    <motion.div
+      whileHover={{ y: -8, scale: 1.02 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
+      <Card className="group overflow-hidden border-border/50 bg-card hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <motion.div 
+          className="h-24 bg-gradient-to-r from-primary/15 via-primary/5 to-transparent relative overflow-hidden"
+          whileHover={{ backgroundPosition: "100% 0%" }}
+        >
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+            initial={{ x: "-100%" }}
+            whileHover={{ x: "100%" }}
+            transition={{ duration: 0.6 }}
+          />
+        </motion.div>
       <CardHeader className="relative pt-0 pb-4">
         <div className="flex justify-between items-start">
           <Avatar className="h-20 w-20 -mt-10 border-4 border-background shadow-sm">
@@ -64,14 +80,22 @@ export function CreatorCard({ creator }: CreatorCardProps) {
         </div>
       </CardContent>
 
-      <CardFooter className="pt-2 pb-6">
+      <CardFooter className="pt-2 pb-6 relative z-10">
         <Link href={`/creators/${creator.handle}`} className="w-full">
-          <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-300">
-            View Portfolio
-            <ExternalLink className="ml-2 h-4 w-4 opacity-50" />
-          </Button>
+          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-300">
+              View Portfolio
+              <motion.div
+                animate={{ x: [0, 4, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <ExternalLink className="ml-2 h-4 w-4 opacity-50 group-hover:opacity-100" />
+              </motion.div>
+            </Button>
+          </motion.div>
         </Link>
       </CardFooter>
-    </Card>
+      </Card>
+    </motion.div>
   );
 }
