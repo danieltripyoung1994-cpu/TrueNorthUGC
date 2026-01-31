@@ -145,69 +145,144 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-hidden">
       <Navbar />
-      <main className="container mx-auto px-4 py-6 sm:py-12">
+      <main className="container mx-auto px-4 py-6 sm:py-12 relative">
+        {/* Background decorations */}
+        <div className="absolute top-10 right-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl -z-10" />
+        <div className="absolute bottom-20 left-10 w-56 h-56 bg-blue-500/5 rounded-full blur-3xl -z-10" />
+        
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="max-w-4xl mx-auto space-y-6 sm:space-y-8"
         >
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter">Dashboard</h1>
-            <Button variant="outline" onClick={() => logout()} data-testid="button-logout" className="hover-elevate rounded-xl px-4 sm:px-6 font-bold">
-              <LogOut className="mr-2 h-4 w-4" />
-              Sign Out
-            </Button>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+          >
+            <div className="space-y-1">
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="text-sm text-muted-foreground"
+              >
+                Welcome back
+              </motion.p>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+                  Dashboard
+                </span>
+              </h1>
+            </div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Button variant="outline" onClick={() => logout()} data-testid="button-logout" className="hover-elevate rounded-xl px-4 sm:px-6 font-bold group">
+                <motion.div
+                  className="mr-2"
+                  whileHover={{ rotate: 180 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <LogOut className="h-4 w-4" />
+                </motion.div>
+                Sign Out
+              </Button>
+            </motion.div>
+          </motion.div>
 
           {hasProfile && (
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="mb-4 sm:mb-6 w-full sm:w-auto">
-                <TabsTrigger value="profile" className="gap-1 sm:gap-2 flex-1 sm:flex-none" data-testid="tab-profile">
-                  <Settings className="h-4 w-4" />
-                  <span>Profile</span>
-                </TabsTrigger>
-                <TabsTrigger value="messages" className="gap-1 sm:gap-2 flex-1 sm:flex-none" data-testid="tab-messages">
-                  <Mail className="h-4 w-4" />
-                  <span>Messages</span>
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="messages">
-                <Messages />
-              </TabsContent>
-              <TabsContent value="profile">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="mb-4 sm:mb-6 w-full sm:w-auto bg-secondary/50 p-1 rounded-xl">
+                  <TabsTrigger value="profile" className="gap-1 sm:gap-2 flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all" data-testid="tab-profile">
+                    <Settings className="h-4 w-4" />
+                    <span>Profile</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="messages" className="gap-1 sm:gap-2 flex-1 sm:flex-none rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all" data-testid="tab-messages">
+                    <Mail className="h-4 w-4" />
+                    <span>Messages</span>
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="messages">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Messages />
+                  </motion.div>
+                </TabsContent>
+                <TabsContent value="profile">
                 <AnimatePresence mode="wait">
             {!hasProfile && !roleSelection ? (
               <motion.div
                 key="choice"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                transition={{ duration: 0.4 }}
               >
-                <Card className="border-2 border-dashed">
-                  <CardHeader className="text-center">
-                    <CardTitle className="text-2xl">Choose your path</CardTitle>
+                <Card className="border-2 border-dashed border-primary/20 bg-gradient-to-br from-background to-secondary/10">
+                  <CardHeader className="text-center pb-2">
+                    <motion.div
+                      animate={{ y: [0, -5, 0] }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                    >
+                      <CardTitle className="text-2xl sm:text-3xl font-black">Choose your path</CardTitle>
+                    </motion.div>
+                    <p className="text-muted-foreground mt-2">Select how you want to use TrueNorthUGC</p>
                   </CardHeader>
-                  <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 p-8">
-                    <Button 
-                      variant="outline" 
-                      className="h-auto py-8 flex-col gap-4 text-xl hover-elevate group transition-all"
-                      onClick={() => setRoleSelection("creator")}
-                      data-testid="button-select-creator"
+                  <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 sm:p-8">
+                    <motion.div
+                      whileHover={{ scale: 1.03, y: -5 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      <User className="h-12 w-12 text-primary group-hover:scale-110 transition-transform" />
-                      I am a Creator
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="h-auto py-8 flex-col gap-4 text-xl hover-elevate group transition-all"
-                      onClick={() => setRoleSelection("brand")}
-                      data-testid="button-select-brand"
+                      <Button 
+                        variant="outline" 
+                        className="h-auto py-10 flex-col gap-4 text-xl hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 group transition-all w-full rounded-2xl"
+                        onClick={() => setRoleSelection("creator")}
+                        data-testid="button-select-creator"
+                      >
+                        <motion.div
+                          animate={{ rotate: [0, 5, -5, 0] }}
+                          transition={{ duration: 4, repeat: Infinity }}
+                        >
+                          <User className="h-14 w-14 text-primary group-hover:scale-110 transition-transform" />
+                        </motion.div>
+                        <span className="font-bold">I am a Creator</span>
+                        <span className="text-sm text-muted-foreground font-normal">Showcase your content</span>
+                      </Button>
+                    </motion.div>
+                    <motion.div
+                      whileHover={{ scale: 1.03, y: -5 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      <Building className="h-12 w-12 text-primary group-hover:scale-110 transition-transform" />
-                      I am a Brand
-                    </Button>
+                      <Button 
+                        variant="outline" 
+                        className="h-auto py-10 flex-col gap-4 text-xl hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 group transition-all w-full rounded-2xl"
+                        onClick={() => setRoleSelection("brand")}
+                        data-testid="button-select-brand"
+                      >
+                        <motion.div
+                          animate={{ scale: [1, 1.05, 1] }}
+                          transition={{ duration: 3, repeat: Infinity }}
+                        >
+                          <Building className="h-14 w-14 text-primary group-hover:scale-110 transition-transform" />
+                        </motion.div>
+                        <span className="font-bold">I am a Brand</span>
+                        <span className="text-sm text-muted-foreground font-normal">Find creators</span>
+                      </Button>
+                    </motion.div>
                   </CardContent>
                 </Card>
               </motion.div>
