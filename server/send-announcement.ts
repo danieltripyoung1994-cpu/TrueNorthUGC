@@ -1,4 +1,19 @@
-import { sendEmail } from './gmail.js';
+import { sendBulkEmails } from './gmail.js';
+
+const recipientEmails = [
+  'juliecblaq@gmail.com',
+  'ugcbyemilydc@gmail.com',
+  'abikendra.tritz@gmail.com',
+  'thecornthwaitecorner@gmail.com',
+  '1ad2dd3tt@gmail.com',
+  'kevin@pulselinemedia.com',
+  'beaqs1989@gmail.com',
+  'ridhi.khakhar@gmail.com',
+  'jomarbaterina17@gmail.com',
+  'chrisparkerugc@gmail.com',
+  'zeyad@chatbase.co',
+  'draicads@gmail.com'
+];
 
 const htmlBody = `<html><body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
 <div style="text-align: center; padding: 20px 0;">
@@ -6,39 +21,53 @@ const htmlBody = `<html><body style="font-family: Arial, sans-serif; max-width: 
 <p style="color: #666; font-size: 14px;">Canada's Premier Creator Marketplace</p>
 </div>
 <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-<h2 style="color: #333;">We're Officially Live!</h2>
-<p style="color: #444; line-height: 1.6;">We're thrilled to announce that <strong>TrueNorthUGC is now live</strong> and ready for creators and brands to officially start our journey of running campaigns together!</p>
-<p style="color: #444; line-height: 1.6;">Whether you're a talented Canadian creator looking for brand collaborations, or a brand seeking authentic UGC content, TrueNorthUGC is your platform to connect, collaborate, and create.</p>
+<h2 style="color: #333;">You're Invited to Join TrueNorthUGC!</h2>
+<p style="color: #444; line-height: 1.6;">We're excited to invite you to <strong>TrueNorthUGC</strong> — Canada's premier marketplace connecting talented UGC creators with brands looking for authentic content!</p>
+<p style="color: #444; line-height: 1.6;">As a creator, you'll have access to:</p>
 <div style="background: linear-gradient(135deg, #dc2626 0%, #f97316 100%); padding: 25px; border-radius: 12px; margin: 25px 0; text-align: center;">
-<h3 style="color: white; margin: 0 0 15px 0;">What You Can Do Now:</h3>
 <ul style="color: white; text-align: left; padding-left: 20px; line-height: 2;">
-<li>Complete your creator or brand profile</li>
-<li>Browse and apply to active campaigns</li>
-<li>Connect with brands or creators directly</li>
+<li>Browse and apply to brand campaigns</li>
+<li>Build your professional creator profile</li>
+<li>Connect directly with Canadian brands</li>
 <li>Secure payments through PayPal</li>
+<li>Showcase your portfolio to potential clients</li>
 </ul>
 </div>
-<p style="color: #444; line-height: 1.6;">Log in now to explore the platform and start making connections!</p>
+<p style="color: #444; line-height: 1.6;">Join our growing community of Canadian creators and start your UGC journey today!</p>
 <div style="text-align: center; margin: 30px 0;">
-<a href="https://truenorthugc.replit.app" style="background: #dc2626; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Visit TrueNorthUGC</a>
+<a href="https://truenorthugc.replit.app" style="background: #dc2626; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Join TrueNorthUGC Now</a>
 </div>
-<p style="color: #666; font-size: 14px; margin-top: 30px;">Thank you for being part of our community!</p>
+<p style="color: #666; font-size: 14px; margin-top: 30px;">We look forward to seeing you on the platform!</p>
 <p style="color: #444;">— The TrueNorthUGC Team</p>
 <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0 20px;">
-<p style="color: #999; font-size: 12px; text-align: center;">You're receiving this email because you signed up for TrueNorthUGC.</p>
+<p style="color: #999; font-size: 12px; text-align: center;">Questions? Reply to this email or contact us at TrueNorthUGCcanada@gmail.com</p>
 </body></html>`;
 
 async function main() {
   try {
-    console.log('Sending launch announcement email...');
-    const result = await sendEmail(
-      'danieltripyoung1994@icloud.com',
-      'TrueNorthUGC is Now LIVE - Start Your UGC Journey!',
+    console.log(`Sending invitation emails to ${recipientEmails.length} recipients...`);
+    const results = await sendBulkEmails(
+      recipientEmails,
+      'You\'re Invited to Join TrueNorthUGC - Canada\'s Creator Marketplace!',
       htmlBody
     );
-    console.log('Email sent successfully:', result);
+    
+    const successful = results.filter(r => r.success).length;
+    const failed = results.filter(r => !r.success);
+    
+    console.log(`\nResults: ${successful}/${recipientEmails.length} emails sent successfully`);
+    
+    if (failed.length > 0) {
+      console.log('\nFailed emails:');
+      failed.forEach(f => console.log(`  - ${f.email}: ${f.error}`));
+    }
+    
+    console.log('\nDetailed results:');
+    results.forEach(r => {
+      console.log(`  ${r.success ? '✓' : '✗'} ${r.email}`);
+    });
   } catch (error) {
-    console.error('Failed to send email:', error);
+    console.error('Failed to send emails:', error);
   }
 }
 
