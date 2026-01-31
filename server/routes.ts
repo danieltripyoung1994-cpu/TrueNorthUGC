@@ -573,6 +573,47 @@ export async function registerRoutes(
     }
   });
 
+  // Admin: Get all users with emails
+  app.get("/api/admin/users", isAuthenticated, async (req, res) => {
+    try {
+      const users = await storage.getAllUsersWithEmail();
+      res.json(users);
+    } catch (error: any) {
+      console.error("Failed to get users:", error);
+      res.status(500).json({ message: error.message || "Failed to get users" });
+    }
+  });
+
+  // Admin: Send announcement email to all users
+  app.post("/api/admin/send-announcement", isAuthenticated, async (req, res) => {
+    try {
+      const { subject, htmlBody } = req.body;
+      
+      if (!subject || !htmlBody) {
+        return res.status(400).json({ message: "Subject and htmlBody are required" });
+      }
+
+      const users = await storage.getAllUsersWithEmail();
+      const validEmails = users
+        .filter(u => u.email && !u.email.includes('@example.com') && !u.email.includes('@test.com'))
+        .map(u => u.email as string);
+
+      if (validEmails.length === 0) {
+        return res.status(400).json({ message: "No valid user emails found" });
+      }
+
+      const results = await sendBulkEmails(validEmails, subject, htmlBody);
+      res.json({ 
+        sent: results.filter(r => r.success).length,
+        failed: results.filter(r => !r.success).length,
+        results 
+      });
+    } catch (error: any) {
+      console.error("Failed to send announcement:", error);
+      res.status(500).json({ message: error.message || "Failed to send announcement" });
+    }
+  });
+
   return httpServer;
 }
 
