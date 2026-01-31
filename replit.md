@@ -49,7 +49,7 @@ Preferred communication style: Simple, everyday language.
 - **Enhanced Directory**: Search, filter by niche, location (Canadian provinces), and experience level
 - **Profile Customization**: Complete profile editing with profile picture, bio, social links, portfolio videos, and more
 - **Code Splitting**: React.lazy for optimized page loading
-- **Campaigns System**: Brands can post and manage campaigns with title, description, budget, niches, deliverables, deadline, and location. Creators can discover active campaigns at /campaigns.
+- **Campaigns System**: Highly customizable campaign creation with tabbed form interface (Basics, Requirements, Advanced). Brands can configure: campaign type (Product Review, Testimonial, Unboxing, Tutorial, Lifestyle, Brand Awareness, Challenge, Giveaway), target platforms (TikTok, Instagram, YouTube, Twitter, Facebook), compensation type (Fixed Payment, Product Gifting, Commission, Hybrid, Negotiable), content style (Professional, Casual, Authentic, Cinematic, Comedic), usage rights duration (30 days to perpetual), exclusivity level, number of creators needed, required hashtags/mentions, experience level preference, product provided status, and brief document URL. Creators can discover active campaigns at /campaigns with full details displayed.
 - **PayPal Payments**: Secure PayPal integration with 20% platform fee (80% to creator, 20% to platform). Server-side transaction recording with verified amounts. All payments go to platform's PayPal account. The platform owner manually pays creators their 80% share.
 - **Testimonials Section**: Landing page features success stories from creators and brands
 - **Featured Campaigns**: Landing page displays active campaigns with empty state handling

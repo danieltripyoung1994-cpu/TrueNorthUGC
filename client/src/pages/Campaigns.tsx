@@ -410,8 +410,20 @@ export default function Campaigns() {
                   )}
                 </div>
 
-                {(selectedCampaign.usageRights || selectedCampaign.exclusivity) && (
+                {(selectedCampaign.usageRights || selectedCampaign.exclusivity || selectedCampaign.productProvided) && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {selectedCampaign.productProvided && (
+                      <div className="flex items-center gap-3 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
+                        <Package className="h-5 w-5 text-green-500" />
+                        <div>
+                          <p className="text-sm text-muted-foreground">Product Provided</p>
+                          <p className="font-semibold">
+                            {selectedCampaign.productProvided === "yes" ? "Yes - Shipped to you" : 
+                             selectedCampaign.productProvided === "digital" ? "Digital product/access" : "No"}
+                          </p>
+                        </div>
+                      </div>
+                    )}
                     {selectedCampaign.usageRights && (
                       <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg border border-primary/10">
                         <Shield className="h-5 w-5 text-primary" />
