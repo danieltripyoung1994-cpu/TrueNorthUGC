@@ -4,16 +4,14 @@ import type { Review } from "@shared/schema";
 
 export function useReviewsByCreator(userId: string | undefined) {
   return useQuery<Review[]>({
-    queryKey: ["/api/reviews/creators", userId],
-    queryFn: () => fetch(`/api/reviews/creators/${userId}`).then(res => res.json()),
+    queryKey: [`/api/reviews/creators/${userId}`],
     enabled: !!userId,
   });
 }
 
 export function useReviewsByBrand(userId: string | undefined) {
   return useQuery<Review[]>({
-    queryKey: ["/api/reviews/brands", userId],
-    queryFn: () => fetch(`/api/reviews/brands/${userId}`).then(res => res.json()),
+    queryKey: [`/api/reviews/brands/${userId}`],
     enabled: !!userId,
   });
 }
@@ -26,8 +24,7 @@ export function useMyReviews() {
 
 export function useReviewSummary(userId: string | undefined) {
   return useQuery<{ averageRating: number; totalReviews: number }>({
-    queryKey: ["/api/reviews/summary", userId],
-    queryFn: () => fetch(`/api/reviews/summary/${userId}`).then(res => res.json()),
+    queryKey: [`/api/reviews/summary/${userId}`],
     enabled: !!userId,
   });
 }
@@ -47,9 +44,9 @@ export function useCreateReview() {
       return res.json();
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["/api/reviews/creators", variables.revieweeUserId] });
-      queryClient.invalidateQueries({ queryKey: ["/api/reviews/brands", variables.revieweeUserId] });
-      queryClient.invalidateQueries({ queryKey: ["/api/reviews/summary", variables.revieweeUserId] });
+      queryClient.invalidateQueries({ queryKey: [`/api/reviews/creators/${variables.revieweeUserId}`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/reviews/brands/${variables.revieweeUserId}`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/reviews/summary/${variables.revieweeUserId}`] });
       queryClient.invalidateQueries({ queryKey: ["/api/reviews/me"] });
     },
   });
@@ -64,7 +61,17 @@ export function useDeleteReview() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/reviews"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/reviews/me"] });
+      queryClient.invalidateQueries({ 
+        predicate: (query) => {
+          const key = query.queryKey[0];
+          return typeof key === 'string' && (
+            key.startsWith('/api/reviews/creators/') ||
+            key.startsWith('/api/reviews/brands/') ||
+            key.startsWith('/api/reviews/summary/')
+          );
+        }
+      });
     },
   });
 }

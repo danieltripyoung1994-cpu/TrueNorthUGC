@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { useAuth } from "@/hooks/use-auth";
-import { useCreators } from "@/hooks/use-creators";
+import { useCreator } from "@/hooks/use-creators";
 import { useBrand } from "@/hooks/use-brand";
 import { useReviewsByCreator } from "@/hooks/use-reviews";
 import { useParams, useLocation } from "wouter";
@@ -22,11 +22,9 @@ export default function Profile() {
   const { handle } = useParams();
   const [, setLocation] = useLocation();
   const { user } = useAuth();
-  const { data: creators, isLoading: loadingCreator } = useCreators({ search: handle });
+  const { data: creator, isLoading: loadingCreator } = useCreator(handle || "");
   const { brand: myBrand, isLoading: loadingBrand } = useBrand();
   const { toast } = useToast();
-  
-  const creator = creators?.[0];
   const { data: reviews, isLoading: loadingReviews } = useReviewsByCreator(creator?.userId);
 
   const isLoading = loadingCreator || loadingBrand;
