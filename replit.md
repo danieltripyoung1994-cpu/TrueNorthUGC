@@ -15,6 +15,11 @@ Preferred communication style: Simple, everyday language.
 - **Routing**: Wouter (lightweight React router)
 - **State Management**: TanStack React Query for server state caching and synchronization
 - **Styling**: Tailwind CSS with shadcn/ui component library (New York style variant)
+- **Theme**: Dark mode default with creator-style aesthetics (TikTok/Instagram-inspired)
+  - Primary accent colors: Pink (#ff0080), Purple (#7928ca), Cyan (#00d4ff)
+  - Glass morphism effects with backdrop blur
+  - Gradient text and button styling
+  - Neon glow hover effects
 - **Animations**: Framer Motion for page transitions and UI animations
 - **Build Tool**: Vite with hot module replacement
 
