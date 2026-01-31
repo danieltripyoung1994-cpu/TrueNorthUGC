@@ -5,7 +5,8 @@ import { useCreators } from "@/hooks/use-creators";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Loader2, FilterX, MapPin, Star, Users, Sparkles } from "lucide-react";
+import { Search, FilterX, MapPin, Star, Users, Sparkles } from "lucide-react";
+import { CardSkeleton } from "@/components/ui/skeleton-loaders";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NICHES = ["All", "Fitness", "Beauty", "Tech", "Travel", "Food", "Fashion", "Lifestyle", "Gaming"];
@@ -176,15 +177,11 @@ export default function Directory() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex flex-col justify-center items-center h-64 gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
             >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              >
-                <Loader2 className="h-10 w-10 text-primary" />
-              </motion.div>
-              <p className="text-muted-foreground animate-pulse">Loading creators...</p>
+              {[...Array(8)].map((_, idx) => (
+                <CardSkeleton key={idx} />
+              ))}
             </motion.div>
           ) : isError ? (
             <motion.div 

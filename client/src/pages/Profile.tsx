@@ -4,7 +4,8 @@ import { useCreator } from "@/hooks/use-creators";
 import { useBrand } from "@/hooks/use-brand";
 import { useReviewsByCreator } from "@/hooks/use-reviews";
 import { useParams, useLocation } from "wouter";
-import { Loader2, Share2, Twitter, Facebook, Link as LinkIcon, Settings, Instagram, Music2, Youtube, Video, Play, Star } from "lucide-react";
+import { Share2, Twitter, Facebook, Link as LinkIcon, Settings, Instagram, Music2, Youtube, Video, Play, Star } from "lucide-react";
+import { ProfileSkeleton } from "@/components/ui/skeleton-loaders";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,8 +33,11 @@ export default function Profile() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main className="container mx-auto px-4 py-12">
+          <ProfileSkeleton />
+        </main>
       </div>
     );
   }

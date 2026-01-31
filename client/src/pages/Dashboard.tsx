@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera, Mail, Settings, Megaphone, Plus, Pencil, Trash2, Calendar, DollarSign, MapPin, Package } from "lucide-react";
+import { DashboardSkeleton } from "@/components/ui/skeleton-loaders";
 import { Link, useLocation } from "wouter";
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -137,8 +138,11 @@ export default function Dashboard() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main className="container mx-auto px-4 py-6 sm:py-12">
+          <DashboardSkeleton />
+        </main>
       </div>
     );
   }
