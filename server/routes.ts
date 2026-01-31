@@ -212,6 +212,97 @@ export async function registerRoutes(
     res.json({ success: true });
   });
 
+  // Review Routes
+  app.post(api.reviews.create.path, isAuthenticated, async (req, res) => {
+    const userId = (req.user as any).claims.sub;
+    try {
+      const input = api.reviews.create.input.parse(req.body);
+      
+      // Determine reviewer type
+      const creatorProfile = await storage.getCreatorByUserId(userId);
+      const brandProfile = await storage.getBrandByUserId(userId);
+      const reviewerType = creatorProfile ? "creator" : brandProfile ? "brand" : "unknown";
+      
+      if (reviewerType === "unknown") {
+        return res.status(400).json({ message: "You need a profile to leave reviews" });
+      }
+      
+      // Prevent self-review
+      if (userId === input.revieweeUserId) {
+        return res.status(400).json({ message: "You cannot review yourself" });
+      }
+      
+      const review = await storage.createReview({
+        reviewerUserId: userId,
+        revieweeUserId: input.revieweeUserId,
+        reviewerType,
+        revieweeType: input.revieweeType,
+        rating: input.rating,
+        title: input.title || null,
+        body: input.body,
+        createdAt: new Date().toISOString(),
+      });
+
+      // Create notification for reviewee
+      await storage.createNotification({
+        userId: input.revieweeUserId,
+        type: "review",
+        title: "New Review",
+        content: `You received a ${input.rating}-star review!`,
+        link: "/dashboard",
+        createdAt: new Date().toISOString(),
+      });
+
+      res.json(review);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({
+          message: err.errors[0].message,
+          field: err.errors[0].path.join('.'),
+        });
+      }
+      throw err;
+    }
+  });
+
+  app.get(api.reviews.byCreator.path, async (req, res) => {
+    const userIdParam = req.params.userId;
+    const userId = typeof userIdParam === 'string' ? userIdParam : userIdParam[0];
+    const reviews = await storage.getReviewsByCreatorUserId(userId);
+    res.json(reviews);
+  });
+
+  app.get(api.reviews.byBrand.path, async (req, res) => {
+    const userIdParam = req.params.userId;
+    const userId = typeof userIdParam === 'string' ? userIdParam : userIdParam[0];
+    const reviews = await storage.getReviewsByBrandUserId(userId);
+    res.json(reviews);
+  });
+
+  app.get(api.reviews.myReviews.path, isAuthenticated, async (req, res) => {
+    const userId = (req.user as any).claims.sub;
+    const reviews = await storage.getReviewsByReviewer(userId);
+    res.json(reviews);
+  });
+
+  app.get(api.reviews.summary.path, async (req, res) => {
+    const userIdParam = req.params.userId;
+    const userId = typeof userIdParam === 'string' ? userIdParam : userIdParam[0];
+    const summary = await storage.getReviewSummary(userId);
+    res.json(summary);
+  });
+
+  app.delete(api.reviews.delete.path, isAuthenticated, async (req, res) => {
+    const userId = (req.user as any).claims.sub;
+    const idParam = req.params.id;
+    const id = parseInt(typeof idParam === 'string' ? idParam : idParam[0]);
+    const deleted = await storage.deleteReview(id, userId);
+    if (!deleted) {
+      return res.status(404).json({ message: "Review not found or not authorized" });
+    }
+    res.json({ success: true });
+  });
+
   // Admin endpoint to send broadcast emails to all users
   app.post("/api/admin/broadcast-email", isAuthenticated, async (req, res) => {
     try {

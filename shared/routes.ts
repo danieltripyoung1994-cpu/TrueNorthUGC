@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertCreatorSchema, creators, Brand, insertBrandSchema, insertMessageSchema, messages, notifications, insertNotificationSchema } from './schema';
+import { insertCreatorSchema, creators, Brand, insertBrandSchema, insertMessageSchema, messages, notifications, insertNotificationSchema, reviews, insertReviewSchema } from './schema';
 
 export const errorSchemas = {
   validation: z.object({
@@ -153,6 +153,65 @@ export const api = {
       responses: {
         200: z.object({ success: z.boolean() }),
         401: errorSchemas.unauthorized,
+      },
+    },
+  },
+  reviews: {
+    create: {
+      method: 'POST' as const,
+      path: '/api/reviews',
+      input: z.object({
+        revieweeUserId: z.string(),
+        revieweeType: z.enum(["creator", "brand"]),
+        rating: z.number().min(1).max(5),
+        title: z.string().optional(),
+        body: z.string().min(1),
+      }),
+      responses: {
+        200: z.custom<typeof reviews.$inferSelect>(),
+        400: errorSchemas.validation,
+        401: errorSchemas.unauthorized,
+      },
+    },
+    byCreator: {
+      method: 'GET' as const,
+      path: '/api/reviews/creators/:userId',
+      responses: {
+        200: z.array(z.custom<typeof reviews.$inferSelect>()),
+      },
+    },
+    byBrand: {
+      method: 'GET' as const,
+      path: '/api/reviews/brands/:userId',
+      responses: {
+        200: z.array(z.custom<typeof reviews.$inferSelect>()),
+      },
+    },
+    myReviews: {
+      method: 'GET' as const,
+      path: '/api/reviews/me',
+      responses: {
+        200: z.array(z.custom<typeof reviews.$inferSelect>()),
+        401: errorSchemas.unauthorized,
+      },
+    },
+    summary: {
+      method: 'GET' as const,
+      path: '/api/reviews/summary/:userId',
+      responses: {
+        200: z.object({
+          averageRating: z.number(),
+          totalReviews: z.number(),
+        }),
+      },
+    },
+    delete: {
+      method: 'DELETE' as const,
+      path: '/api/reviews/:id',
+      responses: {
+        200: z.object({ success: z.boolean() }),
+        401: errorSchemas.unauthorized,
+        404: errorSchemas.notFound,
       },
     },
   },
