@@ -99,38 +99,89 @@ export default function Pricing() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-hidden">
       <Navbar />
-      <main className="container mx-auto px-4 py-24">
+      <main className="container mx-auto px-4 py-16 sm:py-24 relative">
+        {/* Background decorations */}
         <motion.div 
-          initial={{ opacity: 0, y: -20 }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+          className="absolute top-20 -right-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10"
+        />
+        <motion.div 
+          animate={{ rotate: -360 }}
+          transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+          className="absolute top-1/2 -left-32 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl -z-10"
+        />
+        
+        <motion.div 
+          initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center max-w-3xl mx-auto mb-24 space-y-6"
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center max-w-3xl mx-auto mb-16 sm:mb-24 space-y-6"
         >
-          <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary backdrop-blur-xl shadow-sm">
-            <Star className="mr-2 h-4 w-4" />
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary backdrop-blur-xl shadow-lg animate-pulse-glow"
+          >
+            <motion.div
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+            >
+              <Star className="mr-2 h-4 w-4" />
+            </motion.div>
             Official Partnership Programs
-          </div>
-          <h1 className="text-5xl font-black tracking-tighter sm:text-7xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
-            Choose Your <span className="text-primary italic">Success</span> Path
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
+          </motion.div>
+          <motion.h1 
+            initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter"
+          >
+            Choose Your{" "}
+            <motion.span 
+              animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+              transition={{ duration: 5, repeat: Infinity }}
+              style={{ backgroundSize: "200% auto" }}
+              className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-400 to-primary inline-block italic"
+            >
+              Success
+            </motion.span>
+            {" "}Path
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed"
+          >
             Whether you're a creator looking to showcase your work or a brand looking to scale, our official programs offer exclusive tools for elite performance.
-          </p>
+          </motion.p>
         </motion.div>
 
         <div className="space-y-16 sm:space-y-24 md:space-y-32">
           {/* Creators Section */}
           <section>
             <motion.div 
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
               className="flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12"
             >
-              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-              </div>
+              <motion.div 
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center flex-shrink-0 shadow-lg"
+              >
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                >
+                  <Zap className="h-6 w-6 sm:h-7 sm:w-7 text-primary" />
+                </motion.div>
+              </motion.div>
               <div>
                 <h2 className="text-2xl sm:text-3xl font-black tracking-tight">For Creators</h2>
                 <p className="text-sm sm:text-base text-muted-foreground">Monetize your talent with elite brand deals</p>
@@ -145,13 +196,25 @@ export default function Pricing() {
               className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto"
             >
               {creatorTiers.map((tier) => (
-                <motion.div key={tier.name} variants={item}>
-                  <Card className={`flex flex-col h-full relative overflow-hidden transition-all duration-500 rounded-2xl sm:rounded-[2.5rem] ${tier.popular ? 'border-primary/20 shadow-2xl shadow-primary/10 md:scale-105 z-10' : 'hover:border-primary/50'}`}>
+                <motion.div 
+                  key={tier.name} 
+                  variants={item}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card className={`flex flex-col h-full relative overflow-hidden transition-all duration-500 rounded-2xl sm:rounded-[2.5rem] group ${tier.popular ? 'border-primary/30 shadow-2xl shadow-primary/15 md:scale-105 z-10' : 'hover:border-primary/50 hover:shadow-xl'}`}>
+                    {/* Animated gradient overlay on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     {tier.popular && (
                       <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
-                        <Badge className="bg-primary text-primary-foreground font-bold px-3 sm:px-4 py-1 rounded-full uppercase tracking-widest text-[10px]">
-                          Popular
-                        </Badge>
+                        <motion.div
+                          animate={{ scale: [1, 1.05, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        >
+                          <Badge className="bg-gradient-to-r from-primary to-blue-500 text-primary-foreground font-bold px-3 sm:px-4 py-1 rounded-full uppercase tracking-widest text-[10px] shadow-lg">
+                            Popular
+                          </Badge>
+                        </motion.div>
                       </div>
                     )}
                     <CardHeader className="p-6 sm:p-10 pb-4 sm:pb-6">
