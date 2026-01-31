@@ -436,7 +436,7 @@ export default function Landing() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="flex-1 relative w-full"
+              className="flex-1 relative w-full hidden lg:block"
             >
               <div className="aspect-square rounded-3xl bg-gradient-to-br from-secondary/50 via-secondary/30 to-primary/10 relative overflow-hidden border border-border/50 shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent" />
