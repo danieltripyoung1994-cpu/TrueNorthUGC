@@ -2,10 +2,13 @@ import { Link } from "wouter";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Search, Sparkles, Star, Zap, Users, Shield, Globe, ChevronDown } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight, Search, Sparkles, Star, Zap, Users, Shield, Globe, ChevronDown, Quote, Briefcase, DollarSign, Calendar, MapPin } from "lucide-react";
 import banffBg from "@assets/stock_images/scenic_background_of_f3c6840b.jpg";
 import logoPng from "@assets/Photoroom_20260124_081931_1769558537558.png";
 import { useRef } from "react";
+import { useCampaigns } from "@/hooks/use-campaigns";
 
 const FloatingShape = ({ className, delay = 0 }: { className?: string; delay?: number }) => (
   <motion.div
@@ -84,6 +87,48 @@ export default function Landing() {
   };
 
   const niches = ["Fitness", "Wellness", "Travel", "Tech", "Beauty", "Fashion", "Food", "Lifestyle", "Gaming", "Parenting"];
+
+  const { data: campaigns } = useCampaigns("active");
+  const featuredCampaigns = campaigns?.slice(0, 3) || [];
+
+  const testimonials = [
+    {
+      type: "creator",
+      name: "Sarah Mitchell",
+      role: "Fitness & Wellness Creator",
+      location: "Vancouver, BC",
+      quote: "TrueNorthUGC has completely transformed my career. I've connected with amazing Canadian brands that truly align with my values. The platform makes collaboration seamless!",
+      rating: 5,
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop"
+    },
+    {
+      type: "brand",
+      name: "Maple Leaf Organics",
+      role: "Wellness Brand",
+      location: "Toronto, ON",
+      quote: "Finding authentic Canadian creators was always a challenge until we discovered TrueNorthUGC. The quality of content we receive is exceptional, and ROI has been incredible.",
+      rating: 5,
+      image: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=400&h=400&fit=crop"
+    },
+    {
+      type: "creator",
+      name: "Marcus Chen",
+      role: "Tech & Gaming Creator",
+      location: "Calgary, AB",
+      quote: "The platform's payment system is secure and the 80/20 split is fair. I've earned more in 3 months here than I did all last year working with brands directly.",
+      rating: 5,
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"
+    },
+    {
+      type: "brand",
+      name: "Northern Beauty Co.",
+      role: "Cosmetics Brand",
+      location: "Montreal, QC",
+      quote: "We've launched 12 successful campaigns through TrueNorthUGC. The creators understand our Canadian audience and deliver content that truly resonates with our customers.",
+      rating: 5,
+      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=400&fit=crop"
+    }
+  ];
 
   const features = [
     {
@@ -556,6 +601,231 @@ export default function Landing() {
               </motion.div>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 sm:py-28 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden" data-testid="section-testimonials">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12 sm:mb-16"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-bold mb-6"
+            >
+              <Star className="h-4 w-4 fill-primary" />
+              Success Stories
+            </motion.div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4">
+              What Our <span className="text-primary">Community</span> Says
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Hear from creators and brands who have found success through TrueNorthUGC
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8"
+          >
+            {testimonials.map((testimonial, idx) => (
+              <motion.div
+                key={idx}
+                variants={itemVariants}
+                whileHover={{ y: -8 }}
+                className="group"
+                data-testid={`card-testimonial-${idx}`}
+              >
+                <Card className="h-full border-2 hover:border-primary/30 transition-all duration-300 rounded-3xl overflow-hidden">
+                  <CardContent className="p-6 sm:p-8">
+                    <div className="flex items-start gap-4 mb-6">
+                      <motion.img
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        className="w-14 h-14 rounded-2xl object-cover border-2 border-primary/20"
+                        whileHover={{ scale: 1.1 }}
+                        data-testid={`img-testimonial-${idx}`}
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          <h4 className="font-bold text-lg" data-testid={`text-testimonial-name-${idx}`}>{testimonial.name}</h4>
+                          <Badge 
+                            variant={testimonial.type === "creator" ? "default" : "secondary"}
+                            className="text-xs"
+                            data-testid={`badge-testimonial-type-${idx}`}
+                          >
+                            {testimonial.type === "creator" ? "Creator" : "Brand"}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground" data-testid={`text-testimonial-role-${idx}`}>{testimonial.role}</p>
+                        <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                          <MapPin className="h-3 w-3" />
+                          <span data-testid={`text-testimonial-location-${idx}`}>{testimonial.location}</span>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <Quote className="absolute -top-2 -left-2 h-8 w-8 text-primary/10" />
+                      <p className="text-muted-foreground leading-relaxed pl-6 italic" data-testid={`text-testimonial-quote-${idx}`}>
+                        "{testimonial.quote}"
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1 mt-4 pl-6" data-testid={`rating-testimonial-${idx}`}>
+                      {Array.from({ length: testimonial.rating }).map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Featured Campaigns Section */}
+      <section className="py-20 sm:py-28 bg-background relative overflow-hidden" data-testid="section-campaigns">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12 sm:mb-16"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-bold mb-6"
+            >
+              <Briefcase className="h-4 w-4" />
+              Active Opportunities
+            </motion.div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4">
+              Featured <span className="text-primary">Campaigns</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Explore active brand campaigns looking for talented Canadian creators
+            </p>
+          </motion.div>
+
+          {featuredCampaigns.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center py-16"
+              data-testid="campaigns-empty-state"
+            >
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-muted flex items-center justify-center">
+                <Briefcase className="h-10 w-10 text-muted-foreground" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">No Active Campaigns Yet</h3>
+              <p className="text-muted-foreground max-w-md mx-auto mb-6">
+                Brands are getting ready to post exciting opportunities. Check back soon or register to be notified when new campaigns launch.
+              </p>
+              <a href="/api/login">
+                <Button size="lg" className="rounded-xl" data-testid="button-register-brand">
+                  Register as a Brand
+                </Button>
+              </a>
+            </motion.div>
+          ) : (
+            <>
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+              >
+                {featuredCampaigns.map((campaign) => (
+                  <motion.div
+                    key={campaign.id}
+                    variants={itemVariants}
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="group"
+                    data-testid={`card-campaign-${campaign.id}`}
+                  >
+                    <Card className="h-full border-2 hover:border-primary/30 transition-all duration-300 rounded-3xl overflow-hidden bg-gradient-to-br from-background to-secondary/20">
+                      <CardContent className="p-6 sm:p-8">
+                        <div className="flex items-start justify-between mb-4 gap-2 flex-wrap">
+                          <Badge 
+                            variant="default"
+                            className="bg-green-500/10 text-green-600 border-green-500/20"
+                            data-testid={`badge-campaign-status-${campaign.id}`}
+                          >
+                            Active
+                          </Badge>
+                          {campaign.budget && (
+                            <span className="flex items-center gap-1 text-sm font-bold text-primary" data-testid={`text-campaign-budget-${campaign.id}`}>
+                              <DollarSign className="h-4 w-4" />
+                              {campaign.budget}
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-2" data-testid={`text-campaign-title-${campaign.id}`}>
+                          {campaign.title}
+                        </h3>
+                        <p className="text-muted-foreground text-sm mb-4 line-clamp-3" data-testid={`text-campaign-description-${campaign.id}`}>
+                          {campaign.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {campaign.niches?.slice(0, 3).map((niche) => (
+                            <Badge key={niche} variant="secondary" className="text-xs" data-testid={`badge-campaign-niche-${campaign.id}`}>
+                              {niche}
+                            </Badge>
+                          ))}
+                        </div>
+                        <div className="flex items-center justify-between text-xs text-muted-foreground flex-wrap gap-2">
+                          {campaign.location && (
+                            <span className="flex items-center gap-1" data-testid={`text-campaign-location-${campaign.id}`}>
+                              <MapPin className="h-3 w-3" />
+                              {campaign.location}
+                            </span>
+                          )}
+                          {campaign.deadline && (
+                            <span className="flex items-center gap-1" data-testid={`text-campaign-deadline-${campaign.id}`}>
+                              <Calendar className="h-3 w-3" />
+                              {new Date(campaign.deadline).toLocaleDateString()}
+                            </span>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="text-center mt-10"
+              >
+                <Link href="/campaigns">
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                    <Button size="lg" variant="outline" className="rounded-xl" data-testid="link-view-all-campaigns">
+                      View All Campaigns
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </motion.div>
+                </Link>
+              </motion.div>
+            </>
+          )}
         </div>
       </section>
 
