@@ -152,10 +152,10 @@ export default function Campaigns() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20"
             >
-              <Megaphone className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Campaign Opportunities</span>
+              <Megaphone className="h-4 w-4 text-pink-500" />
+              <span className="text-sm font-medium text-pink-500">Campaign Opportunities</span>
             </motion.div>
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
@@ -164,7 +164,7 @@ export default function Campaigns() {
               className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter"
             >
               Find Your Next{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-500">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">
                 Collaboration
               </span>
             </motion.h1>
@@ -183,7 +183,7 @@ export default function Campaigns() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-card border rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-8 sm:mb-12 shadow-sm"
+          className="bg-card/50 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-8 sm:mb-12 shadow-sm"
         >
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="relative flex-1">
@@ -304,18 +304,18 @@ export default function Campaigns() {
               <div className="space-y-6 pt-4">
                 <div className="flex flex-wrap gap-2">
                   {selectedCampaign.campaignType && (
-                    <Badge variant="default">
+                    <Badge variant="default" className="bg-gradient-to-r from-pink-500 to-purple-500 border-white/10">
                       {CAMPAIGN_TYPE_LABELS[selectedCampaign.campaignType] || selectedCampaign.campaignType}
                     </Badge>
                   )}
                   {selectedCampaign.compensationType && (
-                    <Badge variant="secondary">
+                    <Badge variant="secondary" className="border-white/10">
                       {COMPENSATION_LABELS[selectedCampaign.compensationType] || selectedCampaign.compensationType}
                     </Badge>
                   )}
                   {selectedCampaign.contentStyle && (
-                    <Badge variant="outline">
-                      <Sparkles className="h-3 w-3 mr-1" />
+                    <Badge variant="outline" className="border-white/10">
+                      <Sparkles className="h-3 w-3 mr-1 text-pink-500" />
                       {CONTENT_STYLE_LABELS[selectedCampaign.contentStyle] || selectedCampaign.contentStyle}
                     </Badge>
                   )}
@@ -340,12 +340,12 @@ export default function Campaigns() {
                 {selectedCampaign.platforms && selectedCampaign.platforms.length > 0 && (
                   <div>
                     <h4 className="font-semibold mb-2 flex items-center gap-2">
-                      <Video className="h-4 w-4 text-primary" />
+                      <Video className="h-4 w-4 text-pink-500" />
                       Target Platforms
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedCampaign.platforms.map((p) => (
-                        <Badge key={p} variant="outline">
+                        <Badge key={p} variant="outline" className="border-white/10">
                           {PLATFORM_LABELS[p] || p}
                         </Badge>
                       ))}
@@ -355,7 +355,7 @@ export default function Campaigns() {
 
                 <div className="flex flex-wrap gap-2">
                   {selectedCampaign.niches?.map((n) => (
-                    <Badge key={n} variant="secondary">{n}</Badge>
+                    <Badge key={n} variant="secondary" className="border-white/10">{n}</Badge>
                   ))}
                 </div>
 
@@ -470,12 +470,12 @@ export default function Campaigns() {
                     {selectedCampaign.hashtags && selectedCampaign.hashtags.length > 0 && (
                       <div>
                         <h4 className="font-semibold mb-2 flex items-center gap-2">
-                          <Hash className="h-4 w-4 text-primary" />
+                          <Hash className="h-4 w-4 text-pink-500" />
                           Required Hashtags
                         </h4>
                         <div className="flex flex-wrap gap-1.5">
                           {selectedCampaign.hashtags.map((tag, i) => (
-                            <Badge key={i} variant="outline" className="text-primary">{tag}</Badge>
+                            <Badge key={i} variant="outline" className="text-pink-500 border-white/10">{tag}</Badge>
                           ))}
                         </div>
                       </div>
@@ -483,12 +483,12 @@ export default function Campaigns() {
                     {selectedCampaign.mentions && selectedCampaign.mentions.length > 0 && (
                       <div>
                         <h4 className="font-semibold mb-2 flex items-center gap-2">
-                          <AtSign className="h-4 w-4 text-blue-500" />
+                          <AtSign className="h-4 w-4 text-cyan-400" />
                           Required Mentions
                         </h4>
                         <div className="flex flex-wrap gap-1.5">
                           {selectedCampaign.mentions.map((mention, i) => (
-                            <Badge key={i} variant="outline" className="text-blue-500">{mention}</Badge>
+                            <Badge key={i} variant="outline" className="text-cyan-400 border-white/10">{mention}</Badge>
                           ))}
                         </div>
                       </div>
@@ -497,12 +497,12 @@ export default function Campaigns() {
                 ) : null}
 
                 {selectedCampaign.briefDocument && (
-                  <div className="p-4 bg-secondary/30 rounded-lg">
+                  <div className="p-4 bg-card/50 backdrop-blur-sm border border-white/10 rounded-lg">
                     <a 
                       href={selectedCampaign.briefDocument} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-primary hover:underline font-medium"
+                      className="flex items-center gap-2 text-pink-500 hover:underline font-medium hover:text-pink-400 transition-colors"
                     >
                       <FileText className="h-5 w-5" />
                       View Full Campaign Brief
@@ -513,7 +513,7 @@ export default function Campaigns() {
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <Button 
-                    className="flex-1" 
+                    className="flex-1 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 border-0 hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300" 
                     onClick={() => setSelectedCampaign(null)}
                     data-testid="button-close-campaign-modal"
                   >

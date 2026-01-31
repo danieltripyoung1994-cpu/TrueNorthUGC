@@ -67,14 +67,14 @@ export function CampaignCard({ campaign, onViewDetails }: CampaignCardProps) {
       transition={{ type: "spring", stiffness: 400, damping: 17 }}
     >
       <Card 
-        className="group overflow-visible border-border/50 bg-card hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 hover-elevate h-full flex flex-col"
+        className="group overflow-visible bg-card/50 backdrop-blur-sm border border-white/10 hover:border-pink-500/30 hover:shadow-xl hover:shadow-pink-500/20 transition-all duration-300 h-full flex flex-col"
         data-testid={`card-campaign-${campaign.id}`}
       >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2 min-w-0">
-              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <Building className="h-5 w-5 text-primary" />
+              <div className="h-10 w-10 rounded-lg bg-pink-500/10 flex items-center justify-center flex-shrink-0">
+                <Building className="h-5 w-5 text-pink-500" />
               </div>
               <div className="min-w-0">
                 <p className="text-sm text-muted-foreground truncate">
@@ -102,12 +102,12 @@ export function CampaignCard({ campaign, onViewDetails }: CampaignCardProps) {
 
           <div className="flex flex-wrap gap-1.5">
             {campaign.campaignType && (
-              <Badge variant="default" className="text-xs">
+              <Badge variant="default" className="text-xs bg-gradient-to-r from-pink-500 to-purple-500 border-white/10">
                 {CAMPAIGN_TYPE_LABELS[campaign.campaignType] || campaign.campaignType}
               </Badge>
             )}
             {campaign.compensationType && (
-              <Badge variant="secondary" className="text-xs">
+              <Badge variant="secondary" className="text-xs border-white/10">
                 {COMPENSATION_LABELS[campaign.compensationType] || campaign.compensationType}
               </Badge>
             )}
@@ -119,9 +119,9 @@ export function CampaignCard({ campaign, onViewDetails }: CampaignCardProps) {
                 <Badge 
                   key={platform} 
                   variant="outline" 
-                  className="text-xs font-normal"
+                  className="text-xs font-normal border-white/10"
                 >
-                  <Video className="h-3 w-3 mr-1" />
+                  <Video className="h-3 w-3 mr-1 text-pink-500" />
                   {PLATFORM_LABELS[platform] || platform}
                 </Badge>
               ))}
@@ -133,14 +133,14 @@ export function CampaignCard({ campaign, onViewDetails }: CampaignCardProps) {
               <Badge 
                 key={niche} 
                 variant="outline" 
-                className="text-xs font-normal text-muted-foreground"
+                className="text-xs font-normal text-muted-foreground border-white/10"
                 data-testid={`badge-campaign-niche-${campaign.id}-${niche}`}
               >
                 {niche}
               </Badge>
             ))}
             {campaign.niches && campaign.niches.length > 3 && (
-              <Badge variant="outline" className="text-xs text-muted-foreground font-normal">
+              <Badge variant="outline" className="text-xs text-muted-foreground font-normal border-white/10">
                 +{campaign.niches.length - 3}
               </Badge>
             )}
@@ -187,7 +187,7 @@ export function CampaignCard({ campaign, onViewDetails }: CampaignCardProps) {
         <CardFooter className="pt-3">
           <Button 
             variant="outline" 
-            className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-300"
+            className="w-full border-white/10 group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-purple-500 group-hover:text-white group-hover:border-transparent group-hover:shadow-lg group-hover:shadow-pink-500/25 transition-all duration-300"
             onClick={onViewDetails}
             data-testid={`button-view-campaign-${campaign.id}`}
           >

@@ -91,16 +91,16 @@ export default function Contact() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 mb-6"
             >
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Get in Touch</span>
+              <Sparkles className="h-4 w-4 text-pink-500" />
+              <span className="text-sm font-medium text-pink-500">Get in Touch</span>
             </motion.div>
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-4xl sm:text-5xl font-black mb-4" 
+              className="text-4xl sm:text-5xl font-black mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400" 
               data-testid="text-contact-title"
             >
               Contact Us
@@ -124,11 +124,11 @@ export default function Contact() {
               className="space-y-6"
             >
               <motion.div variants={itemVariants} whileHover={{ y: -4, scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
-                <Card className="hover:shadow-lg hover:border-primary/30 transition-all duration-300">
+                <Card className="bg-card/50 backdrop-blur-sm border-white/10 hover:shadow-lg hover:shadow-pink-500/20 hover:border-pink-500/30 transition-all duration-300">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <motion.div animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
-                        <Phone className="h-5 w-5 text-primary" />
+                        <Phone className="h-5 w-5 text-pink-500" />
                       </motion.div>
                       Phone
                     </CardTitle>
@@ -136,7 +136,7 @@ export default function Contact() {
                   <CardContent>
                     <a 
                       href="tel:1-226-220-1522" 
-                      className="text-lg font-medium hover:text-primary transition-colors"
+                      className="text-lg font-medium hover:text-pink-500 transition-colors"
                       data-testid="link-phone"
                     >
                       1-226-220-1522
@@ -149,11 +149,11 @@ export default function Contact() {
               </motion.div>
 
               <motion.div variants={itemVariants} whileHover={{ y: -4, scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
-                <Card className="hover:shadow-lg hover:border-primary/30 transition-all duration-300">
+                <Card className="bg-card/50 backdrop-blur-sm border-white/10 hover:shadow-lg hover:shadow-pink-500/20 hover:border-pink-500/30 transition-all duration-300">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                        <Mail className="h-5 w-5 text-primary" />
+                        <Mail className="h-5 w-5 text-pink-500" />
                       </motion.div>
                       Email
                     </CardTitle>
@@ -161,7 +161,7 @@ export default function Contact() {
                   <CardContent>
                     <a 
                       href="mailto:TrueNorthUGCcanada@gmail.com" 
-                      className="text-lg font-medium hover:text-primary transition-colors"
+                      className="text-lg font-medium hover:text-pink-500 transition-colors"
                       data-testid="link-email"
                     >
                       TrueNorthUGCcanada@gmail.com
@@ -174,11 +174,11 @@ export default function Contact() {
               </motion.div>
 
               <motion.div variants={itemVariants} whileHover={{ y: -4, scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
-                <Card className="hover:shadow-lg hover:border-primary/30 transition-all duration-300">
+                <Card className="bg-card/50 backdrop-blur-sm border-white/10 hover:shadow-lg hover:shadow-pink-500/20 hover:border-pink-500/30 transition-all duration-300">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }}>
-                        <MapPin className="h-5 w-5 text-primary" />
+                        <MapPin className="h-5 w-5 text-pink-500" />
                       </motion.div>
                       Location
                     </CardTitle>
@@ -193,11 +193,11 @@ export default function Contact() {
               </motion.div>
 
               <motion.div variants={itemVariants} whileHover={{ y: -4, scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
-                <Card className="hover:shadow-lg hover:border-primary/30 transition-all duration-300">
+                <Card className="bg-card/50 backdrop-blur-sm border-white/10 hover:shadow-lg hover:shadow-pink-500/20 hover:border-pink-500/30 transition-all duration-300">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <motion.div animate={{ rotate: 360 }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }}>
-                        <Clock className="h-5 w-5 text-primary" />
+                        <Clock className="h-5 w-5 text-pink-500" />
                       </motion.div>
                       Business Hours
                     </CardTitle>
@@ -218,11 +218,11 @@ export default function Contact() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <Card className="hover:shadow-xl transition-shadow duration-300 overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500" />
+              <Card className="bg-card/50 backdrop-blur-sm border-white/10 hover:shadow-xl hover:shadow-pink-500/20 transition-shadow duration-300 overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-purple-500/5 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500" />
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Send className="h-5 w-5 text-primary" />
+                    <Send className="h-5 w-5 text-pink-500" />
                     Send us a message
                   </CardTitle>
                 </CardHeader>
@@ -240,7 +240,7 @@ export default function Contact() {
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="Your name"
                         required
-                        className="transition-all duration-200 focus:scale-[1.01]"
+                        className="bg-background/50 backdrop-blur-sm border-white/10 focus:border-pink-500/50 transition-all duration-200 focus:scale-[1.01]"
                         data-testid="input-contact-name"
                       />
                     </motion.div>
@@ -257,7 +257,7 @@ export default function Contact() {
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="your@email.com"
                         required
-                        className="transition-all duration-200 focus:scale-[1.01]"
+                        className="bg-background/50 backdrop-blur-sm border-white/10 focus:border-pink-500/50 transition-all duration-200 focus:scale-[1.01]"
                         data-testid="input-contact-email"
                       />
                     </motion.div>
@@ -273,7 +273,7 @@ export default function Contact() {
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                         placeholder="How can we help?"
                         required
-                        className="transition-all duration-200 focus:scale-[1.01]"
+                        className="bg-background/50 backdrop-blur-sm border-white/10 focus:border-pink-500/50 transition-all duration-200 focus:scale-[1.01]"
                         data-testid="input-contact-subject"
                       />
                     </motion.div>
@@ -290,7 +290,7 @@ export default function Contact() {
                         placeholder="Tell us more about your inquiry..."
                         rows={5}
                         required
-                        className="transition-all duration-200 focus:scale-[1.01]"
+                        className="bg-background/50 backdrop-blur-sm border-white/10 focus:border-pink-500/50 transition-all duration-200 focus:scale-[1.01]"
                         data-testid="input-contact-message"
                       />
                     </motion.div>
@@ -301,7 +301,7 @@ export default function Contact() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
-                      <Button type="submit" className="w-full group" disabled={isSubmitting} data-testid="button-contact-submit">
+                      <Button type="submit" className="w-full group bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 border-0 hover:shadow-lg hover:shadow-pink-500/25" disabled={isSubmitting} data-testid="button-contact-submit">
                         {isSubmitting ? (
                           <motion.span
                             animate={{ opacity: [1, 0.5, 1] }}
