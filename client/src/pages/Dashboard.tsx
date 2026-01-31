@@ -100,7 +100,7 @@ export default function Dashboard() {
       website: "",
       niches: [] as string[],
       location: "",
-      socialLinks: { instagram: "", twitter: "", linkedin: "", facebook: "", canva: "" } as Record<string, string>
+      socialLinks: { instagram: "", twitter: "", linkedin: "", facebook: "", canva: "" }
     }
   });
 
@@ -698,6 +698,63 @@ export default function Dashboard() {
                             />
                           </div>
                         </div>
+                        
+                        <div className="space-y-4 pt-4 border-t">
+                          <h3 className="font-bold text-sm uppercase tracking-wider text-muted-foreground">Portfolio Videos</h3>
+                          <p className="text-sm text-muted-foreground">Add video URLs to showcase your work (YouTube, TikTok, Vimeo, etc.)</p>
+                          <div className="space-y-2">
+                            {(creatorForm.watch("portfolio") || []).map((video: any, index: number) => (
+                              <div key={video.id || index} className="flex gap-2 items-center">
+                                <Input 
+                                  value={video.title} 
+                                  onChange={(e) => {
+                                    const portfolio = [...(creatorForm.getValues("portfolio") || [])];
+                                    portfolio[index] = { ...portfolio[index], title: e.target.value };
+                                    creatorForm.setValue("portfolio", portfolio);
+                                  }}
+                                  placeholder="Video title"
+                                  className="flex-1"
+                                />
+                                <Input 
+                                  value={video.url} 
+                                  onChange={(e) => {
+                                    const portfolio = [...(creatorForm.getValues("portfolio") || [])];
+                                    portfolio[index] = { ...portfolio[index], url: e.target.value };
+                                    creatorForm.setValue("portfolio", portfolio);
+                                  }}
+                                  placeholder="Video URL"
+                                  className="flex-1"
+                                />
+                                <Button 
+                                  type="button" 
+                                  variant="ghost" 
+                                  size="icon"
+                                  onClick={() => {
+                                    const portfolio = creatorForm.getValues("portfolio") || [];
+                                    creatorForm.setValue("portfolio", portfolio.filter((_: any, i: number) => i !== index));
+                                  }}
+                                >
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </div>
+                            ))}
+                            <Button 
+                              type="button" 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => {
+                                const portfolio = creatorForm.getValues("portfolio") || [];
+                                creatorForm.setValue("portfolio", [...portfolio, { id: Date.now().toString(), title: "", url: "" }]);
+                              }}
+                              className="w-full"
+                              data-testid="button-add-portfolio-video"
+                            >
+                              <Plus className="h-4 w-4 mr-2" />
+                              Add Video
+                            </Button>
+                          </div>
+                        </div>
+                        
                         <Button size="lg" type="submit" className="w-full font-bold" disabled={updateCreator.isPending}>
                           {updateCreator.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                           Save Changes
@@ -868,6 +925,21 @@ export default function Dashboard() {
                                 </FormLabel>
                                 <FormControl>
                                   <Input placeholder="https://facebook.com/..." {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={brandForm.control}
+                            name="socialLinks.linkedin"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="flex items-center gap-2">
+                                  <Globe className="h-4 w-4" /> LinkedIn URL
+                                </FormLabel>
+                                <FormControl>
+                                  <Input placeholder="https://linkedin.com/company/..." {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
