@@ -5,6 +5,7 @@ import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integra
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { sendBulkEmails } from "./gmail";
+import { createPaypalOrder, capturePaypalOrder, loadPaypalDefault, isPayPalConfigured } from "./paypal";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -336,6 +337,19 @@ export async function registerRoutes(
       console.error("Broadcast email error:", error);
       res.status(500).json({ message: error.message || "Failed to send emails" });
     }
+  });
+
+  // PayPal Routes
+  app.get("/paypal/setup", async (req, res) => {
+    await loadPaypalDefault(req, res);
+  });
+
+  app.post("/paypal/order", async (req, res) => {
+    await createPaypalOrder(req, res);
+  });
+
+  app.post("/paypal/order/:orderID/capture", async (req, res) => {
+    await capturePaypalOrder(req, res);
   });
 
   return httpServer;
