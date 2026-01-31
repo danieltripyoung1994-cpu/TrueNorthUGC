@@ -1,4 +1,4 @@
-import { pgTable, text, serial, jsonb, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, jsonb, varchar, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { users } from "./models/auth";
@@ -107,3 +107,24 @@ export const notifications = pgTable("notifications", {
 export const insertNotificationSchema = createInsertSchema(notifications).omit({ id: true });
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = z.infer<typeof insertNotificationSchema>;
+
+// Reviews for rating creators and brands after collaborations
+export const reviews = pgTable("reviews", {
+  id: serial("id").primaryKey(),
+  reviewerUserId: varchar("reviewer_user_id").notNull(),
+  revieweeUserId: varchar("reviewee_user_id").notNull(),
+  reviewerType: text("reviewer_type").notNull(), // "creator" or "brand"
+  revieweeType: text("reviewee_type").notNull(), // "creator" or "brand"
+  rating: integer("rating").notNull(), // 1-5 stars
+  title: text("title"),
+  body: text("body").notNull(),
+  createdAt: text("created_at").notNull(),
+});
+
+export const insertReviewSchema = createInsertSchema(reviews)
+  .omit({ id: true })
+  .extend({
+    rating: z.number().min(1).max(5),
+  });
+export type Review = typeof reviews.$inferSelect;
+export type InsertReview = z.infer<typeof insertReviewSchema>;

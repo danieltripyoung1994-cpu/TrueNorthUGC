@@ -1,4 +1,4 @@
-import { creators, brands, offers, messages, notifications, users, type Creator, type InsertCreator, type Brand, type InsertBrand, type Offer, type InsertOffer, type Message, type InsertMessage, type Notification, type InsertNotification, type User } from "@shared/schema";
+import { creators, brands, offers, messages, notifications, users, reviews, type Creator, type InsertCreator, type Brand, type InsertBrand, type Offer, type InsertOffer, type Message, type InsertMessage, type Notification, type InsertNotification, type User, type Review, type InsertReview } from "@shared/schema";
 import { db } from "./db";
 import { eq, ilike, or, desc, and, isNotNull } from "drizzle-orm";
 
@@ -31,6 +31,14 @@ export interface IStorage {
 
   // Users
   getAllUsersWithEmail(): Promise<User[]>;
+
+  // Reviews
+  createReview(review: InsertReview): Promise<Review>;
+  getReviewsByCreatorUserId(creatorUserId: string): Promise<Review[]>;
+  getReviewsByBrandUserId(brandUserId: string): Promise<Review[]>;
+  getReviewsByReviewer(reviewerUserId: string): Promise<Review[]>;
+  getReviewSummary(revieweeUserId: string): Promise<{ averageRating: number; totalReviews: number }>;
+  deleteReview(id: number, reviewerUserId: string): Promise<boolean>;
 }
 
 type CreatorSocialLinks = { tiktok?: string; instagram?: string; youtube?: string; twitter?: string; facebook?: string; canva?: string };
@@ -266,6 +274,52 @@ export class DatabaseStorage implements IStorage {
 
   async getAllUsersWithEmail(): Promise<User[]> {
     return await db.select().from(users).where(isNotNull(users.email));
+  }
+
+  // Reviews
+  async createReview(insertReview: InsertReview): Promise<Review> {
+    const [review] = await db.insert(reviews).values(insertReview).returning();
+    return review;
+  }
+
+  async getReviewsByCreatorUserId(creatorUserId: string): Promise<Review[]> {
+    return await db.select().from(reviews)
+      .where(and(eq(reviews.revieweeUserId, creatorUserId), eq(reviews.revieweeType, "creator")))
+      .orderBy(desc(reviews.createdAt));
+  }
+
+  async getReviewsByBrandUserId(brandUserId: string): Promise<Review[]> {
+    return await db.select().from(reviews)
+      .where(and(eq(reviews.revieweeUserId, brandUserId), eq(reviews.revieweeType, "brand")))
+      .orderBy(desc(reviews.createdAt));
+  }
+
+  async getReviewsByReviewer(reviewerUserId: string): Promise<Review[]> {
+    return await db.select().from(reviews)
+      .where(eq(reviews.reviewerUserId, reviewerUserId))
+      .orderBy(desc(reviews.createdAt));
+  }
+
+  async getReviewSummary(revieweeUserId: string): Promise<{ averageRating: number; totalReviews: number }> {
+    const allReviews = await db.select().from(reviews)
+      .where(eq(reviews.revieweeUserId, revieweeUserId));
+    
+    if (allReviews.length === 0) {
+      return { averageRating: 0, totalReviews: 0 };
+    }
+    
+    const totalRating = allReviews.reduce((sum, r) => sum + r.rating, 0);
+    return {
+      averageRating: Math.round((totalRating / allReviews.length) * 10) / 10,
+      totalReviews: allReviews.length
+    };
+  }
+
+  async deleteReview(id: number, reviewerUserId: string): Promise<boolean> {
+    const result = await db.delete(reviews)
+      .where(and(eq(reviews.id, id), eq(reviews.reviewerUserId, reviewerUserId)))
+      .returning();
+    return result.length > 0;
   }
 }
 
