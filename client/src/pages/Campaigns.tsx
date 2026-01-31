@@ -8,13 +8,71 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Search, FilterX, Megaphone, DollarSign, Calendar, MapPin, Package, Building, ExternalLink } from "lucide-react";
+import { Search, FilterX, Megaphone, DollarSign, Calendar, MapPin, Package, Building, ExternalLink, Video, Users, Sparkles, Hash, AtSign, Clock, Shield, FileText } from "lucide-react";
 import { CardSkeleton } from "@/components/ui/skeleton-loaders";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 
 const NICHES = ["All", "Fitness", "Beauty", "Tech", "Travel", "Food", "Fashion", "Lifestyle", "Gaming"];
+
+const CAMPAIGN_TYPE_LABELS: Record<string, string> = {
+  product_review: "Product Review",
+  testimonial: "Testimonial",
+  unboxing: "Unboxing",
+  tutorial: "Tutorial / How-To",
+  lifestyle: "Lifestyle Integration",
+  brand_awareness: "Brand Awareness",
+  challenge: "Challenge / Trend",
+  giveaway: "Giveaway Promo",
+};
+
+const COMPENSATION_LABELS: Record<string, string> = {
+  fixed: "Fixed Payment",
+  product_gifting: "Product Gifting Only",
+  commission: "Commission Based",
+  hybrid: "Payment + Product",
+  negotiable: "Negotiable",
+};
+
+const CONTENT_STYLE_LABELS: Record<string, string> = {
+  professional: "Professional / Polished",
+  casual: "Casual / Relatable",
+  authentic: "Raw / Authentic UGC",
+  cinematic: "Cinematic",
+  comedic: "Comedic / Fun",
+};
+
+const USAGE_RIGHTS_LABELS: Record<string, string> = {
+  "30_days": "30 Days",
+  "90_days": "90 Days",
+  "6_months": "6 Months",
+  "1_year": "1 Year",
+  perpetual: "Perpetual / Forever",
+  negotiable: "Negotiable",
+};
+
+const EXCLUSIVITY_LABELS: Record<string, string> = {
+  none: "No Exclusivity",
+  category: "Category Exclusive",
+  full: "Full Exclusivity",
+};
+
+const PLATFORM_LABELS: Record<string, string> = {
+  tiktok: "TikTok",
+  instagram: "Instagram",
+  youtube: "YouTube",
+  twitter: "X (Twitter)",
+  facebook: "Facebook",
+};
+
+const EXPERIENCE_LABELS: Record<string, string> = {
+  any: "Any Level",
+  beginner: "Beginner",
+  intermediate: "Intermediate",
+  pro: "Pro",
+  elite: "Elite Only",
+};
 
 function useBrandByUserId(userId: string | null) {
   return useQuery<Brand>({
@@ -238,6 +296,25 @@ export default function Campaigns() {
             
             {selectedCampaign && (
               <div className="space-y-6 pt-4">
+                <div className="flex flex-wrap gap-2">
+                  {selectedCampaign.campaignType && (
+                    <Badge variant="default">
+                      {CAMPAIGN_TYPE_LABELS[selectedCampaign.campaignType] || selectedCampaign.campaignType}
+                    </Badge>
+                  )}
+                  {selectedCampaign.compensationType && (
+                    <Badge variant="secondary">
+                      {COMPENSATION_LABELS[selectedCampaign.compensationType] || selectedCampaign.compensationType}
+                    </Badge>
+                  )}
+                  {selectedCampaign.contentStyle && (
+                    <Badge variant="outline">
+                      <Sparkles className="h-3 w-3 mr-1" />
+                      {CONTENT_STYLE_LABELS[selectedCampaign.contentStyle] || selectedCampaign.contentStyle}
+                    </Badge>
+                  )}
+                </div>
+
                 <div>
                   <h4 className="font-semibold mb-2">Description</h4>
                   <p className="text-muted-foreground" data-testid="text-campaign-modal-description">
@@ -251,6 +328,22 @@ export default function Campaigns() {
                     <p className="text-muted-foreground" data-testid="text-campaign-modal-requirements">
                       {selectedCampaign.requirements}
                     </p>
+                  </div>
+                )}
+
+                {selectedCampaign.platforms && selectedCampaign.platforms.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-2 flex items-center gap-2">
+                      <Video className="h-4 w-4 text-primary" />
+                      Target Platforms
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedCampaign.platforms.map((p) => (
+                        <Badge key={p} variant="outline">
+                          {PLATFORM_LABELS[p] || p}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
                 )}
 
@@ -270,12 +363,30 @@ export default function Campaigns() {
                       </div>
                     </div>
                   )}
+                  {selectedCampaign.creatorCount && (
+                    <div className="flex items-center gap-3 p-3 bg-secondary/50 rounded-lg">
+                      <Users className="h-5 w-5 text-indigo-500" />
+                      <div>
+                        <p className="text-sm text-muted-foreground">Creators Needed</p>
+                        <p className="font-semibold">{selectedCampaign.creatorCount}</p>
+                      </div>
+                    </div>
+                  )}
                   {selectedCampaign.deadline && (
                     <div className="flex items-center gap-3 p-3 bg-secondary/50 rounded-lg">
                       <Calendar className="h-5 w-5 text-blue-500" />
                       <div>
-                        <p className="text-sm text-muted-foreground">Deadline</p>
+                        <p className="text-sm text-muted-foreground">Content Deadline</p>
                         <p className="font-semibold" data-testid="text-campaign-modal-deadline">{formatDeadline(selectedCampaign.deadline)}</p>
+                      </div>
+                    </div>
+                  )}
+                  {selectedCampaign.applicationDeadline && (
+                    <div className="flex items-center gap-3 p-3 bg-secondary/50 rounded-lg">
+                      <Clock className="h-5 w-5 text-amber-500" />
+                      <div>
+                        <p className="text-sm text-muted-foreground">Apply By</p>
+                        <p className="font-semibold">{formatDeadline(selectedCampaign.applicationDeadline)}</p>
                       </div>
                     </div>
                   )}
@@ -288,7 +399,39 @@ export default function Campaigns() {
                       </div>
                     </div>
                   )}
+                  {selectedCampaign.experienceLevel && selectedCampaign.experienceLevel !== "any" && (
+                    <div className="flex items-center gap-3 p-3 bg-secondary/50 rounded-lg">
+                      <Sparkles className="h-5 w-5 text-purple-500" />
+                      <div>
+                        <p className="text-sm text-muted-foreground">Experience Level</p>
+                        <p className="font-semibold">{EXPERIENCE_LABELS[selectedCampaign.experienceLevel] || selectedCampaign.experienceLevel}</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                {(selectedCampaign.usageRights || selectedCampaign.exclusivity) && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {selectedCampaign.usageRights && (
+                      <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg border border-primary/10">
+                        <Shield className="h-5 w-5 text-primary" />
+                        <div>
+                          <p className="text-sm text-muted-foreground">Usage Rights</p>
+                          <p className="font-semibold">{USAGE_RIGHTS_LABELS[selectedCampaign.usageRights] || selectedCampaign.usageRights}</p>
+                        </div>
+                      </div>
+                    )}
+                    {selectedCampaign.exclusivity && selectedCampaign.exclusivity !== "none" && (
+                      <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg border border-primary/10">
+                        <Shield className="h-5 w-5 text-primary" />
+                        <div>
+                          <p className="text-sm text-muted-foreground">Exclusivity</p>
+                          <p className="font-semibold">{EXCLUSIVITY_LABELS[selectedCampaign.exclusivity] || selectedCampaign.exclusivity}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {selectedCampaign.deliverables && selectedCampaign.deliverables.length > 0 && (
                   <div>
@@ -301,6 +444,52 @@ export default function Campaigns() {
                         <li key={i}>{d}</li>
                       ))}
                     </ul>
+                  </div>
+                )}
+
+                {(selectedCampaign.hashtags && selectedCampaign.hashtags.length > 0) || (selectedCampaign.mentions && selectedCampaign.mentions.length > 0) ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {selectedCampaign.hashtags && selectedCampaign.hashtags.length > 0 && (
+                      <div>
+                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                          <Hash className="h-4 w-4 text-primary" />
+                          Required Hashtags
+                        </h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {selectedCampaign.hashtags.map((tag, i) => (
+                            <Badge key={i} variant="outline" className="text-primary">{tag}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {selectedCampaign.mentions && selectedCampaign.mentions.length > 0 && (
+                      <div>
+                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                          <AtSign className="h-4 w-4 text-blue-500" />
+                          Required Mentions
+                        </h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {selectedCampaign.mentions.map((mention, i) => (
+                            <Badge key={i} variant="outline" className="text-blue-500">{mention}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : null}
+
+                {selectedCampaign.briefDocument && (
+                  <div className="p-4 bg-secondary/30 rounded-lg">
+                    <a 
+                      href={selectedCampaign.briefDocument} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-primary hover:underline font-medium"
+                    >
+                      <FileText className="h-5 w-5" />
+                      View Full Campaign Brief
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
                   </div>
                 )}
 

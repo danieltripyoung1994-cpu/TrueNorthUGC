@@ -4,8 +4,35 @@ import { type Campaign, type Brand } from "@shared/schema";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, DollarSign, MapPin, Package, Building, ArrowRight } from "lucide-react";
+import { Calendar, DollarSign, MapPin, Package, Building, ArrowRight, Video, Users, Sparkles } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+
+const CAMPAIGN_TYPE_LABELS: Record<string, string> = {
+  product_review: "Product Review",
+  testimonial: "Testimonial",
+  unboxing: "Unboxing",
+  tutorial: "Tutorial",
+  lifestyle: "Lifestyle",
+  brand_awareness: "Brand Awareness",
+  challenge: "Challenge",
+  giveaway: "Giveaway",
+};
+
+const COMPENSATION_LABELS: Record<string, string> = {
+  fixed: "Paid",
+  product_gifting: "Product Only",
+  commission: "Commission",
+  hybrid: "Paid + Product",
+  negotiable: "Negotiable",
+};
+
+const PLATFORM_LABELS: Record<string, string> = {
+  tiktok: "TikTok",
+  instagram: "Instagram",
+  youtube: "YouTube",
+  twitter: "X",
+  facebook: "Facebook",
+};
 
 interface CampaignCardProps {
   campaign: Campaign;
@@ -69,16 +96,44 @@ export function CampaignCard({ campaign, onViewDetails }: CampaignCardProps) {
         </CardHeader>
 
         <CardContent className="space-y-4 flex-1">
-          <p className="text-sm text-muted-foreground line-clamp-3" data-testid={`text-campaign-description-${campaign.id}`}>
+          <p className="text-sm text-muted-foreground line-clamp-2" data-testid={`text-campaign-description-${campaign.id}`}>
             {campaign.description}
           </p>
+
+          <div className="flex flex-wrap gap-1.5">
+            {campaign.campaignType && (
+              <Badge variant="default" className="text-xs">
+                {CAMPAIGN_TYPE_LABELS[campaign.campaignType] || campaign.campaignType}
+              </Badge>
+            )}
+            {campaign.compensationType && (
+              <Badge variant="secondary" className="text-xs">
+                {COMPENSATION_LABELS[campaign.compensationType] || campaign.compensationType}
+              </Badge>
+            )}
+          </div>
+
+          {campaign.platforms && campaign.platforms.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {campaign.platforms.map((platform) => (
+                <Badge 
+                  key={platform} 
+                  variant="outline" 
+                  className="text-xs font-normal"
+                >
+                  <Video className="h-3 w-3 mr-1" />
+                  {PLATFORM_LABELS[platform] || platform}
+                </Badge>
+              ))}
+            </div>
+          )}
 
           <div className="flex flex-wrap gap-1.5">
             {campaign.niches?.slice(0, 3).map((niche) => (
               <Badge 
                 key={niche} 
                 variant="outline" 
-                className="text-xs font-normal"
+                className="text-xs font-normal text-muted-foreground"
                 data-testid={`badge-campaign-niche-${campaign.id}-${niche}`}
               >
                 {niche}
@@ -96,6 +151,12 @@ export function CampaignCard({ campaign, onViewDetails }: CampaignCardProps) {
               <div className="flex items-center gap-2 text-muted-foreground">
                 <DollarSign className="h-4 w-4 text-green-500" />
                 <span data-testid={`text-campaign-budget-${campaign.id}`}>{campaign.budget}</span>
+              </div>
+            )}
+            {campaign.creatorCount && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Users className="h-4 w-4 text-indigo-500" />
+                <span>Looking for {campaign.creatorCount} creator{campaign.creatorCount > 1 ? 's' : ''}</span>
               </div>
             )}
             {campaign.deadline && (

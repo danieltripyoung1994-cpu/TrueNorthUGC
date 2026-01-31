@@ -164,6 +164,20 @@ export const campaigns = pgTable("campaigns", {
   location: text("location"), // Target location for creators
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at"),
+  // New customization fields
+  campaignType: text("campaign_type"), // product_review, testimonial, unboxing, tutorial, lifestyle, brand_awareness
+  platforms: jsonb("platforms").$type<string[]>().default([]), // tiktok, instagram, youtube, twitter
+  experienceLevel: text("experience_level"), // any, beginner, intermediate, pro, elite
+  compensationType: text("compensation_type"), // fixed, product_gifting, commission, negotiable, hybrid
+  applicationDeadline: text("application_deadline"), // When applications close
+  creatorCount: integer("creator_count"), // How many creators needed
+  contentStyle: text("content_style"), // professional, casual, authentic, polished, ugc_style
+  usageRights: text("usage_rights"), // 30_days, 90_days, 1_year, perpetual, negotiable
+  exclusivity: text("exclusivity"), // none, category, full
+  productProvided: text("product_provided"), // yes, no
+  briefDocument: text("brief_document"), // URL to campaign brief
+  hashtags: jsonb("hashtags").$type<string[]>().default([]), // Required hashtags
+  mentions: jsonb("mentions").$type<string[]>().default([]), // Required mentions
 });
 
 export const insertCampaignSchema = createInsertSchema(campaigns).omit({ id: true });
