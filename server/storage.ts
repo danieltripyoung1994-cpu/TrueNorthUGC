@@ -1,6 +1,6 @@
-import { creators, brands, offers, type Creator, type InsertCreator, type Brand, type InsertBrand, type Offer, type InsertOffer } from "@shared/schema";
+import { creators, brands, offers, messages, notifications, type Creator, type InsertCreator, type Brand, type InsertBrand, type Offer, type InsertOffer, type Message, type InsertMessage, type Notification, type InsertNotification } from "@shared/schema";
 import { db } from "./db";
-import { eq, ilike, or } from "drizzle-orm";
+import { eq, ilike, or, desc, and } from "drizzle-orm";
 
 export interface IStorage {
   getCreators(search?: string, niche?: string): Promise<Creator[]>;
@@ -15,11 +15,24 @@ export interface IStorage {
 
   getOffers(target?: string): Promise<Offer[]>;
   createOffer(offer: InsertOffer): Promise<Offer>;
+
+  // Messages
+  getMessages(userId: string): Promise<Message[]>;
+  getSentMessages(userId: string): Promise<Message[]>;
+  createMessage(message: InsertMessage): Promise<Message>;
+  markMessageRead(id: number, userId: string): Promise<Message | undefined>;
+
+  // Notifications
+  getNotifications(userId: string): Promise<Notification[]>;
+  createNotification(notification: InsertNotification): Promise<Notification>;
+  markNotificationRead(id: number, userId: string): Promise<Notification | undefined>;
+  markAllNotificationsRead(userId: string): Promise<void>;
+  getUnreadCount(userId: string): Promise<number>;
 }
 
-type CreatorSocialLinks = { tiktok?: string; instagram?: string; youtube?: string; twitter?: string };
+type CreatorSocialLinks = { tiktok?: string; instagram?: string; youtube?: string; twitter?: string; facebook?: string; canva?: string };
 type CreatorPortfolioItem = { id: string; title: string; url: string; thumbnail?: string };
-type BrandSocialLinks = { instagram?: string; twitter?: string; linkedin?: string };
+type BrandSocialLinks = { instagram?: string; twitter?: string; linkedin?: string; facebook?: string; canva?: string };
 
 function normalizeCreator(creator: typeof creators.$inferSelect): Creator {
   return {
@@ -188,6 +201,64 @@ export class DatabaseStorage implements IStorage {
       .where(eq(brands.userId, userId))
       .returning();
     return normalizeBrand(updated);
+  }
+
+  // Messages
+  async getMessages(userId: string): Promise<Message[]> {
+    return await db.select().from(messages)
+      .where(eq(messages.receiverId, userId))
+      .orderBy(desc(messages.createdAt));
+  }
+
+  async getSentMessages(userId: string): Promise<Message[]> {
+    return await db.select().from(messages)
+      .where(eq(messages.senderId, userId))
+      .orderBy(desc(messages.createdAt));
+  }
+
+  async createMessage(insertMessage: InsertMessage): Promise<Message> {
+    const [message] = await db.insert(messages).values(insertMessage).returning();
+    return message;
+  }
+
+  async markMessageRead(id: number, userId: string): Promise<Message | undefined> {
+    const [message] = await db.update(messages)
+      .set({ read: "true" })
+      .where(and(eq(messages.id, id), eq(messages.receiverId, userId)))
+      .returning();
+    return message;
+  }
+
+  // Notifications
+  async getNotifications(userId: string): Promise<Notification[]> {
+    return await db.select().from(notifications)
+      .where(eq(notifications.userId, userId))
+      .orderBy(desc(notifications.createdAt));
+  }
+
+  async createNotification(insertNotification: InsertNotification): Promise<Notification> {
+    const [notification] = await db.insert(notifications).values(insertNotification).returning();
+    return notification;
+  }
+
+  async markNotificationRead(id: number, userId: string): Promise<Notification | undefined> {
+    const [notification] = await db.update(notifications)
+      .set({ read: "true" })
+      .where(and(eq(notifications.id, id), eq(notifications.userId, userId)))
+      .returning();
+    return notification;
+  }
+
+  async markAllNotificationsRead(userId: string): Promise<void> {
+    await db.update(notifications)
+      .set({ read: "true" })
+      .where(eq(notifications.userId, userId));
+  }
+
+  async getUnreadCount(userId: string): Promise<number> {
+    const unread = await db.select().from(notifications)
+      .where(and(eq(notifications.userId, userId), eq(notifications.read, "false")));
+    return unread.length;
   }
 }
 

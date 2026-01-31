@@ -38,8 +38,17 @@ Preferred communication style: Simple, everyday language.
 
 ### Key Data Models
 - **Users**: Core user accounts (managed by Replit Auth)
-- **Creators**: Content creator profiles with portfolio, social links, and niches
-- **Brands**: Brand profiles with industry information and preferences
+- **Creators**: Content creator profiles with portfolio, social links (TikTok, Instagram, YouTube, Twitter, Facebook, Canva), niches, location, languages, and experience level
+- **Brands**: Brand profiles with industry information, social links (Instagram, Twitter, LinkedIn, Facebook, Canva), niches, and location
+- **Messages**: Creator-brand messaging system with inbox/sent tabs
+- **Notifications**: Real-time notification system for messages and interactions
+
+### Key Features (January 2026)
+- **Messaging System**: Full inbox/sent messaging between creators and brands with compose modal
+- **Notifications**: Bell icon with unread count badge, dropdown menu with mark as read functionality
+- **Enhanced Directory**: Search, filter by niche, location (Canadian provinces), and experience level
+- **Profile Customization**: Complete profile editing with profile picture, bio, social links, and more
+- **Code Splitting**: React.lazy for optimized page loading
 
 ### Project Structure
 ```
