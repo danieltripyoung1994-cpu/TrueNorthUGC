@@ -6,7 +6,6 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { CreditCard, Loader2, CheckCircle, AlertCircle, DollarSign } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
 
 declare global {
   namespace JSX {
@@ -108,20 +107,19 @@ export default function PaymentButton({
     const response = await fetch(`/paypal/order/${orderId}/capture`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        recipientUserId: creatorUserId,
+        description,
+      }),
     });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to capture payment");
+    }
+    
     const data = await response.json();
-    return { data, orderId };
-  };
-
-  const recordTransaction = async (orderId: string) => {
-    const response = await apiRequest("POST", "/api/transactions", {
-      paypalOrderId: orderId,
-      recipientUserId: creatorUserId,
-      amount: amount.toFixed(2),
-      currency: "CAD",
-      description,
-    });
-    return await response.json();
+    return { data, orderId, transaction: data.transaction };
   };
 
   const onApprove = async (data: any) => {
@@ -129,7 +127,6 @@ export default function PaymentButton({
     setPaymentStatus("processing");
     try {
       const result = await captureOrder(data.orderId);
-      const transaction = await recordTransaction(data.orderId);
       
       setPaymentStatus("success");
       toast({
@@ -138,7 +135,7 @@ export default function PaymentButton({
       });
       
       if (onSuccess) {
-        onSuccess(transaction);
+        onSuccess(result.transaction);
       }
       
       setTimeout(() => {

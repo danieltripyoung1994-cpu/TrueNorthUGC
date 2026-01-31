@@ -358,50 +358,95 @@ export async function registerRoutes(
     await createPaypalOrder(req, res);
   });
 
+  // Secure capture endpoint that also records the transaction server-side
   app.post("/paypal/order/:orderID/capture", isAuthenticated, async (req, res) => {
     const userId = (req.user as any).claims.sub;
     const orderID = req.params.orderID as string;
+    const { recipientUserId, description } = req.body;
     
-    // First capture the PayPal order
     try {
-      // Call the original capture function
-      await capturePaypalOrder(req, res);
-    } catch (error) {
-      // Error already handled by capturePaypalOrder
-    }
-  });
-
-  // Transaction recording endpoint - called after successful payment
-  app.post("/api/transactions", isAuthenticated, async (req, res) => {
-    try {
-      const userId = (req.user as any).claims.sub;
-      const { paypalOrderId, recipientUserId, amount, currency, description } = req.body;
-      
-      if (!paypalOrderId || !recipientUserId || !amount) {
-        return res.status(400).json({ message: "Missing required fields" });
+      // Check if transaction already exists for this order
+      const existingTransaction = await storage.getTransactionByPaypalOrderId(orderID);
+      if (existingTransaction) {
+        return res.status(400).json({ 
+          error: "Transaction already recorded for this order",
+          transaction: existingTransaction 
+        });
       }
 
-      const totalAmount = parseFloat(amount);
-      const { platformFee, creatorPayout } = calculateFees(totalAmount);
-
-      const transaction = await storage.createTransaction({
-        paypalOrderId,
-        payerUserId: userId,
-        recipientUserId,
-        amount: totalAmount.toFixed(2),
-        currency: currency || "CAD",
-        platformFee: platformFee.toFixed(2),
-        creatorPayout: creatorPayout.toFixed(2),
-        status: "completed",
-        description: description || "Creator service payment",
-        createdAt: new Date().toISOString(),
-        completedAt: new Date().toISOString(),
+      // Capture the PayPal order - this modifies req/res, so we need to handle it differently
+      // We'll call the capture function but intercept the response to get payment data
+      const captureResponse = await new Promise<any>((resolve, reject) => {
+        const originalJson = res.json.bind(res);
+        const originalStatus = res.status.bind(res);
+        let statusCode = 200;
+        
+        res.status = (code: number) => {
+          statusCode = code;
+          return res;
+        };
+        
+        res.json = (data: any) => {
+          if (statusCode >= 400) {
+            reject(new Error(data.error || "PayPal capture failed"));
+          } else {
+            resolve(data);
+          }
+          return res;
+        };
+        
+        capturePaypalOrder(req, res).catch(reject);
       });
 
-      res.json(transaction);
+      // Extract payment details from PayPal capture response
+      const purchaseUnit = captureResponse.purchase_units?.[0];
+      const captureDetails = purchaseUnit?.payments?.captures?.[0];
+      
+      if (!captureDetails) {
+        return res.status(500).json({ error: "Failed to extract capture details from PayPal" });
+      }
+
+      // Get verified amount from PayPal (not from client)
+      const verifiedAmount = parseFloat(captureDetails.amount?.value || "0");
+      const verifiedCurrency = captureDetails.amount?.currency_code || "CAD";
+      const captureId = captureDetails.id;
+      const captureStatus = captureDetails.status;
+
+      if (verifiedAmount <= 0) {
+        return res.status(400).json({ error: "Invalid payment amount" });
+      }
+
+      // Calculate fees based on verified amount
+      const { platformFee, creatorPayout } = calculateFees(verifiedAmount);
+
+      // Record the transaction with verified PayPal data
+      const transaction = await storage.createTransaction({
+        paypalOrderId: orderID,
+        payerUserId: userId,
+        recipientUserId: recipientUserId || "platform", // Default to platform if no recipient
+        amount: verifiedAmount.toFixed(2),
+        currency: verifiedCurrency,
+        platformFee: platformFee.toFixed(2),
+        creatorPayout: creatorPayout.toFixed(2),
+        status: captureStatus === "COMPLETED" ? "completed" : "pending",
+        description: description || "Creator service payment",
+        createdAt: new Date().toISOString(),
+        completedAt: captureStatus === "COMPLETED" ? new Date().toISOString() : undefined,
+      });
+
+      res.json({
+        ...captureResponse,
+        transaction,
+        feeBreakdown: {
+          totalAmount: verifiedAmount.toFixed(2),
+          platformFee: platformFee.toFixed(2),
+          creatorPayout: creatorPayout.toFixed(2),
+          platformFeePercentage: "20%",
+        },
+      });
     } catch (error: any) {
-      console.error("Failed to record transaction:", error);
-      res.status(500).json({ message: error.message || "Failed to record transaction" });
+      console.error("Failed to capture order:", error);
+      res.status(500).json({ error: error.message || "Failed to capture order" });
     }
   });
 
