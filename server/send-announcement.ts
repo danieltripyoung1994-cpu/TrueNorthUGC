@@ -21,21 +21,23 @@ const htmlBody = `<html><body style="font-family: Arial, sans-serif; max-width: 
 <p style="color: #666; font-size: 14px;">Canada's Premier Creator Marketplace</p>
 </div>
 <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-<h2 style="color: #333;">You're Invited to Join TrueNorthUGC!</h2>
-<p style="color: #444; line-height: 1.6;">We're excited to invite you to <strong>TrueNorthUGC</strong> — Canada's premier marketplace connecting talented UGC creators with brands looking for authentic content!</p>
-<p style="color: #444; line-height: 1.6;">As a creator, you'll have access to:</p>
+<h2 style="color: #333;">Our Official Domain Is Now Live!</h2>
+<p style="color: #444; line-height: 1.6;">Great news! <strong>TrueNorthUGC</strong> is now available at our official domain:</p>
 <div style="background: linear-gradient(135deg, #dc2626 0%, #f97316 100%); padding: 25px; border-radius: 12px; margin: 25px 0; text-align: center;">
-<ul style="color: white; text-align: left; padding-left: 20px; line-height: 2;">
+<a href="https://www.truenorthugc.com" style="color: white; font-size: 24px; font-weight: bold; text-decoration: none;">www.truenorthugc.com</a>
+</div>
+<p style="color: #444; line-height: 1.6;">Canada's premier marketplace connecting talented UGC creators with brands looking for authentic content is now easier to access than ever!</p>
+<p style="color: #444; line-height: 1.6;">As a creator, you'll have access to:</p>
+<ul style="color: #444; line-height: 2; padding-left: 20px;">
 <li>Browse and apply to brand campaigns</li>
 <li>Build your professional creator profile</li>
 <li>Connect directly with Canadian brands</li>
 <li>Secure payments through PayPal</li>
 <li>Showcase your portfolio to potential clients</li>
 </ul>
-</div>
 <p style="color: #444; line-height: 1.6;">Join our growing community of Canadian creators and start your UGC journey today!</p>
 <div style="text-align: center; margin: 30px 0;">
-<a href="https://truenorthugc.replit.app" style="background: #dc2626; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Join TrueNorthUGC Now</a>
+<a href="https://www.truenorthugc.com" style="background: #dc2626; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Visit TrueNorthUGC.com</a>
 </div>
 <p style="color: #666; font-size: 14px; margin-top: 30px;">We look forward to seeing you on the platform!</p>
 <p style="color: #444;">— The TrueNorthUGC Team</p>
@@ -48,7 +50,7 @@ async function main() {
     console.log(`Sending invitation emails to ${recipientEmails.length} recipients...`);
     const results = await sendBulkEmails(
       recipientEmails,
-      'You\'re Invited to Join TrueNorthUGC - Canada\'s Creator Marketplace!',
+      'TrueNorthUGC Official Domain Is Now Live - www.truenorthugc.com',
       htmlBody
     );
     
