@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Instagram, Youtube, Video, Sparkles } from "lucide-react";
+import { RatingSummary } from "@/components/Reviews";
 
 interface CreatorCardProps {
   creator: Creator;
@@ -63,6 +64,7 @@ export function CreatorCard({ creator }: CreatorCardProps) {
       </CardHeader>
       
       <CardContent className="space-y-4">
+        <RatingSummary userId={creator.userId} showLabel={false} />
         <p className="text-sm text-muted-foreground line-clamp-2 min-h-[40px]">
           {creator.bio || "No bio yet."}
         </p>
