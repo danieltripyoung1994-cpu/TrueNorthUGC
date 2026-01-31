@@ -1,4 +1,4 @@
-import { creators, brands, offers, messages, notifications, users, reviews, transactions, type Creator, type InsertCreator, type Brand, type InsertBrand, type Offer, type InsertOffer, type Message, type InsertMessage, type Notification, type InsertNotification, type User, type Review, type InsertReview, type Transaction, type InsertTransaction } from "@shared/schema";
+import { creators, brands, offers, messages, notifications, users, reviews, transactions, campaigns, type Creator, type InsertCreator, type Brand, type InsertBrand, type Offer, type InsertOffer, type Message, type InsertMessage, type Notification, type InsertNotification, type User, type Review, type InsertReview, type Transaction, type InsertTransaction, type Campaign, type InsertCampaign } from "@shared/schema";
 import { db } from "./db";
 import { eq, ilike, or, desc, and, isNotNull } from "drizzle-orm";
 
@@ -45,6 +45,14 @@ export interface IStorage {
   getTransactionByPaypalOrderId(paypalOrderId: string): Promise<Transaction | undefined>;
   updateTransactionStatus(paypalOrderId: string, status: string, completedAt?: string): Promise<Transaction | undefined>;
   getTransactionsByUser(userId: string): Promise<Transaction[]>;
+
+  // Campaigns
+  getCampaigns(status?: string): Promise<Campaign[]>;
+  getCampaignById(id: number): Promise<Campaign | undefined>;
+  getCampaignsByBrand(brandUserId: string): Promise<Campaign[]>;
+  createCampaign(campaign: InsertCampaign): Promise<Campaign>;
+  updateCampaign(id: number, brandUserId: string, updates: Partial<InsertCampaign>): Promise<Campaign | undefined>;
+  deleteCampaign(id: number, brandUserId: string): Promise<boolean>;
 }
 
 type CreatorSocialLinks = { tiktok?: string; instagram?: string; youtube?: string; twitter?: string; facebook?: string; canva?: string };
@@ -356,6 +364,68 @@ export class DatabaseStorage implements IStorage {
       .where(or(eq(transactions.payerUserId, userId), eq(transactions.recipientUserId, userId)))
       .orderBy(desc(transactions.createdAt));
     return result;
+  }
+
+  // Campaign methods
+  async getCampaigns(status?: string): Promise<Campaign[]> {
+    if (status) {
+      const result = await db.select().from(campaigns)
+        .where(eq(campaigns.status, status))
+        .orderBy(desc(campaigns.createdAt));
+      return result;
+    }
+    const result = await db.select().from(campaigns).orderBy(desc(campaigns.createdAt));
+    return result;
+  }
+
+  async getCampaignById(id: number): Promise<Campaign | undefined> {
+    const result = await db.select().from(campaigns).where(eq(campaigns.id, id));
+    return result[0];
+  }
+
+  async getCampaignsByBrand(brandUserId: string): Promise<Campaign[]> {
+    const result = await db.select().from(campaigns)
+      .where(eq(campaigns.brandUserId, brandUserId))
+      .orderBy(desc(campaigns.createdAt));
+    return result;
+  }
+
+  async createCampaign(campaign: InsertCampaign): Promise<Campaign> {
+    const campaignData = {
+      brandUserId: campaign.brandUserId,
+      title: campaign.title,
+      description: campaign.description,
+      requirements: campaign.requirements,
+      budget: campaign.budget,
+      niches: campaign.niches as string[] || [],
+      deliverables: campaign.deliverables as string[] || [],
+      deadline: campaign.deadline,
+      status: campaign.status || "active",
+      location: campaign.location,
+      createdAt: campaign.createdAt,
+      updatedAt: campaign.updatedAt,
+    };
+    const result = await db.insert(campaigns).values(campaignData).returning();
+    return result[0];
+  }
+
+  async updateCampaign(id: number, brandUserId: string, updates: Partial<InsertCampaign>): Promise<Campaign | undefined> {
+    const updateData: any = { ...updates, updatedAt: new Date().toISOString() };
+    if (updates.niches) updateData.niches = updates.niches;
+    if (updates.deliverables) updateData.deliverables = updates.deliverables;
+    
+    const result = await db.update(campaigns)
+      .set(updateData)
+      .where(and(eq(campaigns.id, id), eq(campaigns.brandUserId, brandUserId)))
+      .returning();
+    return result[0];
+  }
+
+  async deleteCampaign(id: number, brandUserId: string): Promise<boolean> {
+    const result = await db.delete(campaigns)
+      .where(and(eq(campaigns.id, id), eq(campaigns.brandUserId, brandUserId)))
+      .returning();
+    return result.length > 0;
   }
 }
 
