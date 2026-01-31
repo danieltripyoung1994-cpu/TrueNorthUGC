@@ -128,3 +128,23 @@ export const insertReviewSchema = createInsertSchema(reviews)
   });
 export type Review = typeof reviews.$inferSelect;
 export type InsertReview = z.infer<typeof insertReviewSchema>;
+
+// Transactions for tracking payments with platform fees
+export const transactions = pgTable("transactions", {
+  id: serial("id").primaryKey(),
+  paypalOrderId: varchar("paypal_order_id").notNull().unique(),
+  payerUserId: varchar("payer_user_id").notNull(), // The brand paying
+  recipientUserId: varchar("recipient_user_id").notNull(), // The creator receiving
+  amount: text("amount").notNull(), // Total amount paid
+  currency: text("currency").notNull().default("CAD"),
+  platformFee: text("platform_fee").notNull(), // 20% platform fee
+  creatorPayout: text("creator_payout").notNull(), // 80% to creator
+  status: text("status").notNull().default("pending"), // pending, completed, failed, refunded
+  description: text("description"), // What the payment was for
+  createdAt: text("created_at").notNull(),
+  completedAt: text("completed_at"),
+});
+
+export const insertTransactionSchema = createInsertSchema(transactions).omit({ id: true });
+export type Transaction = typeof transactions.$inferSelect;
+export type InsertTransaction = z.infer<typeof insertTransactionSchema>;

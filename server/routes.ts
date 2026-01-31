@@ -5,7 +5,7 @@ import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integra
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { sendBulkEmails } from "./gmail";
-import { createPaypalOrder, capturePaypalOrder, loadPaypalDefault, isPayPalConfigured } from "./paypal";
+import { createPaypalOrder, capturePaypalOrder, loadPaypalDefault, isPayPalConfigured, calculateFees } from "./paypal";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -344,12 +344,77 @@ export async function registerRoutes(
     await loadPaypalDefault(req, res);
   });
 
-  app.post("/paypal/order", async (req, res) => {
+  app.post("/paypal/order", isAuthenticated, async (req, res) => {
+    const userId = (req.user as any).claims.sub;
+    const { amount, currency, intent, recipientUserId, description } = req.body;
+    
+    // Store temporary data for when we capture the order
+    (req as any).paymentContext = {
+      payerUserId: userId,
+      recipientUserId,
+      description,
+    };
+    
     await createPaypalOrder(req, res);
   });
 
-  app.post("/paypal/order/:orderID/capture", async (req, res) => {
-    await capturePaypalOrder(req, res);
+  app.post("/paypal/order/:orderID/capture", isAuthenticated, async (req, res) => {
+    const userId = (req.user as any).claims.sub;
+    const orderID = req.params.orderID as string;
+    
+    // First capture the PayPal order
+    try {
+      // Call the original capture function
+      await capturePaypalOrder(req, res);
+    } catch (error) {
+      // Error already handled by capturePaypalOrder
+    }
+  });
+
+  // Transaction recording endpoint - called after successful payment
+  app.post("/api/transactions", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any).claims.sub;
+      const { paypalOrderId, recipientUserId, amount, currency, description } = req.body;
+      
+      if (!paypalOrderId || !recipientUserId || !amount) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const totalAmount = parseFloat(amount);
+      const { platformFee, creatorPayout } = calculateFees(totalAmount);
+
+      const transaction = await storage.createTransaction({
+        paypalOrderId,
+        payerUserId: userId,
+        recipientUserId,
+        amount: totalAmount.toFixed(2),
+        currency: currency || "CAD",
+        platformFee: platformFee.toFixed(2),
+        creatorPayout: creatorPayout.toFixed(2),
+        status: "completed",
+        description: description || "Creator service payment",
+        createdAt: new Date().toISOString(),
+        completedAt: new Date().toISOString(),
+      });
+
+      res.json(transaction);
+    } catch (error: any) {
+      console.error("Failed to record transaction:", error);
+      res.status(500).json({ message: error.message || "Failed to record transaction" });
+    }
+  });
+
+  // Get user's transactions
+  app.get("/api/transactions", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any).claims.sub;
+      const transactions = await storage.getTransactionsByUser(userId);
+      res.json(transactions);
+    } catch (error: any) {
+      console.error("Failed to fetch transactions:", error);
+      res.status(500).json({ message: error.message || "Failed to fetch transactions" });
+    }
   });
 
   return httpServer;

@@ -67,13 +67,22 @@ export async function getClientToken() {
   return result.accessToken;
 }
 
+// Platform fee configuration
+const PLATFORM_FEE_PERCENTAGE = 0.20; // 20% platform fee
+
+export function calculateFees(totalAmount: number): { platformFee: number; creatorPayout: number } {
+  const platformFee = Math.round(totalAmount * PLATFORM_FEE_PERCENTAGE * 100) / 100;
+  const creatorPayout = Math.round((totalAmount - platformFee) * 100) / 100;
+  return { platformFee, creatorPayout };
+}
+
 /*  Process transactions */
 
 export async function createPaypalOrder(req: Request, res: Response) {
   try {
     initializePayPal();
     
-    const { amount, currency, intent } = req.body;
+    const { amount, currency, intent, recipientUserId, description } = req.body;
 
     if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
       return res.status(400).json({
@@ -89,6 +98,10 @@ export async function createPaypalOrder(req: Request, res: Response) {
       return res.status(400).json({ error: "Invalid intent. Intent is required." });
     }
 
+    // Calculate the 20% platform fee
+    const totalAmount = parseFloat(amount);
+    const { platformFee, creatorPayout } = calculateFees(totalAmount);
+
     const collect = {
       body: {
         intent: intent,
@@ -97,7 +110,24 @@ export async function createPaypalOrder(req: Request, res: Response) {
             amount: {
               currencyCode: currency,
               value: amount,
+              breakdown: {
+                itemTotal: {
+                  currencyCode: currency,
+                  value: amount,
+                },
+              },
             },
+            items: [
+              {
+                name: description || "Creator Service Payment",
+                quantity: "1",
+                unitAmount: {
+                  currencyCode: currency,
+                  value: amount,
+                },
+              },
+            ],
+            description: `Creator payment: $${creatorPayout} to creator, $${platformFee} platform fee (20%)`,
           },
         ],
       },
@@ -109,7 +139,16 @@ export async function createPaypalOrder(req: Request, res: Response) {
     const jsonResponse = JSON.parse(String(body));
     const httpStatusCode = httpResponse.statusCode;
 
-    res.status(httpStatusCode).json(jsonResponse);
+    // Include fee breakdown in response
+    res.status(httpStatusCode).json({
+      ...jsonResponse,
+      feeBreakdown: {
+        totalAmount: amount,
+        platformFee: platformFee.toFixed(2),
+        creatorPayout: creatorPayout.toFixed(2),
+        platformFeePercentage: "20%",
+      },
+    });
   } catch (error) {
     console.error("Failed to create order:", error);
     res.status(500).json({ error: "Failed to create order." });

@@ -1,4 +1,4 @@
-import { creators, brands, offers, messages, notifications, users, reviews, type Creator, type InsertCreator, type Brand, type InsertBrand, type Offer, type InsertOffer, type Message, type InsertMessage, type Notification, type InsertNotification, type User, type Review, type InsertReview } from "@shared/schema";
+import { creators, brands, offers, messages, notifications, users, reviews, transactions, type Creator, type InsertCreator, type Brand, type InsertBrand, type Offer, type InsertOffer, type Message, type InsertMessage, type Notification, type InsertNotification, type User, type Review, type InsertReview, type Transaction, type InsertTransaction } from "@shared/schema";
 import { db } from "./db";
 import { eq, ilike, or, desc, and, isNotNull } from "drizzle-orm";
 
@@ -39,6 +39,12 @@ export interface IStorage {
   getReviewsByReviewer(reviewerUserId: string): Promise<Review[]>;
   getReviewSummary(revieweeUserId: string): Promise<{ averageRating: number; totalReviews: number }>;
   deleteReview(id: number, reviewerUserId: string): Promise<boolean>;
+
+  // Transactions
+  createTransaction(transaction: InsertTransaction): Promise<Transaction>;
+  getTransactionByPaypalOrderId(paypalOrderId: string): Promise<Transaction | undefined>;
+  updateTransactionStatus(paypalOrderId: string, status: string, completedAt?: string): Promise<Transaction | undefined>;
+  getTransactionsByUser(userId: string): Promise<Transaction[]>;
 }
 
 type CreatorSocialLinks = { tiktok?: string; instagram?: string; youtube?: string; twitter?: string; facebook?: string; canva?: string };
@@ -320,6 +326,36 @@ export class DatabaseStorage implements IStorage {
       .where(and(eq(reviews.id, id), eq(reviews.reviewerUserId, reviewerUserId)))
       .returning();
     return result.length > 0;
+  }
+
+  // Transaction methods
+  async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
+    const result = await db.insert(transactions).values(transaction).returning();
+    return result[0];
+  }
+
+  async getTransactionByPaypalOrderId(paypalOrderId: string): Promise<Transaction | undefined> {
+    const result = await db.select().from(transactions).where(eq(transactions.paypalOrderId, paypalOrderId));
+    return result[0];
+  }
+
+  async updateTransactionStatus(paypalOrderId: string, status: string, completedAt?: string): Promise<Transaction | undefined> {
+    const updates: Partial<Transaction> = { status };
+    if (completedAt) {
+      updates.completedAt = completedAt;
+    }
+    const result = await db.update(transactions)
+      .set(updates)
+      .where(eq(transactions.paypalOrderId, paypalOrderId))
+      .returning();
+    return result[0];
+  }
+
+  async getTransactionsByUser(userId: string): Promise<Transaction[]> {
+    const result = await db.select().from(transactions)
+      .where(or(eq(transactions.payerUserId, userId), eq(transactions.recipientUserId, userId)))
+      .orderBy(desc(transactions.createdAt));
+    return result;
   }
 }
 
