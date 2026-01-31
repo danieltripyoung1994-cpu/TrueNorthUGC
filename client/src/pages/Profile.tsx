@@ -2,8 +2,9 @@ import { Navbar } from "@/components/Navbar";
 import { useAuth } from "@/hooks/use-auth";
 import { useCreators } from "@/hooks/use-creators";
 import { useBrand } from "@/hooks/use-brand";
+import { useReviewsByCreator } from "@/hooks/use-reviews";
 import { useParams, useLocation } from "wouter";
-import { Loader2, Share2, Twitter, Facebook, Link as LinkIcon, Settings, Instagram, Music2, Youtube, Video, Play } from "lucide-react";
+import { Loader2, Share2, Twitter, Facebook, Link as LinkIcon, Settings, Instagram, Music2, Youtube, Video, Play, Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { ReviewsSection, RatingSummary } from "@/components/Reviews";
 
 export default function Profile() {
   const { handle } = useParams();
@@ -23,6 +25,9 @@ export default function Profile() {
   const { data: creators, isLoading: loadingCreator } = useCreators({ search: handle });
   const { brand: myBrand, isLoading: loadingBrand } = useBrand();
   const { toast } = useToast();
+  
+  const creator = creators?.[0];
+  const { data: reviews, isLoading: loadingReviews } = useReviewsByCreator(creator?.userId);
 
   const isLoading = loadingCreator || loadingBrand;
 
@@ -33,8 +38,6 @@ export default function Profile() {
       </div>
     );
   }
-
-  const creator = creators?.[0];
   
   if (!creator) {
     return (
@@ -210,6 +213,31 @@ export default function Profile() {
               )}
             </motion.div>
           </div>
+          
+          {/* Reviews Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <div className="space-y-8">
+              <div className="flex items-center gap-4">
+                <h2 className="text-3xl font-black tracking-tighter flex items-center gap-2">
+                  <Star className="h-6 w-6 text-yellow-400 fill-yellow-400" />
+                  Reviews
+                </h2>
+                <div className="h-px bg-muted flex-1" />
+              </div>
+              <ReviewsSection
+                userId={creator.userId}
+                userType="creator"
+                userName={creator.name}
+                reviews={reviews || []}
+                isLoading={loadingReviews}
+                canReview={!isOwnProfile && !!user && !!myBrand}
+              />
+            </div>
+          </motion.div>
         </motion.div>
       </main>
     </div>
