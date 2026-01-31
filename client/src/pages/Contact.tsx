@@ -1,5 +1,6 @@
 import { Phone, Mail, MapPin, Clock, Sparkles, Send } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { usePageMeta } from "@/hooks/use-page-meta";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +11,10 @@ import { Navbar } from "@/components/Navbar";
 import { motion, useReducedMotion } from "framer-motion";
 
 export default function Contact() {
+  usePageMeta({ 
+    title: "Contact Us", 
+    description: "Get in touch with TrueNorthUGC. We're here to help creators and brands connect." 
+  });
   const { toast } = useToast();
   const prefersReducedMotion = useReducedMotion();
   const [formData, setFormData] = useState({
