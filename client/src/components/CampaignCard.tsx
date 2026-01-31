@@ -35,8 +35,9 @@ export function CampaignCard({ campaign, onViewDetails }: CampaignCardProps) {
 
   return (
     <motion.div
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.2, ease: "easeOut" }}
+      whileHover={{ y: -6, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
     >
       <Card 
         className="group overflow-visible border-border/50 bg-card hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 hover-elevate h-full flex flex-col"

@@ -98,13 +98,24 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-hidden">
       <Navbar />
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-12 relative">
+        <motion.div
+          className="absolute top-20 right-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl -z-10"
+          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute bottom-40 left-10 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl -z-10"
+          animate={{ scale: [1.1, 1, 1.1], opacity: [0.5, 0.3, 0.5] }}
+          transition={{ duration: 10, repeat: Infinity }}
+        />
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-4xl mx-auto space-y-12"
+          transition={{ duration: 0.6 }}
+          className="max-w-4xl mx-auto space-y-12 relative z-10"
         >
           <div className="flex flex-col md:flex-row gap-10 items-start relative">
             <motion.div 
@@ -142,19 +153,40 @@ export default function Profile() {
                     <p className="text-xl font-medium text-muted-foreground">@{creator.handle}</p>
                     <div className="flex items-center gap-4">
                       {creator.socialLinks?.instagram && (
-                        <a href={creator.socialLinks.instagram} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                        <motion.a 
+                          href={creator.socialLinks.instagram} 
+                          target="_blank" 
+                          rel="noreferrer" 
+                          className="text-muted-foreground hover:text-primary transition-colors"
+                          whileHover={{ scale: 1.2, rotate: 5 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
                           <Instagram className="h-6 w-6" />
-                        </a>
+                        </motion.a>
                       )}
                       {creator.socialLinks?.tiktok && (
-                        <a href={creator.socialLinks.tiktok} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                        <motion.a 
+                          href={creator.socialLinks.tiktok} 
+                          target="_blank" 
+                          rel="noreferrer" 
+                          className="text-muted-foreground hover:text-primary transition-colors"
+                          whileHover={{ scale: 1.2, rotate: -5 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
                           <Music2 className="h-6 w-6" />
-                        </a>
+                        </motion.a>
                       )}
                       {creator.socialLinks?.youtube && (
-                        <a href={creator.socialLinks.youtube} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                        <motion.a 
+                          href={creator.socialLinks.youtube} 
+                          target="_blank" 
+                          rel="noreferrer" 
+                          className="text-muted-foreground hover:text-primary transition-colors"
+                          whileHover={{ scale: 1.2, rotate: 5 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
                           <Youtube className="h-6 w-6" />
-                        </a>
+                        </motion.a>
                       )}
                     </div>
                   </div>
