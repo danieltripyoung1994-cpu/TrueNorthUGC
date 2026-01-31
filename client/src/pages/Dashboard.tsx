@@ -710,20 +710,22 @@ export default function Dashboard() {
                                   onChange={(e) => {
                                     const portfolio = [...(creatorForm.getValues("portfolio") || [])];
                                     portfolio[index] = { ...portfolio[index], title: e.target.value };
-                                    creatorForm.setValue("portfolio", portfolio);
+                                    creatorForm.setValue("portfolio", portfolio, { shouldValidate: true });
                                   }}
                                   placeholder="Video title"
                                   className="flex-1"
+                                  data-testid={`input-portfolio-title-${index}`}
                                 />
                                 <Input 
                                   value={video.url} 
                                   onChange={(e) => {
                                     const portfolio = [...(creatorForm.getValues("portfolio") || [])];
                                     portfolio[index] = { ...portfolio[index], url: e.target.value };
-                                    creatorForm.setValue("portfolio", portfolio);
+                                    creatorForm.setValue("portfolio", portfolio, { shouldValidate: true });
                                   }}
                                   placeholder="Video URL"
                                   className="flex-1"
+                                  data-testid={`input-portfolio-url-${index}`}
                                 />
                                 <Button 
                                   type="button" 
@@ -731,8 +733,9 @@ export default function Dashboard() {
                                   size="icon"
                                   onClick={() => {
                                     const portfolio = creatorForm.getValues("portfolio") || [];
-                                    creatorForm.setValue("portfolio", portfolio.filter((_: any, i: number) => i !== index));
+                                    creatorForm.setValue("portfolio", portfolio.filter((_: any, i: number) => i !== index), { shouldValidate: true });
                                   }}
+                                  data-testid={`button-remove-portfolio-${index}`}
                                 >
                                   <Trash2 className="h-4 w-4 text-destructive" />
                                 </Button>
@@ -744,7 +747,7 @@ export default function Dashboard() {
                               size="sm"
                               onClick={() => {
                                 const portfolio = creatorForm.getValues("portfolio") || [];
-                                creatorForm.setValue("portfolio", [...portfolio, { id: Date.now().toString(), title: "", url: "" }]);
+                                creatorForm.setValue("portfolio", [...portfolio, { id: Date.now().toString(), title: "", url: "" }], { shouldValidate: true });
                               }}
                               className="w-full"
                               data-testid="button-add-portfolio-video"

@@ -37,8 +37,8 @@ export function Navbar() {
         Browse Creators
       </Link>
       <Link 
-        href="/pricing" 
-        className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-primary ${location === '/pricing' ? 'text-primary' : 'text-muted-foreground'}`}
+        href="/campaigns" 
+        className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-primary ${location === '/campaigns' ? 'text-primary' : 'text-muted-foreground'}`}
         onClick={onLinkClick}
         data-testid={mobile ? "link-mobile-campaigns" : "link-campaigns"}
       >
