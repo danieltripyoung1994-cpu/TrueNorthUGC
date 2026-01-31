@@ -4,7 +4,8 @@ import { useCreator, useMyCreatorProfile } from "@/hooks/use-creators";
 import { useBrand } from "@/hooks/use-brand";
 import { useReviewsByCreator } from "@/hooks/use-reviews";
 import { useParams, useLocation, Redirect } from "wouter";
-import { Share2, Twitter, Facebook, Link as LinkIcon, Settings, Instagram, Music2, Youtube, Video, Play, Star } from "lucide-react";
+import { Share2, Link as LinkIcon, Settings, Instagram, Music2, Youtube, Video, Play, Star } from "lucide-react";
+import { SiTiktok, SiInstagram, SiSnapchat, SiX, SiFacebook } from "react-icons/si";
 import { ProfileSkeleton } from "@/components/ui/skeleton-loaders";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -87,6 +88,26 @@ export default function Profile() {
 
   const shareToFacebook = () => {
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${profileUrl}`, '_blank');
+  };
+
+  const shareToTikTok = () => {
+    navigator.clipboard.writeText(`Check out ${creator.name}'s UGC portfolio on TrueNorthUGC! ${profileUrl}`);
+    toast({
+      title: "Link copied for TikTok!",
+      description: "Paste this in your TikTok bio or message.",
+    });
+  };
+
+  const shareToInstagram = () => {
+    navigator.clipboard.writeText(`Check out ${creator.name}'s UGC portfolio on TrueNorthUGC! ${profileUrl}`);
+    toast({
+      title: "Link copied for Instagram!",
+      description: "Paste this in your Instagram story or message.",
+    });
+  };
+
+  const shareToSnapchat = () => {
+    window.open(`https://www.snapchat.com/scan?attachmentUrl=${encodeURIComponent(profileUrl)}`, '_blank');
   };
 
   const copyToClipboard = () => {
@@ -198,15 +219,27 @@ export default function Profile() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="rounded-2xl p-2 min-w-[160px] shadow-2xl border-primary/10">
-                    <DropdownMenuItem onClick={shareToTwitter} className="cursor-pointer gap-3 rounded-xl p-3 font-medium">
-                      <Twitter className="h-4 w-4 text-sky-500" />
-                      Twitter
+                    <DropdownMenuItem onClick={shareToInstagram} className="cursor-pointer gap-3 rounded-xl p-3 font-medium" data-testid="share-instagram">
+                      <SiInstagram className="h-4 w-4 text-pink-500" />
+                      Instagram
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={shareToFacebook} className="cursor-pointer gap-3 rounded-xl p-3 font-medium">
-                      <Facebook className="h-4 w-4 text-blue-600" />
+                    <DropdownMenuItem onClick={shareToTikTok} className="cursor-pointer gap-3 rounded-xl p-3 font-medium" data-testid="share-tiktok">
+                      <SiTiktok className="h-4 w-4" />
+                      TikTok
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={shareToSnapchat} className="cursor-pointer gap-3 rounded-xl p-3 font-medium" data-testid="share-snapchat">
+                      <SiSnapchat className="h-4 w-4 text-yellow-400" />
+                      Snapchat
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={shareToTwitter} className="cursor-pointer gap-3 rounded-xl p-3 font-medium" data-testid="share-twitter">
+                      <SiX className="h-4 w-4" />
+                      X (Twitter)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={shareToFacebook} className="cursor-pointer gap-3 rounded-xl p-3 font-medium" data-testid="share-facebook">
+                      <SiFacebook className="h-4 w-4 text-blue-600" />
                       Facebook
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={copyToClipboard} className="cursor-pointer gap-3 rounded-xl p-3 font-medium">
+                    <DropdownMenuItem onClick={copyToClipboard} className="cursor-pointer gap-3 rounded-xl p-3 font-medium" data-testid="share-copy-link">
                       <LinkIcon className="h-4 w-4 text-primary" />
                       Copy Link
                     </DropdownMenuItem>
