@@ -279,6 +279,72 @@ export default function Profile() {
             </div>
           </div>
           
+          {/* Portfolio Section - Only show if creator has videos */}
+          {creator.portfolio && creator.portfolio.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="space-y-6">
+                <div className="flex items-center gap-4">
+                  <h2 className="text-3xl font-black tracking-tighter flex items-center gap-2">
+                    <Video className="h-6 w-6 text-primary" />
+                    Portfolio
+                  </h2>
+                  <div className="h-px bg-muted flex-1" />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {creator.portfolio.map((item, idx) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 * idx }}
+                    >
+                      <Card className="overflow-hidden rounded-2xl">
+                        <div className="aspect-video">
+                          {item.url.includes('youtube.com') || item.url.includes('youtu.be') ? (
+                            <iframe
+                              src={item.url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/')}
+                              className="w-full h-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              title={item.title}
+                            />
+                          ) : item.url.includes('tiktok.com') ? (
+                            <div className="w-full h-full flex items-center justify-center bg-muted">
+                              <a 
+                                href={item.url} 
+                                target="_blank" 
+                                rel="noreferrer"
+                                className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+                              >
+                                <Play className="h-12 w-12" />
+                                <span className="font-medium">Watch on TikTok</span>
+                              </a>
+                            </div>
+                          ) : (
+                            <video
+                              src={item.url}
+                              controls
+                              className="w-full h-full object-cover"
+                              poster={item.thumbnail}
+                            />
+                          )}
+                        </div>
+                        <CardContent className="p-4">
+                          <p className="font-bold text-lg">{item.title}</p>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* Reviews Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
