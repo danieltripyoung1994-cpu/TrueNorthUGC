@@ -4,8 +4,9 @@ import { useMyCreatorProfile, useUpdateCreatorProfile } from "@/hooks/use-creato
 import { useBrand } from "@/hooks/use-brand";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera } from "lucide-react";
-import { Link } from "wouter";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera, Mail, Settings } from "lucide-react";
+import { Link, useLocation } from "wouter";
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -16,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { insertCreatorSchema, insertBrandSchema } from "@shared/schema";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
+import { Messages } from "@/components/Messages";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -28,6 +30,16 @@ export default function Dashboard() {
 
   const isLoading = loadingCreator || loadingBrand;
 
+  const [activeTab, setActiveTab] = useState("profile");
+  const [, navigate] = useLocation();
+
+  // Check URL for tab parameter
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get("tab");
+    if (tab === "messages") setActiveTab("messages");
+  }, []);
+
   const creatorForm = useForm({
     resolver: zodResolver(insertCreatorSchema.omit({ userId: true })),
     defaultValues: {
@@ -36,7 +48,7 @@ export default function Dashboard() {
       bio: "",
       profileImage: "",
       niches: [] as string[],
-      socialLinks: { tiktok: "", instagram: "", youtube: "", twitter: "" } as Record<string, string>,
+      socialLinks: { tiktok: "", instagram: "", youtube: "", twitter: "", facebook: "", canva: "" } as Record<string, string>,
       portfolio: [] as any[],
       location: "",
       languages: [] as string[],
@@ -54,7 +66,7 @@ export default function Dashboard() {
       website: "",
       niches: [] as string[],
       location: "",
-      socialLinks: { instagram: "", twitter: "", linkedin: "" } as Record<string, string>
+      socialLinks: { instagram: "", twitter: "", linkedin: "", facebook: "", canva: "" } as Record<string, string>
     }
   });
 
@@ -66,7 +78,7 @@ export default function Dashboard() {
         bio: creatorProfile.bio || "",
         profileImage: creatorProfile.profileImage || "",
         niches: creatorProfile.niches || [],
-        socialLinks: creatorProfile.socialLinks || { tiktok: "", instagram: "", youtube: "", twitter: "" },
+        socialLinks: creatorProfile.socialLinks || { tiktok: "", instagram: "", youtube: "", twitter: "", facebook: "", canva: "" },
         portfolio: creatorProfile.portfolio || [],
         location: (creatorProfile as any).location || "",
         languages: (creatorProfile as any).languages || [],
@@ -85,7 +97,7 @@ export default function Dashboard() {
         website: brandProfile.website || "",
         niches: brandProfile.niches || [],
         location: (brandProfile as any).location || "",
-        socialLinks: (brandProfile as any).socialLinks || { instagram: "", twitter: "", linkedin: "" }
+        socialLinks: (brandProfile as any).socialLinks || { instagram: "", twitter: "", linkedin: "", facebook: "", canva: "" }
       });
     }
   }, [brandProfile, brandForm]);
@@ -149,7 +161,23 @@ export default function Dashboard() {
             </Button>
           </div>
 
-          <AnimatePresence mode="wait">
+          {hasProfile && (
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="mb-6">
+                <TabsTrigger value="profile" className="gap-2" data-testid="tab-profile">
+                  <Settings className="h-4 w-4" />
+                  Profile
+                </TabsTrigger>
+                <TabsTrigger value="messages" className="gap-2" data-testid="tab-messages">
+                  <Mail className="h-4 w-4" />
+                  Messages
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="messages">
+                <Messages />
+              </TabsContent>
+              <TabsContent value="profile">
+                <AnimatePresence mode="wait">
             {!hasProfile && !roleSelection ? (
               <motion.div
                 key="choice"
@@ -433,6 +461,51 @@ export default function Dashboard() {
                                 </FormItem>
                               )}
                             />
+                            <FormField
+                              control={creatorForm.control}
+                              name="socialLinks.twitter"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="flex items-center gap-2">
+                                    <Globe className="h-4 w-4" /> Twitter/X URL
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="https://twitter.com/..." {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={creatorForm.control}
+                              name="socialLinks.facebook"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="flex items-center gap-2">
+                                    <Globe className="h-4 w-4" /> Facebook URL
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="https://facebook.com/..." {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={creatorForm.control}
+                              name="socialLinks.canva"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="flex items-center gap-2">
+                                    <Camera className="h-4 w-4" /> Canva Portfolio
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="https://canva.com/..." {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
                           </div>
                         </div>
                         <Button size="lg" type="submit" className="w-full font-bold" disabled={updateCreator.isPending}>
@@ -563,6 +636,69 @@ export default function Dashboard() {
                             </FormItem>
                           )}
                         />
+                        <div className="space-y-3 pt-2">
+                          <h3 className="font-bold text-sm uppercase tracking-wider text-muted-foreground">Social Media</h3>
+                          <FormField
+                            control={brandForm.control}
+                            name="socialLinks.instagram"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="flex items-center gap-2">
+                                  <Instagram className="h-4 w-4" /> Instagram URL
+                                </FormLabel>
+                                <FormControl>
+                                  <Input placeholder="https://instagram.com/..." {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={brandForm.control}
+                            name="socialLinks.twitter"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="flex items-center gap-2">
+                                  <Globe className="h-4 w-4" /> Twitter/X URL
+                                </FormLabel>
+                                <FormControl>
+                                  <Input placeholder="https://twitter.com/..." {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={brandForm.control}
+                            name="socialLinks.facebook"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="flex items-center gap-2">
+                                  <Globe className="h-4 w-4" /> Facebook URL
+                                </FormLabel>
+                                <FormControl>
+                                  <Input placeholder="https://facebook.com/..." {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={brandForm.control}
+                            name="socialLinks.canva"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="flex items-center gap-2">
+                                  <Camera className="h-4 w-4" /> Canva Portfolio
+                                </FormLabel>
+                                <FormControl>
+                                  <Input placeholder="https://canva.com/..." {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
                         <Button size="lg" type="submit" className="w-full font-bold">
                           Update Brand Profile
                         </Button>
@@ -572,7 +708,49 @@ export default function Dashboard() {
                 </Dialog>
               </motion.div>
             )}
-          </AnimatePresence>
+                </AnimatePresence>
+              </TabsContent>
+            </Tabs>
+          )}
+
+          {!hasProfile && (
+            <AnimatePresence mode="wait">
+              {!roleSelection ? (
+                <motion.div
+                  key="choice"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                >
+                  <Card className="border-2 border-dashed">
+                    <CardHeader className="text-center">
+                      <CardTitle className="text-2xl">Choose your path</CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 p-8">
+                      <Button 
+                        variant="outline" 
+                        className="h-auto py-8 flex-col gap-4 text-xl hover-elevate group transition-all"
+                        onClick={() => setRoleSelection("creator")}
+                        data-testid="button-select-creator"
+                      >
+                        <User className="h-12 w-12 text-primary group-hover:scale-110 transition-transform" />
+                        I am a Creator
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="h-auto py-8 flex-col gap-4 text-xl hover-elevate group transition-all"
+                        onClick={() => setRoleSelection("brand")}
+                        data-testid="button-select-brand"
+                      >
+                        <Building className="h-12 w-12 text-primary group-hover:scale-110 transition-transform" />
+                        I am a Brand
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+          )}
         </motion.div>
       </main>
     </div>

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertCreatorSchema, creators, Brand, insertBrandSchema } from './schema';
+import { insertCreatorSchema, creators, Brand, insertBrandSchema, insertMessageSchema, messages, notifications, insertNotificationSchema } from './schema';
 
 export const errorSchemas = {
   validation: z.object({
@@ -75,6 +75,83 @@ export const api = {
       responses: {
         200: z.custom<Brand>(),
         400: errorSchemas.validation,
+        401: errorSchemas.unauthorized,
+      },
+    },
+  },
+  messages: {
+    inbox: {
+      method: 'GET' as const,
+      path: '/api/messages/inbox',
+      responses: {
+        200: z.array(z.custom<typeof messages.$inferSelect>()),
+        401: errorSchemas.unauthorized,
+      },
+    },
+    sent: {
+      method: 'GET' as const,
+      path: '/api/messages/sent',
+      responses: {
+        200: z.array(z.custom<typeof messages.$inferSelect>()),
+        401: errorSchemas.unauthorized,
+      },
+    },
+    send: {
+      method: 'POST' as const,
+      path: '/api/messages',
+      input: z.object({
+        receiverId: z.string(),
+        receiverType: z.string(),
+        subject: z.string().min(1),
+        content: z.string().min(1),
+      }),
+      responses: {
+        200: z.custom<typeof messages.$inferSelect>(),
+        400: errorSchemas.validation,
+        401: errorSchemas.unauthorized,
+      },
+    },
+    markRead: {
+      method: 'POST' as const,
+      path: '/api/messages/:id/read',
+      responses: {
+        200: z.custom<typeof messages.$inferSelect>(),
+        401: errorSchemas.unauthorized,
+        404: errorSchemas.notFound,
+      },
+    },
+  },
+  notifications: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/notifications',
+      responses: {
+        200: z.array(z.custom<typeof notifications.$inferSelect>()),
+        401: errorSchemas.unauthorized,
+      },
+    },
+    unreadCount: {
+      method: 'GET' as const,
+      path: '/api/notifications/unread-count',
+      responses: {
+        200: z.object({ count: z.number() }),
+        401: errorSchemas.unauthorized,
+      },
+    },
+    markRead: {
+      method: 'POST' as const,
+      path: '/api/notifications/:id/read',
+      responses: {
+        200: z.custom<typeof notifications.$inferSelect>(),
+        401: errorSchemas.unauthorized,
+        404: errorSchemas.notFound,
+      },
+    },
+    markAllRead: {
+      method: 'POST' as const,
+      path: '/api/notifications/read-all',
+      responses: {
+        200: z.object({ success: z.boolean() }),
         401: errorSchemas.unauthorized,
       },
     },

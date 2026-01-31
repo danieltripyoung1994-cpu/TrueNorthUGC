@@ -33,6 +33,8 @@ export const creators = pgTable("creators", {
     instagram?: string;
     youtube?: string;
     twitter?: string;
+    facebook?: string;
+    canva?: string;
   }>().default({}),
   portfolio: jsonb("portfolio").$type<{
     id: string;
@@ -59,6 +61,8 @@ export const brands = pgTable("brands", {
     instagram?: string;
     twitter?: string;
     linkedin?: string;
+    facebook?: string;
+    canva?: string;
   }>().default({}),
 });
 
@@ -70,3 +74,36 @@ export type InsertCreator = z.infer<typeof insertCreatorSchema>;
 
 export type Brand = typeof brands.$inferSelect;
 export type InsertBrand = z.infer<typeof insertBrandSchema>;
+
+// Messages for creator-brand communication
+export const messages = pgTable("messages", {
+  id: serial("id").primaryKey(),
+  senderId: varchar("sender_id").notNull(),
+  receiverId: varchar("receiver_id").notNull(),
+  senderType: text("sender_type").notNull(), // "creator" or "brand"
+  receiverType: text("receiver_type").notNull(),
+  subject: text("subject").notNull(),
+  content: text("content").notNull(),
+  read: text("read").default("false"),
+  createdAt: text("created_at").notNull(),
+});
+
+export const insertMessageSchema = createInsertSchema(messages).omit({ id: true });
+export type Message = typeof messages.$inferSelect;
+export type InsertMessage = z.infer<typeof insertMessageSchema>;
+
+// Notifications
+export const notifications = pgTable("notifications", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull(),
+  type: text("type").notNull(), // "message", "profile_view", "inquiry"
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  read: text("read").default("false"),
+  link: text("link"),
+  createdAt: text("created_at").notNull(),
+});
+
+export const insertNotificationSchema = createInsertSchema(notifications).omit({ id: true });
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = z.infer<typeof insertNotificationSchema>;

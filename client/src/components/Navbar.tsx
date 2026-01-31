@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, LogOut, User, LayoutDashboard } from "lucide-react";
+import { Notifications } from "@/components/Notifications";
 import logoPng from "@assets/Photoroom_20260124_081931_1769558537558.png";
 
 export function Navbar() {
@@ -37,7 +38,9 @@ export function Navbar() {
           {isLoading ? (
             <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
           ) : user ? (
-            <DropdownMenu>
+            <div className="flex items-center gap-2">
+              <Notifications />
+              <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                   <Avatar className="h-10 w-10 border border-border">
@@ -73,6 +76,7 @@ export function Navbar() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            </div>
           ) : (
             <div className="flex items-center gap-4">
               <a href="/api/login">
