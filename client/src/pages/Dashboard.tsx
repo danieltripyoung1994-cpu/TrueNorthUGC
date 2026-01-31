@@ -5,10 +5,10 @@ import { useBrand } from "@/hooks/use-brand";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera, Mail, Settings, Megaphone, Plus, Pencil, Trash2, Calendar, DollarSign, MapPin, Package } from "lucide-react";
+import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera, Mail, Settings, Megaphone, Plus, Pencil, Trash2, Calendar, DollarSign, MapPin, Package, Upload } from "lucide-react";
 import { DashboardSkeleton } from "@/components/ui/skeleton-loaders";
 import { Link, useLocation } from "wouter";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,8 @@ import { Messages } from "@/components/Messages";
 import { CampaignFormModal } from "@/components/CampaignFormModal";
 import { useMyCampaigns, useDeleteCampaign } from "@/hooks/use-campaigns";
 import { Badge } from "@/components/ui/badge";
+import { useUpload } from "@/hooks/use-upload";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -37,6 +39,41 @@ export default function Dashboard() {
   const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
   const [editingCampaign, setEditingCampaign] = useState<Campaign | null>(null);
   const [deletingCampaignId, setDeletingCampaignId] = useState<number | null>(null);
+  const { toast } = useToast();
+  const profileImageInputRef = useRef<HTMLInputElement>(null);
+  const brandLogoInputRef = useRef<HTMLInputElement>(null);
+  const { uploadFile, isUploading: isUploadingProfileImage } = useUpload({
+    onSuccess: (response) => {
+      creatorForm.setValue("profileImage", response.objectPath, { shouldValidate: true });
+      toast({ title: "Image uploaded successfully!" });
+    },
+    onError: (error) => {
+      toast({ title: "Upload failed", description: error.message, variant: "destructive" });
+    },
+  });
+  const { uploadFile: uploadBrandLogo, isUploading: isUploadingBrandLogo } = useUpload({
+    onSuccess: (response) => {
+      brandForm.setValue("logo", response.objectPath, { shouldValidate: true });
+      toast({ title: "Logo uploaded successfully!" });
+    },
+    onError: (error) => {
+      toast({ title: "Upload failed", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const handleProfileImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      await uploadFile(file);
+    }
+  };
+
+  const handleBrandLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      await uploadBrandLogo(file);
+    }
+  };
 
   const isLoading = loadingCreator || loadingBrand;
 
@@ -542,11 +579,39 @@ export default function Dashboard() {
                               render={({ field }) => (
                                 <FormItem>
                                   <FormLabel className="flex items-center gap-2">
-                                    <Camera className="h-4 w-4" /> Profile Picture URL
+                                    <Camera className="h-4 w-4" /> Profile Picture
                                   </FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="https://..." {...field} value={field.value || ""} />
-                                  </FormControl>
+                                  <div className="flex gap-2">
+                                    <FormControl>
+                                      <Input placeholder="https://... or upload" {...field} value={field.value || ""} className="flex-1" data-testid="input-profile-image" />
+                                    </FormControl>
+                                    <input
+                                      ref={profileImageInputRef}
+                                      type="file"
+                                      accept="image/*"
+                                      className="hidden"
+                                      onChange={handleProfileImageUpload}
+                                      data-testid="input-profile-image-file"
+                                    />
+                                    <Button
+                                      type="button"
+                                      variant="outline"
+                                      size="icon"
+                                      onClick={() => profileImageInputRef.current?.click()}
+                                      disabled={isUploadingProfileImage}
+                                      data-testid="button-upload-profile-image"
+                                    >
+                                      {isUploadingProfileImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                                    </Button>
+                                  </div>
+                                  {field.value && (
+                                    <div className="mt-2 flex items-center gap-2">
+                                      <div className="h-12 w-12 rounded-full overflow-hidden border">
+                                        <img src={field.value} className="h-full w-full object-cover" alt="Preview" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                                      </div>
+                                      <span className="text-xs text-muted-foreground">Preview</span>
+                                    </div>
+                                  )}
                                   <FormMessage />
                                 </FormItem>
                               )}
