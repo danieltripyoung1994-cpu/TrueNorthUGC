@@ -32,6 +32,7 @@ export function Navbar() {
         href="/creators" 
         className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-primary ${location === '/creators' || location === '/directory' ? 'text-primary' : 'text-muted-foreground'}`}
         onClick={onLinkClick}
+        data-testid={mobile ? "link-mobile-browse-creators" : "link-browse-creators"}
       >
         Browse Creators
       </Link>
@@ -39,6 +40,7 @@ export function Navbar() {
         href="/pricing" 
         className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-primary ${location === '/pricing' ? 'text-primary' : 'text-muted-foreground'}`}
         onClick={onLinkClick}
+        data-testid={mobile ? "link-mobile-campaigns" : "link-campaigns"}
       >
         Campaigns
       </Link>
@@ -48,6 +50,7 @@ export function Navbar() {
             href="/dashboard" 
             className="text-lg py-3 w-full font-medium transition-colors hover:text-primary text-muted-foreground"
             onClick={onLinkClick}
+            data-testid="link-mobile-dashboard"
           >
             Dashboard
           </Link>

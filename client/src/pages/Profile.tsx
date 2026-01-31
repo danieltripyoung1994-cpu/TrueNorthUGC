@@ -1,9 +1,9 @@
 import { Navbar } from "@/components/Navbar";
 import { useAuth } from "@/hooks/use-auth";
-import { useCreator } from "@/hooks/use-creators";
+import { useCreator, useMyCreatorProfile } from "@/hooks/use-creators";
 import { useBrand } from "@/hooks/use-brand";
 import { useReviewsByCreator } from "@/hooks/use-reviews";
-import { useParams, useLocation } from "wouter";
+import { useParams, useLocation, Redirect } from "wouter";
 import { Share2, Twitter, Facebook, Link as LinkIcon, Settings, Instagram, Music2, Youtube, Video, Play, Star } from "lucide-react";
 import { ProfileSkeleton } from "@/components/ui/skeleton-loaders";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,12 +24,26 @@ export default function Profile() {
   const { handle } = useParams();
   const [, setLocation] = useLocation();
   const { user } = useAuth();
-  const { data: creator, isLoading: loadingCreator } = useCreator(handle || "");
+  const isMyProfile = handle === "me";
+  const isCreateRoute = handle === "new" || handle === "create";
+  
+  if (isCreateRoute) {
+    return <Redirect to="/dashboard" />;
+  }
+  
+  const { data: creatorByHandle, isLoading: loadingByHandle } = useCreator(isMyProfile ? "" : (handle || ""));
+  const { data: myProfile, isLoading: loadingMyProfile } = useMyCreatorProfile();
+  
+  const creator = isMyProfile ? myProfile : creatorByHandle;
   const { brand: myBrand, isLoading: loadingBrand } = useBrand();
   const { toast } = useToast();
   const { data: reviews, isLoading: loadingReviews } = useReviewsByCreator(creator?.userId);
 
-  const isLoading = loadingCreator || loadingBrand;
+  const isLoading = (isMyProfile ? loadingMyProfile : loadingByHandle) || loadingBrand;
+  
+  if (isMyProfile && !isLoading && !myProfile) {
+    return <Redirect to="/dashboard" />;
+  }
 
   if (isLoading) {
     return (
@@ -47,10 +61,18 @@ export default function Profile() {
       <div className="min-h-screen bg-background">
         <Navbar />
         <main className="container mx-auto px-4 py-12 text-center">
-          <h1 className="text-2xl font-bold">Profile not found</h1>
-          <Button variant="ghost" onClick={() => setLocation("/")} className="mt-4">
-            Go back home
-          </Button>
+          <h1 className="text-2xl font-bold" data-testid="text-profile-not-found">Profile not found</h1>
+          <p className="text-muted-foreground mt-2 mb-4">This creator profile doesn't exist or may have been removed.</p>
+          <div className="flex gap-2 justify-center">
+            <Button variant="ghost" onClick={() => setLocation("/")} data-testid="button-go-home">
+              Go back home
+            </Button>
+            {user && (
+              <Button onClick={() => setLocation("/dashboard")} data-testid="button-create-profile">
+                Create your profile
+              </Button>
+            )}
+          </div>
         </main>
       </div>
     );
