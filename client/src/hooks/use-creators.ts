@@ -7,8 +7,14 @@ export function useCreators(filters?: { search?: string; niche?: string }) {
   return useQuery({
     queryKey: [api.creators.list.path, filters],
     queryFn: async () => {
-      const url = filters
-        ? `${api.creators.list.path}?${new URLSearchParams(filters as Record<string, string>).toString()}`
+      // Build clean params object, excluding undefined values
+      const params = new URLSearchParams();
+      if (filters?.search) params.set('search', filters.search);
+      if (filters?.niche) params.set('niche', filters.niche);
+      
+      const queryString = params.toString();
+      const url = queryString 
+        ? `${api.creators.list.path}?${queryString}` 
         : api.creators.list.path;
 
       const res = await fetch(url, { credentials: "include" });
