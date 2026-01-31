@@ -12,6 +12,7 @@ const Profile = lazy(() => import("@/pages/Profile"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Pricing = lazy(() => import("@/pages/Pricing"));
 const LaunchCampaign = lazy(() => import("@/pages/LaunchCampaign"));
+const Campaigns = lazy(() => import("@/pages/Campaigns"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function PageLoader() {
@@ -33,6 +34,7 @@ function Router() {
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/pricing" component={Pricing} />
         <Route path="/launch" component={LaunchCampaign} />
+        <Route path="/campaigns" component={Campaigns} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>

@@ -110,6 +110,16 @@ export async function registerRoutes(
     }
   });
 
+  // Get brand by userId (public)
+  app.get("/api/brands/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    const brand = await storage.getBrandByUserId(userId);
+    if (!brand) {
+      return res.status(404).json({ message: "Brand not found" });
+    }
+    res.json(brand);
+  });
+
   // Offer Routes
   app.get("/api/offers", async (req, res) => {
     const target = (req.query.target as string) || undefined;

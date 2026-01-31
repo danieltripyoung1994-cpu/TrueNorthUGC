@@ -5,19 +5,23 @@ import { useBrand } from "@/hooks/use-brand";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera, Mail, Settings } from "lucide-react";
+import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera, Mail, Settings, Megaphone, Plus, Pencil, Trash2, Calendar, DollarSign, MapPin, Package } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { insertCreatorSchema, insertBrandSchema } from "@shared/schema";
+import { insertCreatorSchema, insertBrandSchema, type Campaign } from "@shared/schema";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { Messages } from "@/components/Messages";
+import { CampaignFormModal } from "@/components/CampaignFormModal";
+import { useMyCampaigns, useDeleteCampaign } from "@/hooks/use-campaigns";
+import { Badge } from "@/components/ui/badge";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -25,8 +29,13 @@ export default function Dashboard() {
   const { brand: brandProfile, isLoading: loadingBrand } = useBrand();
   const updateCreator = useUpdateCreatorProfile();
   const { updateBrand } = useBrand();
+  const { data: myCampaigns, isLoading: loadingCampaigns } = useMyCampaigns();
+  const deleteCampaign = useDeleteCampaign();
   const [roleSelection, setRoleSelection] = useState<"creator" | "brand" | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
+  const [editingCampaign, setEditingCampaign] = useState<Campaign | null>(null);
+  const [deletingCampaignId, setDeletingCampaignId] = useState<number | null>(null);
 
   const isLoading = loadingCreator || loadingBrand;
 
@@ -38,7 +47,31 @@ export default function Dashboard() {
     const params = new URLSearchParams(window.location.search);
     const tab = params.get("tab");
     if (tab === "messages") setActiveTab("messages");
+    if (tab === "campaigns") setActiveTab("campaigns");
   }, []);
+
+  const handleEditCampaign = (campaign: Campaign) => {
+    setEditingCampaign(campaign);
+    setIsCampaignModalOpen(true);
+  };
+
+  const handleCreateCampaign = () => {
+    setEditingCampaign(null);
+    setIsCampaignModalOpen(true);
+  };
+
+  const handleDeleteCampaign = async () => {
+    if (deletingCampaignId) {
+      await deleteCampaign.mutateAsync(deletingCampaignId);
+      setDeletingCampaignId(null);
+    }
+  };
+
+  const formatDeadline = (deadline: string | null) => {
+    if (!deadline) return null;
+    const date = new Date(deadline);
+    return date.toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" });
+  };
 
   const creatorForm = useForm({
     resolver: zodResolver(insertCreatorSchema.omit({ userId: true })),
@@ -172,10 +205,163 @@ export default function Dashboard() {
                   <Mail className="h-4 w-4" />
                   <span>Messages</span>
                 </TabsTrigger>
+                {brandProfile && (
+                  <TabsTrigger value="campaigns" className="gap-1 sm:gap-2 flex-1 sm:flex-none" data-testid="tab-campaigns">
+                    <Megaphone className="h-4 w-4" />
+                    <span>Campaigns</span>
+                  </TabsTrigger>
+                )}
               </TabsList>
               <TabsContent value="messages">
                 <Messages />
               </TabsContent>
+              {brandProfile && (
+                <TabsContent value="campaigns">
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="space-y-6"
+                  >
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                      <div>
+                        <h2 className="text-xl font-bold">My Campaigns</h2>
+                        <p className="text-muted-foreground text-sm">Manage your brand campaigns</p>
+                      </div>
+                      <Button onClick={handleCreateCampaign} data-testid="button-create-campaign">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Create Campaign
+                      </Button>
+                    </div>
+
+                    {loadingCampaigns ? (
+                      <div className="flex justify-center items-center h-40">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                      </div>
+                    ) : myCampaigns && myCampaigns.length > 0 ? (
+                      <div className="space-y-4">
+                        {myCampaigns.map((campaign) => (
+                          <Card key={campaign.id} className="hover:border-primary/50 transition-colors" data-testid={`card-my-campaign-${campaign.id}`}>
+                            <CardContent className="p-4 sm:p-6">
+                              <div className="flex flex-col sm:flex-row justify-between gap-4">
+                                <div className="flex-1 min-w-0 space-y-2">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <h3 className="font-bold text-lg" data-testid={`text-my-campaign-title-${campaign.id}`}>{campaign.title}</h3>
+                                    <Badge 
+                                      variant={campaign.status === "active" ? "default" : campaign.status === "paused" ? "secondary" : "outline"}
+                                      data-testid={`badge-my-campaign-status-${campaign.id}`}
+                                    >
+                                      {campaign.status}
+                                    </Badge>
+                                  </div>
+                                  <p className="text-muted-foreground text-sm line-clamp-2" data-testid={`text-my-campaign-description-${campaign.id}`}>
+                                    {campaign.description}
+                                  </p>
+                                  <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+                                    {campaign.budget && (
+                                      <span className="flex items-center gap-1">
+                                        <DollarSign className="h-3 w-3 text-green-500" />
+                                        {campaign.budget}
+                                      </span>
+                                    )}
+                                    {campaign.deadline && (
+                                      <span className="flex items-center gap-1">
+                                        <Calendar className="h-3 w-3 text-blue-500" />
+                                        {formatDeadline(campaign.deadline)}
+                                      </span>
+                                    )}
+                                    {campaign.location && (
+                                      <span className="flex items-center gap-1">
+                                        <MapPin className="h-3 w-3 text-orange-500" />
+                                        {campaign.location}
+                                      </span>
+                                    )}
+                                    {campaign.deliverables && campaign.deliverables.length > 0 && (
+                                      <span className="flex items-center gap-1">
+                                        <Package className="h-3 w-3 text-purple-500" />
+                                        {campaign.deliverables.length} deliverable(s)
+                                      </span>
+                                    )}
+                                  </div>
+                                  {campaign.niches && campaign.niches.length > 0 && (
+                                    <div className="flex flex-wrap gap-1 pt-1">
+                                      {campaign.niches.map((niche) => (
+                                        <Badge key={niche} variant="outline" className="text-xs font-normal">
+                                          {niche}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="flex sm:flex-col gap-2 sm:justify-start">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm" 
+                                    onClick={() => handleEditCampaign(campaign)}
+                                    data-testid={`button-edit-campaign-${campaign.id}`}
+                                  >
+                                    <Pencil className="h-4 w-4 mr-1" />
+                                    Edit
+                                  </Button>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    className="text-destructive hover:text-destructive"
+                                    onClick={() => setDeletingCampaignId(campaign.id)}
+                                    data-testid={`button-delete-campaign-${campaign.id}`}
+                                  >
+                                    <Trash2 className="h-4 w-4 mr-1" />
+                                    Delete
+                                  </Button>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    ) : (
+                      <Card className="border-2 border-dashed">
+                        <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+                          <Megaphone className="h-12 w-12 text-muted-foreground/50 mb-4" />
+                          <h3 className="font-bold text-lg">No campaigns yet</h3>
+                          <p className="text-muted-foreground text-sm mb-4">Create your first campaign to start connecting with creators</p>
+                          <Button onClick={handleCreateCampaign} data-testid="button-create-first-campaign">
+                            <Plus className="mr-2 h-4 w-4" />
+                            Create Your First Campaign
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    <CampaignFormModal
+                      open={isCampaignModalOpen}
+                      onOpenChange={setIsCampaignModalOpen}
+                      campaign={editingCampaign}
+                    />
+
+                    <AlertDialog open={!!deletingCampaignId} onOpenChange={(open) => !open && setDeletingCampaignId(null)}>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete Campaign</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete this campaign? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel data-testid="button-cancel-delete">Cancel</AlertDialogCancel>
+                          <AlertDialogAction 
+                            onClick={handleDeleteCampaign}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            data-testid="button-confirm-delete"
+                          >
+                            {deleteCampaign.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </motion.div>
+                </TabsContent>
+              )}
               <TabsContent value="profile">
                 <AnimatePresence mode="wait">
             {!hasProfile && !roleSelection ? (
