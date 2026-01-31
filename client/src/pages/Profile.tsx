@@ -279,53 +279,6 @@ export default function Profile() {
             </div>
           </div>
           
-          <div className="space-y-8">
-            <div className="flex items-center gap-4">
-              <h2 className="text-3xl font-black tracking-tighter">Portfolio</h2>
-              <div className="h-px bg-muted flex-1" />
-            </div>
-            
-            <motion.div 
-              layout
-              className="grid grid-cols-1 md:grid-cols-2 gap-8"
-            >
-              {creator.portfolio?.length === 0 ? (
-                <Card className="md:col-span-2 py-20 border-2 border-dashed rounded-[2.5rem] bg-muted/30 text-center">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="p-4 rounded-full bg-muted">
-                      <Video className="h-8 w-8 text-muted-foreground" />
-                    </div>
-                    <p className="text-muted-foreground font-bold text-lg">Your masterpiece awaits...</p>
-                    <p className="text-sm text-muted-foreground">Add items to your portfolio to showcase your talent.</p>
-                  </div>
-                </Card>
-              ) : (
-                creator.portfolio?.map((item, idx) => (
-                  <motion.div 
-                    key={item.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                  >
-                    <Card className="overflow-hidden group hover:border-primary transition-all duration-500 rounded-[2rem] shadow-lg hover:shadow-2xl hover:shadow-primary/20">
-                      <div className="aspect-video bg-muted relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
-                        <div className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-700 bg-[url('https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&auto=format&fit=crop')] bg-cover bg-center">
-                          <div className="w-16 h-16 rounded-full bg-primary/90 text-primary-foreground flex items-center justify-center shadow-2xl transform scale-0 group-hover:scale-100 transition-transform duration-500 z-20 backdrop-blur-sm">
-                            <Play className="h-6 w-6" />
-                          </div>
-                        </div>
-                        <div className="absolute bottom-6 left-6 right-6 z-20 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                          <p className="text-white font-black text-xl leading-tight">{item.title}</p>
-                        </div>
-                      </div>
-                    </Card>
-                  </motion.div>
-                ))
-              )}
-            </motion.div>
-          </div>
-          
           {/* Reviews Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
