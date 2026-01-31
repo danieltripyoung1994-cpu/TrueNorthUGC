@@ -878,10 +878,38 @@ export default function Dashboard() {
                           name="logo"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Logo URL</FormLabel>
-                              <FormControl>
-                                <Input placeholder="https://..." {...field} />
-                              </FormControl>
+                              <FormLabel>Logo</FormLabel>
+                              <div className="flex gap-2">
+                                <FormControl>
+                                  <Input placeholder="https://... or upload" {...field} className="flex-1" data-testid="input-brand-logo" />
+                                </FormControl>
+                                <input
+                                  ref={brandLogoInputRef}
+                                  type="file"
+                                  accept="image/*"
+                                  className="hidden"
+                                  onChange={handleBrandLogoUpload}
+                                  data-testid="input-brand-logo-file"
+                                />
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="icon"
+                                  onClick={() => brandLogoInputRef.current?.click()}
+                                  disabled={isUploadingBrandLogo}
+                                  data-testid="button-upload-brand-logo"
+                                >
+                                  {isUploadingBrandLogo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                                </Button>
+                              </div>
+                              {field.value && (
+                                <div className="mt-2 flex items-center gap-2">
+                                  <div className="h-12 w-12 rounded-full overflow-hidden border">
+                                    <img src={field.value} className="h-full w-full object-cover" alt="Preview" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                                  </div>
+                                  <span className="text-xs text-muted-foreground">Preview</span>
+                                </div>
+                              )}
                               <FormMessage />
                             </FormItem>
                           )}
