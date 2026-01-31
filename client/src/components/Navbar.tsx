@@ -44,6 +44,14 @@ export function Navbar() {
       >
         Campaigns
       </Link>
+      <Link 
+        href="/contact" 
+        className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-primary ${location === '/contact' ? 'text-primary' : 'text-muted-foreground'}`}
+        onClick={onLinkClick}
+        data-testid={mobile ? "link-mobile-contact" : "link-contact"}
+      >
+        Contact
+      </Link>
       {mobile && user && (
         <>
           <Link 
