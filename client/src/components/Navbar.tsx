@@ -30,7 +30,7 @@ export function Navbar() {
     <>
       <Link 
         href="/creators" 
-        className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-primary ${location === '/creators' || location === '/directory' ? 'text-primary' : 'text-muted-foreground'}`}
+        className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-pink-500 ${location === '/creators' || location === '/directory' ? 'text-pink-500' : 'text-muted-foreground'}`}
         onClick={onLinkClick}
         data-testid={mobile ? "link-mobile-browse-creators" : "link-browse-creators"}
       >
@@ -38,7 +38,7 @@ export function Navbar() {
       </Link>
       <Link 
         href="/campaigns" 
-        className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-primary ${location === '/campaigns' ? 'text-primary' : 'text-muted-foreground'}`}
+        className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-pink-500 ${location === '/campaigns' ? 'text-pink-500' : 'text-muted-foreground'}`}
         onClick={onLinkClick}
         data-testid={mobile ? "link-mobile-campaigns" : "link-campaigns"}
       >
@@ -46,7 +46,7 @@ export function Navbar() {
       </Link>
       <Link 
         href="/contact" 
-        className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-primary ${location === '/contact' ? 'text-primary' : 'text-muted-foreground'}`}
+        className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-pink-500 ${location === '/contact' ? 'text-pink-500' : 'text-muted-foreground'}`}
         onClick={onLinkClick}
         data-testid={mobile ? "link-mobile-contact" : "link-contact"}
       >
@@ -56,7 +56,7 @@ export function Navbar() {
         <>
           <Link 
             href="/dashboard" 
-            className="text-lg py-3 w-full font-medium transition-colors hover:text-primary text-muted-foreground"
+            className="text-lg py-3 w-full font-medium transition-colors hover:text-pink-500 text-muted-foreground"
             onClick={onLinkClick}
             data-testid="link-mobile-dashboard"
           >
@@ -68,13 +68,13 @@ export function Navbar() {
   );
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/90 backdrop-blur-xl">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group relative">
-          <div className="absolute -inset-4 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-          <div className="absolute -inset-2 bg-primary/10 blur-lg rounded-full animate-pulse pointer-events-none" />
-          <img src={logoPng} alt="TrueNorthUGC Logo" className="h-8 sm:h-10 w-auto group-hover:rotate-6 transition-transform drop-shadow-[0_0_8px_rgba(var(--primary),0.3)]" />
-          <span className="text-lg sm:text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80 drop-shadow-[0_0_8px_rgba(var(--primary),0.3)]">TrueNorthUGC</span>
+          <div className="absolute -inset-4 bg-pink-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          <div className="absolute -inset-2 bg-purple-500/10 blur-lg rounded-full animate-pulse pointer-events-none" />
+          <img src={logoPng} alt="TrueNorthUGC Logo" className="h-8 sm:h-10 w-auto group-hover:rotate-6 transition-transform drop-shadow-[0_0_8px_rgba(255,0,128,0.3)]" />
+          <span className="text-lg sm:text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 drop-shadow-[0_0_8px_rgba(255,0,128,0.3)]">TrueNorthUGC</span>
         </Link>
 
         {/* Desktop Navigation */}

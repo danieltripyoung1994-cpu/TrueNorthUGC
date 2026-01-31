@@ -13,8 +13,8 @@ import { useCampaigns } from "@/hooks/use-campaigns";
 
 const GlowOrb = ({ className, prefersReducedMotion }: { className?: string; prefersReducedMotion: boolean }) => (
   <motion.div
-    initial={{ opacity: 0.4 }}
-    animate={prefersReducedMotion ? { opacity: 0.4 } : { opacity: [0.3, 0.5, 0.3] }}
+    initial={{ opacity: 0.6 }}
+    animate={prefersReducedMotion ? { opacity: 0.6 } : { opacity: [0.4, 0.7, 0.4] }}
     transition={prefersReducedMotion ? {} : { 
       duration: 6, 
       repeat: Infinity, 
@@ -159,9 +159,9 @@ export default function Landing() {
           {/* Simplified glow orbs - only render if motion is allowed */}
           {!prefersReducedMotion && (
             <>
-              <GlowOrb className="w-96 h-96 bg-primary/30 top-20 -left-48" prefersReducedMotion={!!prefersReducedMotion} />
-              <GlowOrb className="w-64 h-64 bg-blue-500/20 top-40 right-20" prefersReducedMotion={!!prefersReducedMotion} />
-              <GlowOrb className="w-80 h-80 bg-purple-500/20 bottom-20 right-1/4" prefersReducedMotion={!!prefersReducedMotion} />
+              <GlowOrb className="w-96 h-96 bg-pink-500/40 top-20 -left-48" prefersReducedMotion={!!prefersReducedMotion} />
+              <GlowOrb className="w-64 h-64 bg-purple-500/30 top-40 right-20" prefersReducedMotion={!!prefersReducedMotion} />
+              <GlowOrb className="w-80 h-80 bg-cyan-500/30 bottom-20 right-1/4" prefersReducedMotion={!!prefersReducedMotion} />
             </>
           )}
         </motion.div>
@@ -176,7 +176,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
-              className="inline-flex items-center rounded-full border border-primary/40 bg-primary/10 px-5 py-2 text-sm font-semibold text-white backdrop-blur-xl shadow-[0_0_30px_rgba(59,130,246,0.3)]"
+              className="inline-flex items-center rounded-full border border-pink-500/40 bg-gradient-to-r from-pink-500/20 to-purple-500/20 px-5 py-2 text-sm font-semibold text-white backdrop-blur-xl shadow-[0_0_30px_rgba(255,0,128,0.3)]"
             >
               <img
                 src={logoPng}
@@ -194,7 +194,7 @@ export default function Landing() {
               className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white drop-shadow-2xl leading-[1.05]"
             >
               Canada's <br className="hidden sm:block" />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-300 to-white inline-block">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 inline-block">
                 UGC Marketplace
               </span>
             </motion.h1>
@@ -219,10 +219,10 @@ export default function Landing() {
               <Link href="/creators" className="w-full sm:w-auto group">
                 <Button 
                   size="lg" 
-                  className="w-full sm:w-auto text-base sm:text-lg md:text-xl px-8 sm:px-12 py-7 sm:py-8 rounded-2xl sm:rounded-3xl shadow-2xl shadow-primary/40 relative overflow-hidden group"
+                  className="w-full sm:w-auto text-base sm:text-lg md:text-xl px-8 sm:px-12 py-7 sm:py-8 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-600 hover:via-purple-600 hover:to-cyan-600 shadow-2xl shadow-pink-500/30 relative overflow-hidden group border-0"
                   data-testid="button-browse-creators"
                 >
-                  <span className="relative z-10 flex items-center">
+                  <span className="relative z-10 flex items-center font-bold">
                     Browse Creators
                     <Search className="h-5 w-5 sm:h-6 sm:w-6 ml-3" />
                   </span>
@@ -232,10 +232,10 @@ export default function Landing() {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="w-full sm:w-auto text-base sm:text-lg md:text-xl px-8 sm:px-12 py-7 sm:py-8 rounded-2xl sm:rounded-3xl border-2 bg-white/5 hover:bg-white/15 text-white border-white/30 backdrop-blur-xl relative overflow-hidden"
+                  className="w-full sm:w-auto text-base sm:text-lg md:text-xl px-8 sm:px-12 py-7 sm:py-8 rounded-2xl sm:rounded-3xl border-2 bg-white/5 hover:bg-white/15 text-white border-pink-500/50 hover:border-pink-500 backdrop-blur-xl relative overflow-hidden"
                   data-testid="button-exclusive-offers"
                 >
-                  <span className="relative z-10 flex items-center">
+                  <span className="relative z-10 flex items-center font-bold">
                     Exclusive Offers
                     <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 ml-3" />
                   </span>
@@ -263,7 +263,7 @@ export default function Landing() {
       </section>
 
       {/* Niches Section */}
-      <section className="py-20 sm:py-28 bg-gradient-to-b from-secondary/30 to-background relative overflow-hidden">
+      <section className="py-20 sm:py-28 relative overflow-hidden mesh-gradient">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -272,10 +272,10 @@ export default function Landing() {
             transition={{ duration: 0.4 }}
             className="text-center mb-12 sm:mb-16"
           >
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-6">
-              <Users className="h-8 w-8 text-primary" />
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 mb-6">
+              <Users className="h-8 w-8 text-pink-500" />
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4">Creators Across Every Niche</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4">Creators Across Every <span className="gradient-text">Niche</span></h2>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">From fitness to tech, find specialists in any content category</p>
           </motion.div>
           
@@ -292,7 +292,7 @@ export default function Landing() {
                 variants={itemVariants}
                 whileHover={prefersReducedMotion ? {} : { scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-5 sm:px-7 py-3 sm:py-4 bg-background rounded-full border border-border/50 shadow-lg font-bold text-base sm:text-lg cursor-pointer hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 transition-all duration-200"
+                className="px-5 sm:px-7 py-3 sm:py-4 bg-card/80 backdrop-blur-sm rounded-full border border-white/10 shadow-lg font-bold text-base sm:text-lg cursor-pointer hover:border-pink-500/50 hover:shadow-xl hover:shadow-pink-500/20 transition-all duration-200"
               >
                 {niche}
               </motion.div>
@@ -307,7 +307,7 @@ export default function Landing() {
             transition={{ duration: 0.4 }}
             className="text-center mb-12 sm:mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4">Why TrueNorthUGC?</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4">Why <span className="gradient-text">TrueNorthUGC</span>?</h2>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">We're building the bridge between Canadian creators and the brands that need them.</p>
           </motion.div>
 
@@ -329,10 +329,10 @@ export default function Landing() {
               >
                 <motion.div
                   variants={cardHoverVariants}
-                  className="bg-background rounded-3xl p-6 sm:p-8 border border-border/50 shadow-lg hover:shadow-2xl hover:border-primary/30 transition-all duration-300 h-full card-shine"
+                  className="bg-card/50 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-white/10 shadow-lg hover:shadow-2xl hover:shadow-pink-500/10 hover:border-pink-500/30 transition-all duration-300 h-full card-shine"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                    <feature.icon className="h-7 w-7 text-primary" />
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/20 flex items-center justify-center mb-6 group-hover:border-pink-500/40 transition-colors">
+                    <feature.icon className="h-7 w-7 text-pink-500" />
                   </div>
                   <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
                   <p className="text-muted-foreground leading-relaxed">
