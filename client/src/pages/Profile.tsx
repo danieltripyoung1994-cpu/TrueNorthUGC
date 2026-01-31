@@ -314,17 +314,13 @@ export default function Profile() {
                               title={item.title}
                             />
                           ) : item.url.includes('tiktok.com') ? (
-                            <div className="w-full h-full flex items-center justify-center bg-muted">
-                              <a 
-                                href={item.url} 
-                                target="_blank" 
-                                rel="noreferrer"
-                                className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
-                              >
-                                <Play className="h-12 w-12" />
-                                <span className="font-medium">Watch on TikTok</span>
-                              </a>
-                            </div>
+                            <iframe
+                              src={`https://www.tiktok.com/embed/v2/${item.url.match(/video\/(\d+)/)?.[1] || item.url.split('/').pop()?.split('?')[0]}`}
+                              className="w-full h-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              title={item.title}
+                            />
                           ) : (
                             <video
                               src={item.url}
