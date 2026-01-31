@@ -1,41 +1,44 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { type Campaign, type InsertCampaign } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, QUERY_KEYS, CACHE_TIME } from "@/lib/queryClient";
 
 export function useCampaigns(status?: string) {
   return useQuery<Campaign[]>({
-    queryKey: ["/api/campaigns", status],
+    queryKey: QUERY_KEYS.CAMPAIGNS_FILTERED(status),
     queryFn: async () => {
       const url = status ? `/api/campaigns?status=${status}` : "/api/campaigns";
       const res = await fetch(url, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch campaigns");
       return res.json();
     },
+    staleTime: CACHE_TIME.SHORT,
   });
 }
 
 export function useCampaign(id: number | string) {
   return useQuery<Campaign>({
-    queryKey: ["/api/campaigns", id],
+    queryKey: QUERY_KEYS.CAMPAIGN_DETAIL(id),
     queryFn: async () => {
       const res = await fetch(`/api/campaigns/${id}`, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch campaign");
       return res.json();
     },
     enabled: !!id,
+    staleTime: CACHE_TIME.SHORT,
   });
 }
 
 export function useMyCampaigns() {
   return useQuery<Campaign[]>({
-    queryKey: ["/api/campaigns/my/list"],
+    queryKey: QUERY_KEYS.CAMPAIGNS_MY_LIST,
     queryFn: async () => {
       const res = await fetch("/api/campaigns/my/list", { credentials: "include" });
       if (res.status === 401) return [];
       if (!res.ok) throw new Error("Failed to fetch campaigns");
       return res.json();
     },
+    staleTime: CACHE_TIME.SHORT,
   });
 }
 
@@ -53,8 +56,8 @@ export function useCreateCampaign() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/campaigns/my/list"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CAMPAIGNS_LIST });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CAMPAIGNS_MY_LIST });
       toast({
         title: "Campaign Created",
         description: "Your campaign has been posted successfully.",
@@ -84,9 +87,9 @@ export function useUpdateCampaign() {
       return res.json();
     },
     onSuccess: (_, { id }) => {
-      queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/campaigns", id] });
-      queryClient.invalidateQueries({ queryKey: ["/api/campaigns/my/list"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CAMPAIGNS_LIST });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CAMPAIGN_DETAIL(id) });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CAMPAIGNS_MY_LIST });
       toast({
         title: "Campaign Updated",
         description: "Your campaign has been updated successfully.",
@@ -116,8 +119,8 @@ export function useDeleteCampaign() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/campaigns/my/list"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CAMPAIGNS_LIST });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CAMPAIGNS_MY_LIST });
       toast({
         title: "Campaign Deleted",
         description: "Your campaign has been removed.",
