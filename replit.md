@@ -49,6 +49,11 @@ Preferred communication style: Simple, everyday language.
 - **Enhanced Directory**: Search, filter by niche, location (Canadian provinces), and experience level
 - **Profile Customization**: Complete profile editing with profile picture, bio, social links, and more
 - **Code Splitting**: React.lazy for optimized page loading
+- **Campaigns System**: Brands can post and manage campaigns with title, description, budget, niches, deliverables, deadline, and location. Creators can discover active campaigns.
+- **PayPal Payments**: Secure PayPal integration with 20% platform fee (80% to creator, 20% to platform). Server-side transaction recording with verified amounts.
+- **Testimonials Section**: Landing page features success stories from creators and brands
+- **Featured Campaigns**: Landing page displays active campaigns with empty state handling
+- **Reviews System**: Creators and brands can leave reviews and ratings after collaborations
 
 ### Project Structure
 ```
