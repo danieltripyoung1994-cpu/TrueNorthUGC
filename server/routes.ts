@@ -573,6 +573,47 @@ export async function registerRoutes(
     }
   });
 
+  // Contact form submission
+  app.post("/api/contact", async (req, res) => {
+    try {
+      const { name, email, subject, message } = req.body;
+      
+      if (!name || !email || !subject || !message) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+      
+      // Log the contact message (could also store in database or send email)
+      console.log("Contact form submission:", { name, email, subject, message, timestamp: new Date().toISOString() });
+      
+      // Send email notification to platform owner
+      try {
+        const { sendEmail } = await import("./gmail");
+        await sendEmail(
+          "TrueNorthUGCcanada@gmail.com",
+          `Contact Form: ${subject}`,
+          `<div style="font-family: Arial, sans-serif; max-width: 600px;">
+            <h2>New Contact Form Submission</h2>
+            <p><strong>From:</strong> ${name} (${email})</p>
+            <p><strong>Subject:</strong> ${subject}</p>
+            <hr />
+            <p><strong>Message:</strong></p>
+            <p>${message.replace(/\n/g, '<br>')}</p>
+            <hr />
+            <p style="color: #666; font-size: 12px;">Sent from TrueNorthUGC Contact Form</p>
+          </div>`
+        );
+      } catch (emailError) {
+        console.error("Failed to send contact email:", emailError);
+        // Continue without failing - message is logged
+      }
+      
+      res.json({ success: true, message: "Your message has been received. We'll get back to you soon!" });
+    } catch (error: any) {
+      console.error("Failed to process contact form:", error);
+      res.status(500).json({ message: error.message || "Failed to send message" });
+    }
+  });
+
   // Admin: Get all users with emails
   app.get("/api/admin/users", isAuthenticated, async (req, res) => {
     try {

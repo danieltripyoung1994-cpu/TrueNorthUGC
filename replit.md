@@ -47,14 +47,15 @@ Preferred communication style: Simple, everyday language.
 - **Messaging System**: Full inbox/sent messaging between creators and brands with compose modal
 - **Notifications**: Bell icon with unread count badge, dropdown menu with mark as read functionality
 - **Enhanced Directory**: Search, filter by niche, location (Canadian provinces), and experience level
-- **Profile Customization**: Complete profile editing with profile picture, bio, social links, and more
+- **Profile Customization**: Complete profile editing with profile picture, bio, social links, portfolio videos, and more
 - **Code Splitting**: React.lazy for optimized page loading
-- **Campaigns System**: Brands can post and manage campaigns with title, description, budget, niches, deliverables, deadline, and location. Creators can discover active campaigns.
-- **PayPal Payments**: Secure PayPal integration with 20% platform fee (80% to creator, 20% to platform). Server-side transaction recording with verified amounts.
+- **Campaigns System**: Brands can post and manage campaigns with title, description, budget, niches, deliverables, deadline, and location. Creators can discover active campaigns at /campaigns.
+- **PayPal Payments**: Secure PayPal integration with 20% platform fee (80% to creator, 20% to platform). Server-side transaction recording with verified amounts. All payments go to platform's PayPal account.
 - **Testimonials Section**: Landing page features success stories from creators and brands
 - **Featured Campaigns**: Landing page displays active campaigns with empty state handling
 - **Reviews System**: Creators and brands can leave reviews and ratings after collaborations
 - **Gmail Integration**: Platform email communications via TrueNorthUGCcanada@gmail.com
+- **Contact Page**: Contact form at /contact with phone (1-226-220-1522) and email (TrueNorthUGCcanada@gmail.com). Form submissions are emailed to platform owner.
 
 ### Performance Optimizations (January 2026)
 - **Skeleton Loaders**: Contextual loading states showing headers/filters while content loads (client/src/components/ui/skeleton-loaders.tsx)
