@@ -1,9 +1,9 @@
 // PayPal Integration for TrueNorthUGC
 // Based on blueprint:javascript_paypal
-import * as PayPal from "@paypal/paypal-server-sdk";
+import PayPal from "@paypal/paypal-server-sdk";
 import { Request, Response } from "express";
 
-const { Client, Environment, LogLevel, OAuthAuthorizationController, OrdersController } = PayPal as any;
+const { Client, Environment, LogLevel, OAuthAuthorizationController, OrdersController } = PayPal;
 
 /* PayPal Controllers Setup */
 
