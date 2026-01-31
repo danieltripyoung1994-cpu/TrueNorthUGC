@@ -54,6 +54,15 @@ Preferred communication style: Simple, everyday language.
 - **Testimonials Section**: Landing page features success stories from creators and brands
 - **Featured Campaigns**: Landing page displays active campaigns with empty state handling
 - **Reviews System**: Creators and brands can leave reviews and ratings after collaborations
+- **Gmail Integration**: Platform email communications via TrueNorthUGCcanada@gmail.com
+
+### Performance Optimizations (January 2026)
+- **Skeleton Loaders**: Contextual loading states showing headers/filters while content loads (client/src/components/ui/skeleton-loaders.tsx)
+- **React Query Caching**: Global 5-minute staleTime, 20-minute gcTime. Campaigns use 1-minute staleTime for freshness.
+- **QUERY_KEYS Constants**: Centralized query keys in client/src/lib/queryClient.ts for consistent cache invalidation
+- **Animation Optimization**: Reduced transitions (0.4s), prefers-reduced-motion support, conditional glow effects
+- **Image Loading**: Hero uses eager loading with high fetch priority; other images use lazy loading
+- **Route Prefetching**: Nav links prefetch data on hover for instant navigation
 
 ### Project Structure
 ```
