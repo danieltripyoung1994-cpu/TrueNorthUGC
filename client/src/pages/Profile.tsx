@@ -321,6 +321,39 @@ export default function Profile() {
                               allowFullScreen
                               title={item.title}
                             />
+                          ) : item.url.includes('instagram.com') ? (
+                            <iframe
+                              src={`${item.url.split('?')[0]}embed/`}
+                              className="w-full h-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              title={item.title}
+                            />
+                          ) : item.url.includes('facebook.com') || item.url.includes('fb.watch') ? (
+                            <iframe
+                              src={`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(item.url)}&show_text=false`}
+                              className="w-full h-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                              allowFullScreen
+                              title={item.title}
+                            />
+                          ) : item.url.includes('twitter.com') || item.url.includes('x.com') ? (
+                            <iframe
+                              src={`https://platform.twitter.com/embed/Tweet.html?id=${item.url.match(/status\/(\d+)/)?.[1]}`}
+                              className="w-full h-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              title={item.title}
+                            />
+                          ) : item.url.includes('reddit.com') ? (
+                            <iframe
+                              src={`${item.url.replace('www.reddit.com', 'embed.reddit.com')}`}
+                              className="w-full h-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              sandbox="allow-scripts allow-same-origin allow-popups"
+                              title={item.title}
+                            />
                           ) : (
                             <video
                               src={item.url}
