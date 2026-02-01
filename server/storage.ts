@@ -8,6 +8,7 @@ export interface IStorage {
   getCreatorByUserId(userId: string): Promise<Creator | undefined>;
   createCreator(creator: InsertCreator): Promise<Creator>;
   updateCreator(userId: string, updates: Partial<InsertCreator>): Promise<Creator>;
+  deleteCreatorByUserId(userId: string): Promise<boolean>;
   
   getBrandByUserId(userId: string): Promise<Brand | undefined>;
   createBrand(brand: InsertBrand): Promise<Brand>;
@@ -170,6 +171,11 @@ export class DatabaseStorage implements IStorage {
       .where(eq(creators.userId, userId))
       .returning();
     return normalizeCreator(updated);
+  }
+
+  async deleteCreatorByUserId(userId: string): Promise<boolean> {
+    const result = await db.delete(creators).where(eq(creators.userId, userId)).returning();
+    return result.length > 0;
   }
 
   async getBrandByUserId(userId: string): Promise<Brand | undefined> {
