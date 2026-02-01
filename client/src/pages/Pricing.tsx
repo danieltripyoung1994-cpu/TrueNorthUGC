@@ -41,65 +41,73 @@ export default function Pricing() {
 
   const creatorTiers = [
     {
-      name: "Free",
+      name: "Free Forever",
       price: "$0",
-      description: "Start your creator journey",
-      features: [
-        "Make content",
-        "Access to all brands",
-        "Monetize your content",
-        "Explore paid opportunities"
-      ],
-      buttonText: "Join for Free",
-      variant: "outline" as const
-    },
-    {
-      name: "Exclusive",
-      price: "$19.99",
-      description: "Maximize your earnings and visibility",
+      description: "Start earning with no upfront costs",
       features: [
         "Unlimited access to brand deals",
-        "Verification badge",
-        "Top picks for brands",
-        "Top priority for all content",
-        "Retainer agreements",
-        "Tiered bonuses",
-        "Exclusive creator community access",
-        "Personal brand manager",
-        "Advanced performance analytics"
+        "Create and showcase your portfolio",
+        "Apply to unlimited campaigns",
+        "Direct messaging with brands",
+        "Performance analytics dashboard",
+        "Secure payment processing"
       ],
-      buttonText: "Go Exclusive",
+      buttonText: "Join Free",
       variant: "default" as const,
       popular: true,
-      highlight: true
+      highlight: true,
+      commission: "15% commission on successful paid collaborations"
+    },
+    {
+      name: "Pro Creator",
+      price: "$0",
+      description: "Premium features for serious creators",
+      features: [
+        "Everything in Free Forever",
+        "Verification badge",
+        "Priority visibility to brands",
+        "Exclusive creator community",
+        "Personal brand manager",
+        "Tiered bonus rewards program"
+      ],
+      buttonText: "Get Started",
+      variant: "outline" as const,
+      commission: "15% commission on successful paid collaborations"
     }
   ];
 
   const brandTiers = [
     {
       name: "Campaign Starter",
-      price: "$499",
+      price: "$299",
       description: "Get high-quality UGC for your brand",
       features: [
-        "Full access to contests and deals",
-        "Vetted network of creators",
-        "Spark Ad codes on winning submissions",
-        "Lifetime Access to Winning Submissions",
-        "Achieve Content-Market Fit Faster",
-        "Validate content organically",
+        "Full access to creator network",
+        "Vetted Canadian creators only",
+        "Spark Ad codes on submissions",
+        "Lifetime content ownership",
+        "Custom content brief assistance",
         "Dedicated campaign manager",
-        "Custom content brief assistance"
+        "Transparent 15% transaction fee"
       ],
-      buttonText: "Start Campaign",
+      buttonText: "Launch Campaign",
       variant: "default" as const,
       popular: true,
-      highlight: true
+      highlight: true,
+      commission: "15% fee on creator payments (85% goes to creators)"
     },
     {
       name: "Enterprise",
       price: "Custom",
       description: "Scale your UGC strategy",
-      features: ["Unlimited Messaging", "Advanced Filtering", "Custom Briefs", "Dedicated Support"],
+      features: [
+        "Unlimited campaigns",
+        "Advanced creator filtering",
+        "Custom content briefs",
+        "Dedicated account manager",
+        "Volume discounts available",
+        "Custom payment terms"
+      ],
       buttonText: "Contact Sales",
       variant: "outline" as const
     }
@@ -231,8 +239,15 @@ export default function Pricing() {
                     <CardContent className="flex-1 space-y-6 sm:space-y-10 px-6 sm:px-10">
                       <div className="flex items-baseline gap-2">
                         <span className="text-4xl sm:text-5xl md:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-500 tracking-tighter">{tier.price}</span>
-                        {tier.price !== "Custom" && <span className="text-sm sm:text-base text-muted-foreground font-semibold">/month</span>}
+                        {tier.price === "$0" && <span className="text-sm sm:text-base text-muted-foreground font-semibold">forever</span>}
                       </div>
+
+                      {(tier as any).commission && (
+                        <div className="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/20">
+                          <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-1">Transparent Pricing</p>
+                          <p className="text-sm font-medium text-muted-foreground">{(tier as any).commission}</p>
+                        </div>
+                      )}
 
                       {tier.name === "Enterprise" && (
                         <div className="p-6 rounded-3xl bg-secondary/30 border border-border/50">
