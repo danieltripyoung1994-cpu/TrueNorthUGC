@@ -5,7 +5,7 @@ import { usePageMeta } from "@/hooks/use-page-meta";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Search, Sparkles, Star, Zap, Users, Shield, Globe, ChevronDown, Quote, Briefcase, DollarSign, Calendar, MapPin } from "lucide-react";
+import { ArrowRight, Search, Sparkles, Star, Zap, Users, Shield, Globe, ChevronDown, Quote, Briefcase, DollarSign, Calendar, MapPin, Trophy, Crown, Gift } from "lucide-react";
 import newLogoPng from "@assets/Photoroom_20260131_221621_1769915813253.png";
 import { useRef, useMemo } from "react";
 import { useCampaigns } from "@/hooks/use-campaigns";
@@ -522,6 +522,94 @@ export default function Landing() {
               </div>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Milestone Bonus Program Section */}
+      <section className="py-20 sm:py-28 relative overflow-hidden mesh-gradient" data-testid="section-milestone-bonus">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="text-center mb-12 sm:mb-16"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 text-cyan-400 text-sm font-bold mb-6">
+              <Gift className="h-4 w-4" />
+              Creator Rewards
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4">
+              Milestone <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-cyan-300">Bonus Program</span>
+            </h2>
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
+              Complete campaigns and unlock milestone bonuses. Earn up to <span className="text-cyan-400 font-bold">$1,150</span> in rewards as you grow!
+            </p>
+          </motion.div>
+
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6"
+          >
+            {[
+              { tier: "New Creator", icon: Star, bonus: 0, campaigns: "0-2", color: "from-gray-500/20 to-gray-400/10", borderColor: "border-gray-500/30", textColor: "text-gray-400" },
+              { tier: "Rising Star", icon: Star, bonus: 100, campaigns: "3-9", color: "from-green-500/20 to-green-400/10", borderColor: "border-green-500/30", textColor: "text-green-400" },
+              { tier: "Creator Pro", icon: Zap, bonus: 200, campaigns: "10-19", color: "from-blue-500/20 to-blue-400/10", borderColor: "border-blue-500/30", textColor: "text-blue-400" },
+              { tier: "Top Performer", icon: Trophy, bonus: 350, campaigns: "20-34", color: "from-purple-500/20 to-purple-400/10", borderColor: "border-purple-500/30", textColor: "text-purple-400" },
+              { tier: "Elite Creator", icon: Crown, bonus: 500, campaigns: "35+", color: "from-cyan-500/20 to-cyan-400/10", borderColor: "border-cyan-500/30", textColor: "text-cyan-400" }
+            ].map((level, i) => (
+              <motion.div
+                key={level.tier}
+                variants={itemVariants}
+                initial="rest"
+                whileHover="hover"
+                animate="rest"
+                className="group"
+              >
+                <motion.div
+                  variants={cardHoverVariants}
+                  className={`bg-gradient-to-br ${level.color} backdrop-blur-sm rounded-2xl p-6 border ${level.borderColor} shadow-lg hover:shadow-xl transition-all duration-300 h-full text-center`}
+                  data-testid={`card-tier-${level.tier.toLowerCase().replace(' ', '-')}`}
+                >
+                  <div className={`w-14 h-14 rounded-full bg-background/50 border ${level.borderColor} flex items-center justify-center mx-auto mb-4`}>
+                    <level.icon className={`h-7 w-7 ${level.textColor}`} />
+                  </div>
+                  <h3 className={`text-lg font-bold mb-2 ${level.textColor}`}>{level.tier}</h3>
+                  <p className="text-3xl font-black mb-2">
+                    {level.bonus > 0 ? (
+                      <span className="text-green-400">${level.bonus}</span>
+                    ) : (
+                      <span className="text-muted-foreground">Start</span>
+                    )}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {level.campaigns} campaigns
+                  </p>
+                </motion.div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-center mt-10"
+          >
+            <p className="text-muted-foreground mb-6">
+              Bonuses are cumulative. Complete 35+ campaigns and you'll have earned <span className="text-cyan-400 font-bold">$1,150</span> in total milestone rewards!
+            </p>
+            <a href="/api/login">
+              <Button size="lg" className="rounded-xl bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-600 hover:to-cyan-500 shadow-xl shadow-cyan-500/20" data-testid="button-start-earning">
+                Start Earning Today
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </a>
+          </motion.div>
         </div>
       </section>
 
