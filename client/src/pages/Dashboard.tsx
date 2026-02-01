@@ -5,7 +5,7 @@ import { useBrand } from "@/hooks/use-brand";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera, Mail, Settings, Megaphone, Plus, Pencil, Trash2, Calendar, DollarSign, MapPin, Package, Upload } from "lucide-react";
+import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera, Mail, Settings, Megaphone, Plus, Pencil, Trash2, Calendar, DollarSign, MapPin, Package, Upload, TrendingUp, Users, Star, Zap, Trophy, Crown } from "lucide-react";
 import { DashboardSkeleton } from "@/components/ui/skeleton-loaders";
 import { Link, useLocation } from "wouter";
 import { useState, useEffect, useRef } from "react";
@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { insertCreatorSchema, insertBrandSchema, type Campaign } from "@shared/schema";
+import { insertCreatorSchema, insertBrandSchema, type Campaign, type Transaction, type Brand, type Creator } from "@shared/schema";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { Messages } from "@/components/Messages";
@@ -25,6 +25,10 @@ import { useMyCampaigns, useDeleteCampaign } from "@/hooks/use-campaigns";
 import { Badge } from "@/components/ui/badge";
 import { useUpload } from "@/hooks/use-upload";
 import { useToast } from "@/hooks/use-toast";
+import { useTransactions } from "@/hooks/use-transactions";
+import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -34,6 +38,7 @@ export default function Dashboard() {
   const { updateBrand } = useBrand();
   const { data: myCampaigns, isLoading: loadingCampaigns } = useMyCampaigns();
   const deleteCampaign = useDeleteCampaign();
+  const { data: transactions, isLoading: loadingTransactions } = useTransactions();
   const [roleSelection, setRoleSelection] = useState<"creator" | "brand" | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
@@ -86,6 +91,7 @@ export default function Dashboard() {
     const tab = params.get("tab");
     if (tab === "messages") setActiveTab("messages");
     if (tab === "campaigns") setActiveTab("campaigns");
+    if (tab === "earnings") setActiveTab("earnings");
   }, []);
 
   const handleEditCampaign = (campaign: Campaign) => {
@@ -252,6 +258,10 @@ export default function Dashboard() {
                     <span>Campaigns</span>
                   </TabsTrigger>
                 )}
+                <TabsTrigger value="earnings" className="gap-1 sm:gap-2 flex-1 sm:flex-none" data-testid="tab-earnings">
+                  <DollarSign className="h-4 w-4" />
+                  <span>Earnings</span>
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="messages">
                 <Messages />
@@ -403,6 +413,15 @@ export default function Dashboard() {
                   </motion.div>
                 </TabsContent>
               )}
+              <TabsContent value="earnings">
+                <EarningsTab 
+                  transactions={transactions || []}
+                  isLoading={loadingTransactions}
+                  creatorProfile={creatorProfile}
+                  brandProfile={brandProfile}
+                  userId={user?.id || ""}
+                />
+              </TabsContent>
               <TabsContent value="profile">
                 <AnimatePresence mode="wait">
             {!hasProfile && !roleSelection ? (
@@ -1200,5 +1219,403 @@ export default function Dashboard() {
         </motion.div>
       </main>
     </div>
+  );
+}
+
+interface EarningsTabProps {
+  transactions: Transaction[];
+  isLoading: boolean;
+  creatorProfile: Creator | null | undefined;
+  brandProfile: Brand | null | undefined;
+  userId: string;
+}
+
+function getTierInfo(completedCount: number) {
+  if (completedCount >= 31) {
+    return { name: "Elite Creator", icon: Crown, rate: 88, min: 31, max: null, nextTier: null };
+  } else if (completedCount >= 16) {
+    return { name: "Top Performer", icon: Trophy, rate: 85, min: 16, max: 30, nextTier: "Elite Creator" };
+  } else if (completedCount >= 6) {
+    return { name: "Creator Pro", icon: Zap, rate: 82, min: 6, max: 15, nextTier: "Top Performer" };
+  } else {
+    return { name: "Rising Star", icon: Star, rate: 80, min: 0, max: 5, nextTier: "Creator Pro" };
+  }
+}
+
+function getProgressToNextTier(completedCount: number): { progress: number; remaining: number } {
+  if (completedCount >= 31) {
+    return { progress: 100, remaining: 0 };
+  } else if (completedCount >= 16) {
+    const tierStart = 16;
+    const tierEnd = 31;
+    const progress = ((completedCount - tierStart) / (tierEnd - tierStart)) * 100;
+    return { progress, remaining: tierEnd - completedCount };
+  } else if (completedCount >= 6) {
+    const tierStart = 6;
+    const tierEnd = 16;
+    const progress = ((completedCount - tierStart) / (tierEnd - tierStart)) * 100;
+    return { progress, remaining: tierEnd - completedCount };
+  } else {
+    const tierStart = 0;
+    const tierEnd = 6;
+    const progress = ((completedCount - tierStart) / (tierEnd - tierStart)) * 100;
+    return { progress, remaining: tierEnd - completedCount };
+  }
+}
+
+function EarningsTab({ transactions, isLoading, creatorProfile, brandProfile, userId }: EarningsTabProps) {
+  const isCreator = !!creatorProfile;
+  const isBrand = !!brandProfile;
+
+  const completedTransactions = transactions.filter(t => t.status === "completed");
+  
+  const creatorTransactions = completedTransactions.filter(t => t.recipientUserId === userId);
+  const brandTransactions = completedTransactions.filter(t => t.payerUserId === userId);
+
+  const totalCreatorEarnings = creatorTransactions.reduce((sum, t) => sum + parseFloat(t.creatorPayout || "0"), 0);
+  const totalBrandSpent = brandTransactions.reduce((sum, t) => sum + parseFloat(t.amount || "0"), 0);
+  const totalPlatformFees = brandTransactions.reduce((sum, t) => sum + parseFloat(t.platformFee || "0"), 0);
+  const uniqueCreatorsPaid = new Set(brandTransactions.map(t => t.recipientUserId)).size;
+
+  const tierInfo = getTierInfo(creatorTransactions.length);
+  const { progress, remaining } = getProgressToNextTier(creatorTransactions.length);
+  const TierIcon = tierInfo.icon;
+
+  const { data: brandNamesMap } = useQuery<Record<string, string>>({
+    queryKey: ["/api/brands/names", creatorTransactions.map(t => t.payerUserId).join(",")],
+    queryFn: async () => {
+      const uniquePayerIds = Array.from(new Set(creatorTransactions.map(t => t.payerUserId)));
+      const names: Record<string, string> = {};
+      await Promise.all(uniquePayerIds.map(async (id) => {
+        try {
+          const res = await fetch(`/api/brands/${id}`, { credentials: "include" });
+          if (res.ok) {
+            const brand = await res.json();
+            names[id] = brand.name;
+          }
+        } catch {}
+      }));
+      return names;
+    },
+    enabled: isCreator && creatorTransactions.length > 0,
+  });
+
+  const { data: creatorNamesMap } = useQuery<Record<string, string>>({
+    queryKey: ["/api/creators/names", brandTransactions.map(t => t.recipientUserId).join(",")],
+    queryFn: async () => {
+      const uniqueRecipientIds = Array.from(new Set(brandTransactions.map(t => t.recipientUserId)));
+      const names: Record<string, string> = {};
+      const creators = await fetch("/api/creators", { credentials: "include" }).then(r => r.json());
+      creators.forEach((c: Creator) => {
+        if (uniqueRecipientIds.includes(c.userId)) {
+          names[c.userId] = c.name;
+        }
+      });
+      return names;
+    },
+    enabled: isBrand && brandTransactions.length > 0,
+  });
+
+  if (isLoading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="space-y-6"
+        data-testid="earnings-loading"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="bg-card/50 backdrop-blur-sm border-white/10">
+              <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 pb-2">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-4 rounded-full" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-8 w-32 mb-2" />
+                <Skeleton className="h-3 w-20" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <Card className="bg-card/50 backdrop-blur-sm border-white/10">
+          <CardHeader>
+            <Skeleton className="h-5 w-40" />
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} className="h-16 w-full" />
+            ))}
+          </CardContent>
+        </Card>
+      </motion.div>
+    );
+  }
+
+  if (!isCreator && !isBrand) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="text-center py-12"
+      >
+        <DollarSign className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+        <h3 className="font-bold text-lg mb-2">No Profile Found</h3>
+        <p className="text-muted-foreground">Create a profile to start tracking your earnings.</p>
+      </motion.div>
+    );
+  }
+
+  if (isCreator) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="space-y-6"
+        data-testid="earnings-creator-view"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Card className="bg-card/50 backdrop-blur-sm border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20 transition-all" data-testid="card-total-earnings">
+            <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Total Earnings</CardTitle>
+              <DollarSign className="h-4 w-4 text-green-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-black" data-testid="text-total-earnings">
+                ${totalCreatorEarnings.toFixed(2)} CAD
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {creatorTransactions.length} completed transaction{creatorTransactions.length !== 1 ? "s" : ""}
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-card/50 backdrop-blur-sm border-cyan-500/20 hover:border-cyan-400/40 hover:shadow-lg hover:shadow-cyan-500/10 transition-all" data-testid="card-current-tier">
+            <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Current Tier</CardTitle>
+              <TierIcon className="h-4 w-4 text-cyan-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-cyan-300" data-testid="text-current-tier">
+                {tierInfo.name}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {tierInfo.rate}% commission rate
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-card/50 backdrop-blur-sm border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20 transition-all" data-testid="card-completed-campaigns">
+            <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Completed Campaigns</CardTitle>
+              <TrendingUp className="h-4 w-4 text-purple-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-black" data-testid="text-completed-campaigns">
+                {creatorTransactions.length}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Total paid collaborations
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {tierInfo.nextTier && (
+          <Card className="bg-card/50 backdrop-blur-sm border-cyan-500/20" data-testid="card-tier-progress">
+            <CardHeader>
+              <CardTitle className="text-lg font-bold flex items-center gap-2">
+                <Zap className="h-5 w-5 text-cyan-400" />
+                Progress to {tierInfo.nextTier}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">{creatorTransactions.length} completed</span>
+                  <span className="text-cyan-400 font-semibold">{remaining} more to go</span>
+                </div>
+                <div className="relative">
+                  <Progress value={progress} className="h-3 bg-cyan-500/10" data-testid="progress-tier" />
+                  <div 
+                    className="absolute top-0 left-0 h-3 rounded-full bg-gradient-to-r from-cyan-500 to-cyan-300 transition-all"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Complete {remaining} more campaign{remaining !== 1 ? "s" : ""} to unlock <span className="text-cyan-400 font-semibold">{tierInfo.nextTier}</span> tier and earn a higher commission rate!
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {tierInfo.nextTier === null && (
+          <Card className="bg-gradient-to-br from-cyan-500/10 to-cyan-400/5 backdrop-blur-sm border-cyan-500/30" data-testid="card-max-tier">
+            <CardContent className="flex items-center gap-4 py-6">
+              <div className="h-12 w-12 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                <Crown className="h-6 w-6 text-cyan-400" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg">Congratulations!</h3>
+                <p className="text-sm text-muted-foreground">You've reached the highest tier and earn the maximum 88% commission rate.</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        <Card className="bg-card/50 backdrop-blur-sm border-white/10" data-testid="card-recent-transactions">
+          <CardHeader>
+            <CardTitle className="text-lg font-bold">Recent Transactions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {creatorTransactions.length === 0 ? (
+              <div className="text-center py-8" data-testid="empty-transactions">
+                <DollarSign className="h-10 w-10 text-muted-foreground/50 mx-auto mb-3" />
+                <p className="text-muted-foreground">No transactions yet</p>
+                <p className="text-sm text-muted-foreground/70">Complete campaigns to start earning!</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {creatorTransactions.slice(0, 10).map((transaction) => (
+                  <div 
+                    key={transaction.id} 
+                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 rounded-lg bg-background/50 border border-white/5"
+                    data-testid={`transaction-row-${transaction.id}`}
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-green-500" data-testid={`text-transaction-amount-${transaction.id}`}>
+                          +${parseFloat(transaction.creatorPayout).toFixed(2)}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          from {brandNamesMap?.[transaction.payerUserId] || "Brand"}
+                        </span>
+                      </div>
+                      {transaction.description && (
+                        <p className="text-sm text-muted-foreground truncate" data-testid={`text-transaction-description-${transaction.id}`}>
+                          {transaction.description}
+                        </p>
+                      )}
+                    </div>
+                    <div className="text-xs text-muted-foreground" data-testid={`text-transaction-date-${transaction.id}`}>
+                      {new Date(transaction.createdAt).toLocaleDateString("en-CA", { 
+                        month: "short", 
+                        day: "numeric", 
+                        year: "numeric" 
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="space-y-6"
+      data-testid="earnings-brand-view"
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Card className="bg-card/50 backdrop-blur-sm border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20 transition-all" data-testid="card-total-spent">
+          <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Spent</CardTitle>
+            <DollarSign className="h-4 w-4 text-pink-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-black" data-testid="text-total-spent">
+              ${totalBrandSpent.toFixed(2)} CAD
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {brandTransactions.length} payment{brandTransactions.length !== 1 ? "s" : ""} made
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-card/50 backdrop-blur-sm border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20 transition-all" data-testid="card-platform-fees">
+          <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Platform Fees</CardTitle>
+            <TrendingUp className="h-4 w-4 text-purple-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-black" data-testid="text-platform-fees">
+              ${totalPlatformFees.toFixed(2)} CAD
+            </div>
+            <p className="text-xs text-muted-foreground">
+              20% platform fee
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-card/50 backdrop-blur-sm border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20 transition-all" data-testid="card-creators-paid">
+          <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Creators Paid</CardTitle>
+            <Users className="h-4 w-4 text-cyan-400" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-black" data-testid="text-creators-paid">
+              {uniqueCreatorsPaid}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Unique creator{uniqueCreatorsPaid !== 1 ? "s" : ""}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="bg-card/50 backdrop-blur-sm border-white/10" data-testid="card-recent-payments">
+        <CardHeader>
+          <CardTitle className="text-lg font-bold">Recent Payments</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {brandTransactions.length === 0 ? (
+            <div className="text-center py-8" data-testid="empty-payments">
+              <DollarSign className="h-10 w-10 text-muted-foreground/50 mx-auto mb-3" />
+              <p className="text-muted-foreground">No payments yet</p>
+              <p className="text-sm text-muted-foreground/70">Pay creators to see your transaction history here.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {brandTransactions.slice(0, 10).map((transaction) => (
+                <div 
+                  key={transaction.id} 
+                  className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 rounded-lg bg-background/50 border border-white/5"
+                  data-testid={`payment-row-${transaction.id}`}
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold" data-testid={`text-payment-amount-${transaction.id}`}>
+                        ${parseFloat(transaction.amount).toFixed(2)}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        to {creatorNamesMap?.[transaction.recipientUserId] || "Creator"}
+                      </span>
+                    </div>
+                    {transaction.description && (
+                      <p className="text-sm text-muted-foreground truncate" data-testid={`text-payment-description-${transaction.id}`}>
+                        {transaction.description}
+                      </p>
+                    )}
+                  </div>
+                  <div className="text-xs text-muted-foreground" data-testid={`text-payment-date-${transaction.id}`}>
+                    {new Date(transaction.createdAt).toLocaleDateString("en-CA", { 
+                      month: "short", 
+                      day: "numeric", 
+                      year: "numeric" 
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }
