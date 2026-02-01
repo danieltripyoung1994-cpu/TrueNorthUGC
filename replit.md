@@ -76,13 +76,25 @@ Preferred communication style: Simple, everyday language.
 - **Gmail Integration**: Platform email communications via TrueNorthUGCcanada@gmail.com
 - **Contact Page**: Contact form at /contact with phone (1-226-220-1522) and email (TrueNorthUGCcanada@gmail.com). Form submissions are emailed to platform owner.
 
-### Performance Optimizations (January 2026)
+### Performance Optimizations (February 2026)
+- **Web Vitals Monitoring**: client/src/lib/performance.ts tracks CLS, LCP, TTFB, INP metrics
+- **Optimized Font Loading**: Reduced from 20+ Google Font families to only Inter and Plus Jakarta Sans with preload
+- **Image Optimization**: All images have explicit width/height to prevent CLS, fetchPriority="high" for above-fold, loading="lazy" for below-fold
+- **Code Splitting**: React.lazy for all page components with Suspense fallback
 - **Skeleton Loaders**: Contextual loading states showing headers/filters while content loads (client/src/components/ui/skeleton-loaders.tsx)
 - **React Query Caching**: Global 5-minute staleTime, 20-minute gcTime. Campaigns use 1-minute staleTime for freshness.
 - **QUERY_KEYS Constants**: Centralized query keys in client/src/lib/queryClient.ts for consistent cache invalidation
 - **Animation Optimization**: Reduced transitions (0.4s), prefers-reduced-motion support, conditional glow effects
-- **Image Loading**: Hero uses eager loading with high fetch priority; other images use lazy loading
 - **Route Prefetching**: Nav links prefetch data on hover for instant navigation
+- **Async Script Loading**: Vite module scripts are async by default, non-blocking rendering
+
+### A/B Testing Approach (Future)
+For future UI optimization, implement A/B testing using:
+1. **Feature Flags**: Use environment variables or database flags to toggle features
+2. **User Segmentation**: Assign users to test groups based on user ID hash
+3. **Metrics Collection**: Track conversions using Web Vitals + custom events
+4. **Test Areas**: Landing page CTAs, pricing page layouts, campaign card designs
+5. **Tools**: Consider PostHog, Splitbee, or custom implementation with React context
 
 ### Project Structure
 ```
