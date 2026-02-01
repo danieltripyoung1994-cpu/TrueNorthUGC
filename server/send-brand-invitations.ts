@@ -49,11 +49,11 @@ const brandEmails = [
   { brand: 'Edenbodyworks', email: 'curlfriends@edenbodyworks.com' },
 ];
 
-const htmlBody = `<html><body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9fafb;">
+const htmlBody = `<html><body style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9fafb;">
 <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
   <div style="text-align: center; padding: 20px 0;">
-    <h1 style="color: #dc2626; margin-bottom: 10px;">TrueNorthUGC</h1>
-    <p style="color: #666; font-size: 14px;">Canada's Premier Creator Marketplace</p>
+    <img src="https://www.truenorthugc.com/assets/Photoroom_20260131_221621_1769915813253-D1LGJ7D9.png" alt="TrueNorthUGC" style="max-width: 180px; height: auto;" />
+    <p style="color: #666; font-size: 14px; margin-top: 10px;">Canada's Premier Creator Marketplace</p>
   </div>
   
   <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
@@ -75,8 +75,8 @@ const htmlBody = `<html><body style="font-family: Arial, sans-serif; max-width: 
   <ul style="color: #444; line-height: 2; padding-left: 20px; font-size: 15px;">
     <li><strong>Vetted Creators</strong> – Access carefully selected creators who specialize in performance-focused, platform-native content.</li>
     <li><strong>Easy Campaign Management</strong> – Post briefs, manage deliverables, and oversee campaigns from one streamlined dashboard.</li>
-    <li><strong>Authentic, High-Converting Content</strong> – Get relatable content that feels natural to audiences and drives engagement and sales.</li>
-    <li><strong>Secure Payments</strong> – Structured and secure transactions that protect both brands and creators.</li>
+    <li><strong>Authentic, High Converting Content</strong> - Get relatable content that feels natural to audiences and drives engagement and sales.</li>
+    <li><strong>Secure Payments</strong> - Structured and secure transactions that protect both brands and creators.</li>
     <li><strong>Direct Communication</strong> – Collaborate directly with creators for faster turnaround and clearer creative alignment.</li>
   </ul>
   
@@ -85,7 +85,7 @@ const htmlBody = `<html><body style="font-family: Arial, sans-serif; max-width: 
   </p>
   
   <div style="text-align: center; margin: 35px 0;">
-    <a href="https://www.truenorthugc.com" style="background: linear-gradient(135deg, #dc2626 0%, #f97316 100%); color: white; padding: 16px 35px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; font-size: 16px;">Join TrueNorthUGC Today</a>
+    <a href="https://www.truenorthugc.com" style="background: #F04299; color: white; padding: 16px 35px; text-decoration: none; border-radius: 16px; font-weight: bold; display: inline-block; font-size: 16px; box-shadow: rgba(240, 66, 153, 0.2) 0px 20px 25px -5px, rgba(240, 66, 153, 0.2) 0px 8px 10px -6px;">Join TrueNorthUGC Today</a>
   </div>
   
   <p style="color: #444; line-height: 1.7; font-size: 15px;">
@@ -96,7 +96,7 @@ const htmlBody = `<html><body style="font-family: Arial, sans-serif; max-width: 
     Best regards,<br/>
     <strong>Daniel Young</strong><br/>
     Founder, TrueNorthUGC<br/>
-    <a href="https://www.truenorthugc.com" style="color: #dc2626;">www.truenorthugc.com</a>
+    <a href="https://www.truenorthugc.com" style="color: #F04299;">www.truenorthugc.com</a>
   </p>
 </div>
 </body></html>`;
