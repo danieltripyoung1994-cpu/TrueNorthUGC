@@ -1232,13 +1232,13 @@ interface EarningsTabProps {
 
 function getTierInfo(completedCount: number) {
   if (completedCount >= 31) {
-    return { name: "Elite Creator", icon: Crown, rate: 88, min: 31, max: null, nextTier: null };
+    return { name: "Elite Creator", icon: Crown, bonus: 500, min: 31, max: null, nextTier: null, nextBonus: null };
   } else if (completedCount >= 16) {
-    return { name: "Top Performer", icon: Trophy, rate: 85, min: 16, max: 30, nextTier: "Elite Creator" };
+    return { name: "Top Performer", icon: Trophy, bonus: 350, min: 16, max: 30, nextTier: "Elite Creator", nextBonus: 500 };
   } else if (completedCount >= 6) {
-    return { name: "Creator Pro", icon: Zap, rate: 82, min: 6, max: 15, nextTier: "Top Performer" };
+    return { name: "Creator Pro", icon: Zap, bonus: 200, min: 6, max: 15, nextTier: "Top Performer", nextBonus: 350 };
   } else {
-    return { name: "Rising Star", icon: Star, rate: 80, min: 0, max: 5, nextTier: "Creator Pro" };
+    return { name: "Rising Star", icon: Star, bonus: 100, min: 0, max: 5, nextTier: "Creator Pro", nextBonus: 200 };
   }
 }
 
@@ -1400,7 +1400,7 @@ function EarningsTab({ transactions, isLoading, creatorProfile, brandProfile, us
                 {tierInfo.name}
               </div>
               <p className="text-xs text-muted-foreground">
-                {tierInfo.rate}% commission rate
+                ${tierInfo.bonus} bonus earned
               </p>
             </CardContent>
           </Card>
@@ -1444,7 +1444,7 @@ function EarningsTab({ transactions, isLoading, creatorProfile, brandProfile, us
                 </div>
               </div>
               <p className="text-sm text-muted-foreground">
-                Complete {remaining} more campaign{remaining !== 1 ? "s" : ""} to unlock <span className="text-cyan-400 font-semibold">{tierInfo.nextTier}</span> tier and earn a higher commission rate!
+                Complete {remaining} more campaign{remaining !== 1 ? "s" : ""} to unlock <span className="text-cyan-400 font-semibold">{tierInfo.nextTier}</span> tier and earn a <span className="text-green-400 font-semibold">${tierInfo.nextBonus}</span> bonus!
               </p>
             </CardContent>
           </Card>
@@ -1458,7 +1458,7 @@ function EarningsTab({ transactions, isLoading, creatorProfile, brandProfile, us
               </div>
               <div>
                 <h3 className="font-bold text-lg">Congratulations!</h3>
-                <p className="text-sm text-muted-foreground">You've reached the highest tier and earn the maximum 88% commission rate.</p>
+                <p className="text-sm text-muted-foreground">You've reached the highest tier and earned all milestone bonuses totaling <span className="text-green-400 font-semibold">$1,150</span>!</p>
               </div>
             </CardContent>
           </Card>

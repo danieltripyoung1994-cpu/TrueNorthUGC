@@ -56,7 +56,7 @@ export default function Pricing() {
       variant: "default" as const,
       popular: true,
       highlight: true,
-      commission: "You keep 80% of every payment - only 20% platform fee"
+      commission: "Earn milestone bonuses up to $1,150 as you complete campaigns"
     },
     {
       name: "Pro Creator",
@@ -68,11 +68,11 @@ export default function Pricing() {
         "Priority visibility to brands",
         "Exclusive creator community",
         "Personal brand manager",
-        "Tiered bonus rewards program"
+        "Milestone bonus rewards program"
       ],
       buttonText: "Get Started",
       variant: "outline" as const,
-      commission: "You keep 80% of every payment - only 20% platform fee"
+      commission: "Earn milestone bonuses up to $1,150 as you complete campaigns"
     }
   ];
 
@@ -339,8 +339,8 @@ export default function Pricing() {
                 </motion.div>
               </motion.div>
               <div>
-                <h2 className="text-2xl sm:text-3xl font-black tracking-tight">Earn More as You Grow</h2>
-                <p className="text-sm sm:text-base text-muted-foreground">Unlock higher earnings with every campaign you complete</p>
+                <h2 className="text-2xl sm:text-3xl font-black tracking-tight">Milestone Bonus Program</h2>
+                <p className="text-sm sm:text-base text-muted-foreground">Earn bonus rewards on top of your campaign payments</p>
               </div>
             </motion.div>
 
@@ -352,8 +352,7 @@ export default function Pricing() {
               className="mb-8 p-4 sm:p-6 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 max-w-5xl mx-auto"
             >
               <p className="text-sm sm:text-base text-muted-foreground text-center">
-                <span className="text-cyan-400 font-semibold">Bonuses are automatically applied</span> as you complete more campaigns. 
-                No applications needed — just keep creating great content and watch your earnings grow!
+                <span className="text-green-400 font-semibold">Earn bonus rewards on top of your campaign payments!</span> Complete campaigns, hit milestones, and receive cash bonuses up to <span className="text-green-400 font-semibold">$1,150 total</span>.
               </p>
             </motion.div>
             
@@ -368,32 +367,28 @@ export default function Pricing() {
                 {
                   name: "Rising Star",
                   campaigns: "0-5 completed campaigns",
-                  earnings: "80%",
-                  bonus: "Base",
+                  bonus: "$100",
                   icon: Star,
                   description: "Start your journey and build your portfolio"
                 },
                 {
                   name: "Creator Pro",
                   campaigns: "6-15 completed campaigns",
-                  earnings: "82%",
-                  bonus: "+2%",
+                  bonus: "$200",
                   icon: Zap,
                   description: "Proven track record with consistent quality"
                 },
                 {
                   name: "Top Performer",
                   campaigns: "16-30 completed campaigns",
-                  earnings: "85%",
-                  bonus: "+5%",
+                  bonus: "$350",
                   icon: Trophy,
                   description: "Elite creator with exceptional results"
                 },
                 {
                   name: "Elite Creator",
                   campaigns: "31+ completed campaigns",
-                  earnings: "88%",
-                  bonus: "+8%",
+                  bonus: "$500",
                   icon: Crown,
                   description: "Industry leader with maximum rewards"
                 }
@@ -419,19 +414,12 @@ export default function Pricing() {
                     </CardHeader>
                     <CardContent className="flex-1 px-4 sm:px-6 pb-4 sm:pb-6 text-center space-y-3">
                       <div className="flex items-center justify-center gap-2">
-                        <span className="text-3xl sm:text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-cyan-300 tracking-tighter">{tier.earnings}</span>
-                        <span className="text-sm text-muted-foreground font-medium">earnings</span>
+                        <span className="text-3xl sm:text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-300 tracking-tighter">{tier.bonus}</span>
+                        <span className="text-sm text-muted-foreground font-medium">bonus</span>
                       </div>
-                      {tier.bonus !== "Base" && (
-                        <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 font-bold">
-                          {tier.bonus} bonus
-                        </Badge>
-                      )}
-                      {tier.bonus === "Base" && (
-                        <Badge className="bg-secondary/50 text-muted-foreground border-border/50 font-medium">
-                          Starting tier
-                        </Badge>
-                      )}
+                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30 font-bold">
+                        Paid at milestone
+                      </Badge>
                       <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{tier.description}</p>
                     </CardContent>
                   </Card>
