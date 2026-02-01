@@ -152,7 +152,7 @@ export default function Landing() {
             alt="TrueNorthUGC"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-contain scale-[1.35] opacity-30 mix-blend-lighten"
+            className="absolute inset-0 w-full h-full object-contain scale-[1.35] -translate-y-[30%] opacity-30 mix-blend-lighten"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background z-0" />
           
