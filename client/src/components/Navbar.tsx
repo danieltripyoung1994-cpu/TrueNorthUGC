@@ -19,7 +19,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, LogOut, User, LayoutDashboard, Menu, X } from "lucide-react";
 import { Notifications } from "@/components/Notifications";
-import logoPng from "@assets/Photoroom_20260124_081931_1769558537558.png";
+import logoPng from "@/assets/logo.png";
 
 export function Navbar() {
   const [location] = useLocation();
