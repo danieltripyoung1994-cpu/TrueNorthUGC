@@ -2,7 +2,6 @@ import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, ShieldCheck, Clock, Video, Zap, ArrowRight } from "lucide-react";
-import { useLocation } from "wouter";
 import { motion } from "framer-motion";
 
 const container = {
@@ -21,8 +20,6 @@ const item = {
 };
 
 export default function LaunchCampaign() {
-  const [, setLocation] = useLocation();
-
   const packageDetails = {
     name: "Starter",
     price: "$499",
@@ -96,7 +93,7 @@ export default function LaunchCampaign() {
                   </div>
                 </CardContent>
                 <CardFooter className="bg-muted/30 border-t flex flex-col sm:flex-row gap-6 p-8">
-                  <Button size="lg" className="w-full sm:w-auto px-12 text-lg h-14 font-bold shadow-primary/30 shadow-2xl hover:scale-[1.02] transition-transform" onClick={() => setLocation("/api/login")}>
+                  <Button size="lg" className="w-full sm:w-auto px-12 text-lg h-14 font-bold shadow-primary/30 shadow-2xl hover:scale-[1.02] transition-transform" onClick={() => window.location.href = "/api/login"}>
                     Start Campaign <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                   <div className="flex items-center gap-3 text-muted-foreground text-sm font-medium">
