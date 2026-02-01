@@ -48,6 +48,20 @@ Preferred communication style: Simple, everyday language.
 - **Messages**: Creator-brand messaging system with inbox/sent tabs
 - **Notifications**: Real-time notification system for messages and interactions
 
+### Payment Model (February 2026)
+- **Commission-Based Structure**: Creators join free (no subscription fees), brands pay $299 one-time fee to launch campaigns
+- **Transaction Fees**: 20% platform fee on all creator payments (80% goes to creators, 20% to platform)
+- **Tiered Incentive Program**: Creators earn bonus percentages based on completed campaigns:
+  - Rising Star (0-5 campaigns): Base 80% earnings
+  - Creator Pro (6-15 campaigns): 82% earnings (+2% bonus)
+  - Top Performer (16-30 campaigns): 85% earnings (+5% bonus)
+  - Elite Creator (31+ campaigns): 88% earnings (+8% bonus)
+- **Earnings Dashboard**: New "Earnings" tab in Dashboard showing:
+  - Creators: Total earnings, current tier, tier progress, transaction history
+  - Brands: Total spent, platform fees paid, creators paid, payment history
+- **Transaction Tracking**: All payments recorded in `transactions` table with paypalOrderId, amount, platformFee, creatorPayout, and status
+- **Hooks**: `useTransactions` hook fetches user transaction data from `/api/transactions`
+
 ### Key Features (January 2026)
 - **Messaging System**: Full inbox/sent messaging between creators and brands with compose modal
 - **Notifications**: Bell icon with unread count badge, dropdown menu with mark as read functionality
