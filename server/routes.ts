@@ -41,6 +41,23 @@ export async function registerRoutes(
     res.status(204).send();
   });
 
+  // Admin endpoint to permanently delete seed/test creators
+  app.delete("/api/admin/cleanup-seed-creators", async (req, res) => {
+    try {
+      const seedUserIds = ['seed-user-1', 'seed-user-2', 'seed-user-3'];
+      let deletedCount = 0;
+      
+      for (const userId of seedUserIds) {
+        const deleted = await storage.deleteCreatorByUserId(userId);
+        if (deleted) deletedCount++;
+      }
+      
+      res.json({ success: true, message: `Deleted ${deletedCount} seed creators` });
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  });
+
   // Creator Routes
 
   // List creators
