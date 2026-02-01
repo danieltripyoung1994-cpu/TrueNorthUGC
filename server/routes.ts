@@ -768,6 +768,47 @@ export async function registerRoutes(
     }
   });
 
+  // Platform stats endpoint (public)
+  app.get("/api/stats", async (req, res) => {
+    try {
+      const creators = await storage.getCreators();
+      const campaigns = await storage.getCampaigns();
+      const transactions = await storage.getAllTransactions();
+      
+      const completedCampaigns = campaigns.filter(c => c.status === "completed").length;
+      const totalPaidOut = transactions
+        .filter(t => t.status === "completed")
+        .reduce((sum, t) => sum + t.amount, 0);
+      
+      res.json({
+        totalCreators: creators.length,
+        totalCampaigns: campaigns.length,
+        completedCampaigns,
+        totalPaidOut: Math.round(totalPaidOut),
+        activeBrands: new Set(campaigns.map(c => c.brandId)).size
+      });
+    } catch (error) {
+      console.error("Failed to fetch platform stats:", error);
+      res.json({ totalCreators: 0, totalCampaigns: 0, completedCampaigns: 0, totalPaidOut: 0, activeBrands: 0 });
+    }
+  });
+
+  // Newsletter signup endpoint
+  app.post("/api/newsletter/subscribe", async (req, res) => {
+    try {
+      const { email, type } = req.body;
+      if (!email || !email.includes('@')) {
+        return res.status(400).json({ message: "Valid email required" });
+      }
+      // In production, you'd store this in the database or send to an email service
+      console.log(`[Newsletter] New subscription: ${email} (${type || 'general'})`);
+      res.json({ success: true, message: "Successfully subscribed!" });
+    } catch (error) {
+      console.error("Newsletter subscription error:", error);
+      res.status(500).json({ message: "Failed to subscribe" });
+    }
+  });
+
   // Auto-cleanup seed creators on startup
   (async () => {
     try {
