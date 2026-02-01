@@ -366,28 +366,28 @@ export default function Pricing() {
               {[
                 {
                   name: "Rising Star",
-                  campaigns: "0-5 completed campaigns",
+                  campaigns: "3-9 completed campaigns",
                   bonus: "$100",
                   icon: Star,
                   description: "Start your journey and build your portfolio"
                 },
                 {
                   name: "Creator Pro",
-                  campaigns: "6-15 completed campaigns",
+                  campaigns: "10-19 completed campaigns",
                   bonus: "$200",
                   icon: Zap,
                   description: "Proven track record with consistent quality"
                 },
                 {
                   name: "Top Performer",
-                  campaigns: "16-30 completed campaigns",
+                  campaigns: "20-34 completed campaigns",
                   bonus: "$350",
                   icon: Trophy,
                   description: "Elite creator with exceptional results"
                 },
                 {
                   name: "Elite Creator",
-                  campaigns: "31+ completed campaigns",
+                  campaigns: "35+ completed campaigns",
                   bonus: "$500",
                   icon: Crown,
                   description: "Industry leader with maximum rewards"
