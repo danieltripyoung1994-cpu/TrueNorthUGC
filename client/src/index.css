@@ -284,6 +284,56 @@
   transform: scale(1.02);
 }
 
+/* Enhanced micro-interactions for cards */
+.hover-scale-card {
+  @apply transition-all duration-200 ease-out;
+}
+.hover-scale-card:hover {
+  transform: scale(1.03);
+}
+
+/* Subtle glow effect on hover for interactive elements */
+.hover-glow-subtle {
+  @apply transition-all duration-200 ease-out;
+}
+.hover-glow-subtle:hover {
+  box-shadow: 0 0 20px rgba(255, 0, 128, 0.25), 0 0 40px rgba(121, 40, 202, 0.15);
+}
+
+/* Button transition enhancement */
+.btn-transition {
+  @apply transition-all duration-200 ease-out;
+}
+
+/* Combined card hover with scale and glow */
+.card-hover-effect {
+  @apply transition-all duration-200 ease-out;
+}
+.card-hover-effect:hover {
+  transform: scale(1.02) translateY(-4px);
+  box-shadow: 0 20px 40px -15px rgba(255, 0, 128, 0.2), 0 0 30px rgba(121, 40, 202, 0.1);
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .hover-scale,
+  .hover-scale-card,
+  .hover-glow-subtle,
+  .hover-lift,
+  .hover-glow,
+  .card-hover-effect,
+  .btn-transition {
+    transition: none !important;
+    animation: none !important;
+  }
+  .hover-scale:hover,
+  .hover-scale-card:hover,
+  .card-hover-effect:hover,
+  .hover-lift:hover {
+    transform: none !important;
+  }
+}
+
 .glass-card {
   @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl;
 }
