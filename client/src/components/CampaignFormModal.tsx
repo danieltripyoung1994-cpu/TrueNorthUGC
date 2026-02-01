@@ -10,10 +10,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useCreateCampaign, useUpdateCampaign } from "@/hooks/use-campaigns";
 import { type Campaign } from "@shared/schema";
-import { Loader2, Plus, X, ChevronDown, ChevronUp, Video, Instagram, Youtube, Hash, AtSign } from "lucide-react";
+import { Loader2, Plus, X, ChevronDown, ChevronUp, Video, Instagram, Youtube, Hash, AtSign, Sparkles, Wand2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion, AnimatePresence } from "framer-motion";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 const NICHES = ["Fitness", "Beauty", "Tech", "Travel", "Food", "Fashion", "Lifestyle", "Gaming", "Parenting", "Wellness", "Home", "Pets"];
 const PLATFORMS = [
@@ -106,6 +109,7 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
   const createCampaign = useCreateCampaign();
   const updateCampaign = useUpdateCampaign();
   const isEditing = !!campaign;
+  const { toast } = useToast();
   
   const [niches, setNiches] = useState<string[]>([]);
   const [platforms, setPlatforms] = useState<string[]>([]);
@@ -116,6 +120,55 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
   const [newHashtag, setNewHashtag] = useState("");
   const [newMention, setNewMention] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showAiGenerator, setShowAiGenerator] = useState(false);
+  const [aiProductName, setAiProductName] = useState("");
+  const [aiProductDesc, setAiProductDesc] = useState("");
+  const [aiGoal, setAiGoal] = useState("");
+  const [aiAudience, setAiAudience] = useState("");
+
+  const generateBriefMutation = useMutation({
+    mutationFn: async (data: { productName: string; productDescription: string; campaignGoal: string; targetAudience: string; budget: string; platforms: string[] }) => {
+      return apiRequest("/api/ai/generate-brief", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+    },
+    onSuccess: (response: any) => {
+      const brief = response.brief;
+      if (brief) {
+        form.setValue("title", brief.title || "");
+        form.setValue("description", brief.description || "");
+        form.setValue("requirements", brief.requirements || "");
+        form.setValue("contentStyle", brief.contentStyle || "");
+        if (brief.deliverables?.length) {
+          setDeliverables(brief.deliverables);
+        }
+        if (brief.hashtags?.length) {
+          setHashtags(brief.hashtags);
+        }
+        setShowAiGenerator(false);
+        toast({ title: "Brief generated!", description: "AI has created your campaign brief. Feel free to customize it." });
+      }
+    },
+    onError: () => {
+      toast({ title: "Generation failed", description: "Please try again or fill in the form manually.", variant: "destructive" });
+    }
+  });
+
+  const handleGenerateBrief = () => {
+    if (!aiProductName || !aiGoal) {
+      toast({ title: "Missing info", description: "Please enter product name and campaign goal.", variant: "destructive" });
+      return;
+    }
+    generateBriefMutation.mutate({
+      productName: aiProductName,
+      productDescription: aiProductDesc,
+      campaignGoal: aiGoal,
+      targetAudience: aiAudience,
+      budget: form.getValues("budget") || "",
+      platforms,
+    });
+  };
 
   const form = useForm<CampaignFormValues>({
     resolver: zodResolver(campaignFormSchema),
@@ -292,6 +345,108 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
             {isEditing ? "Update your campaign details" : "Customize your campaign to find the perfect creators"}
           </DialogDescription>
         </DialogHeader>
+
+        {!isEditing && (
+          <div className="mb-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setShowAiGenerator(!showAiGenerator)}
+              className="w-full border-dashed border-pink-500/50 hover:border-pink-500 text-pink-500 hover:bg-pink-500/10"
+              data-testid="button-ai-generator-toggle"
+            >
+              <Wand2 className="mr-2 h-4 w-4" />
+              {showAiGenerator ? "Hide AI Brief Generator" : "Generate Brief with AI"}
+              <Sparkles className="ml-2 h-4 w-4" />
+            </Button>
+            
+            <AnimatePresence>
+              {showAiGenerator && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="mt-4 p-4 rounded-xl bg-gradient-to-br from-pink-500/10 to-purple-500/10 border border-pink-500/20 space-y-4">
+                    <div className="flex items-center gap-2 text-sm font-medium text-pink-400">
+                      <Sparkles className="h-4 w-4" />
+                      AI Campaign Brief Generator
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Tell us about your product and goals, and AI will create a professional campaign brief for you.
+                    </p>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-medium">Product/Brand Name *</label>
+                        <Input
+                          placeholder="e.g. GlowSkin Serum"
+                          value={aiProductName}
+                          onChange={(e) => setAiProductName(e.target.value)}
+                          className="h-9"
+                          data-testid="input-ai-product-name"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-medium">Campaign Goal *</label>
+                        <Input
+                          placeholder="e.g. Drive product awareness"
+                          value={aiGoal}
+                          onChange={(e) => setAiGoal(e.target.value)}
+                          className="h-9"
+                          data-testid="input-ai-goal"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium">Product Description</label>
+                      <Textarea
+                        placeholder="Brief description of your product..."
+                        value={aiProductDesc}
+                        onChange={(e) => setAiProductDesc(e.target.value)}
+                        className="resize-none h-16"
+                        data-testid="textarea-ai-product-desc"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium">Target Audience</label>
+                      <Input
+                        placeholder="e.g. Women 25-40 interested in skincare"
+                        value={aiAudience}
+                        onChange={(e) => setAiAudience(e.target.value)}
+                        className="h-9"
+                        data-testid="input-ai-audience"
+                      />
+                    </div>
+                    
+                    <Button
+                      type="button"
+                      onClick={handleGenerateBrief}
+                      disabled={generateBriefMutation.isPending}
+                      className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
+                      data-testid="button-generate-brief"
+                    >
+                      {generateBriefMutation.isPending ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="mr-2 h-4 w-4" />
+                          Generate Campaign Brief
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-4">

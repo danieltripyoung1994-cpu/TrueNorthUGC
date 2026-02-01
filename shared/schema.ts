@@ -6,6 +6,9 @@ import { users } from "./models/auth";
 // Re-export auth models so they are available
 export * from "./models/auth";
 
+// Re-export chat models for AI integration
+export * from "./models/chat";
+
 export const offers = pgTable("offers", {
   id: serial("id").primaryKey(),
   target: text("target").notNull(), // "creator" or "brand"
