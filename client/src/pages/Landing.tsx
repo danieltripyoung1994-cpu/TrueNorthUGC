@@ -5,10 +5,15 @@ import { usePageMeta } from "@/hooks/use-page-meta";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Search, Sparkles, Star, Zap, Users, Shield, Globe, ChevronDown, Quote, Briefcase, DollarSign, Calendar, MapPin, Trophy, Crown, Gift } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ArrowRight, Search, Sparkles, Star, Zap, Users, Shield, Globe, ChevronDown, Quote, Briefcase, DollarSign, Calendar, MapPin, Trophy, Crown, Gift, TrendingUp, Mail, CheckCircle, Share2 } from "lucide-react";
 import newLogoPng from "@assets/Photoroom_20260131_221621_1769915813253.png";
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState } from "react";
 import { useCampaigns } from "@/hooks/use-campaigns";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 
 const GlowOrb = ({ 
   className, 
@@ -102,6 +107,45 @@ export default function Landing() {
 
   const { data: campaigns } = useCampaigns("active");
   const featuredCampaigns = campaigns?.slice(0, 3) || [];
+
+  // Platform stats
+  const { data: stats } = useQuery<{
+    totalCreators: number;
+    totalCampaigns: number;
+    completedCampaigns: number;
+    totalPaidOut: number;
+    activeBrands: number;
+  }>({
+    queryKey: ["/api/stats"],
+    staleTime: 60000
+  });
+
+  // Newsletter signup
+  const { toast } = useToast();
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+  const newsletterMutation = useMutation({
+    mutationFn: async (email: string) => {
+      return apiRequest("/api/newsletter/subscribe", {
+        method: "POST",
+        body: JSON.stringify({ email, type: "general" })
+      });
+    },
+    onSuccess: () => {
+      setSubscribed(true);
+      toast({ title: "Welcome to the community!", description: "You're now subscribed to TrueNorthUGC updates." });
+    },
+    onError: () => {
+      toast({ title: "Subscription failed", description: "Please try again.", variant: "destructive" });
+    }
+  });
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newsletterEmail && newsletterEmail.includes('@')) {
+      newsletterMutation.mutate(newsletterEmail);
+    }
+  };
 
   const testimonials = [
     {
@@ -299,6 +343,63 @@ export default function Landing() {
             </motion.div>
           </div>
         </motion.div>
+      </section>
+
+      {/* Live Stats Section */}
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-background to-secondary/20 relative overflow-hidden" data-testid="section-live-stats">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="text-center mb-10"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 text-green-400 text-sm font-bold mb-4">
+              <TrendingUp className="h-4 w-4" />
+              Growing Community
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black">Trusted by Creators & Brands Across Canada</h2>
+          </motion.div>
+          
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto"
+          >
+            {[
+              { value: stats?.totalCreators || 50, label: "Active Creators", suffix: "+", icon: <Users className="h-5 w-5 sm:h-6 sm:w-6 text-pink-500" /> },
+              { value: stats?.totalCampaigns || 25, label: "Campaigns Launched", suffix: "+", icon: <Briefcase className="h-5 w-5 sm:h-6 sm:w-6 text-purple-500" /> },
+              { value: stats?.totalPaidOut || 10000, label: "Paid to Creators", prefix: "$", suffix: "+", icon: <DollarSign className="h-5 w-5 sm:h-6 sm:w-6 text-green-500" /> },
+              { value: stats?.activeBrands || 15, label: "Partner Brands", suffix: "+", icon: <Star className="h-5 w-5 sm:h-6 sm:w-6 text-cyan-500" /> }
+            ].map((stat, index) => (
+              <motion.div
+                key={index}
+                variants={itemVariants}
+                className="bg-card/50 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-white/10 hover:border-pink-500/30 transition-colors text-center"
+              >
+                <div className="flex justify-center mb-3">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/20 flex items-center justify-center">
+                    {stat.icon}
+                  </div>
+                </div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">
+                  <AnimatedCounter 
+                    value={stat.value} 
+                    suffix={stat.suffix || ""} 
+                    prefix={stat.prefix || ""}
+                    duration={1.5}
+                  />
+                </div>
+                <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-muted-foreground font-medium">
+                  {stat.label}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
       {/* Niches Section */}
@@ -825,6 +926,96 @@ export default function Landing() {
               </motion.div>
             </>
           )}
+        </div>
+      </section>
+
+      {/* Newsletter Signup Section */}
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-secondary/20 to-background relative overflow-hidden" data-testid="section-newsletter">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="max-w-2xl mx-auto text-center"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pink-500/10 text-pink-400 text-sm font-bold mb-6">
+              <Mail className="h-4 w-4" />
+              Stay Updated
+            </div>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4">
+              Join the TrueNorthUGC Community
+            </h2>
+            <p className="text-muted-foreground mb-8">
+              Get exclusive campaign opportunities, creator tips, and platform updates delivered to your inbox.
+            </p>
+            
+            {subscribed ? (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex items-center justify-center gap-2 text-green-400 font-medium"
+              >
+                <CheckCircle className="h-5 w-5" />
+                You're subscribed! Check your inbox for updates.
+              </motion.div>
+            ) : (
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  className="flex-1 rounded-xl bg-card/50 border-white/10 focus:border-pink-500/50"
+                  data-testid="input-newsletter-email"
+                  required
+                />
+                <Button 
+                  type="submit" 
+                  className="rounded-xl shadow-lg shadow-pink-500/20"
+                  disabled={newsletterMutation.isPending}
+                  data-testid="button-subscribe"
+                >
+                  {newsletterMutation.isPending ? "Subscribing..." : "Subscribe"}
+                </Button>
+              </form>
+            )}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Referral Program Section */}
+      <section className="py-16 sm:py-20 relative overflow-hidden" data-testid="section-referral">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-cyan-500/10 rounded-3xl border border-white/10 p-8 sm:p-12 max-w-4xl mx-auto"
+          >
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="flex-shrink-0">
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex items-center justify-center">
+                  <Share2 className="h-10 w-10 text-purple-400" />
+                </div>
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-2xl sm:text-3xl font-black mb-2">
+                  Refer & Earn <span className="text-purple-400">$25</span>
+                </h3>
+                <p className="text-muted-foreground mb-4">
+                  Know a creator or brand that would love TrueNorthUGC? Refer them and earn $25 for every successful signup that completes their first campaign!
+                </p>
+                <a href="/api/login">
+                  <Button variant="outline" className="rounded-xl border-purple-500/30 hover:border-purple-500/60" data-testid="button-start-referring">
+                    Start Referring
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </a>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
