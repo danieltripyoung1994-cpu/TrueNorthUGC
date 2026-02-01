@@ -58,28 +58,30 @@ const htmlBody = `<html><body style="font-family: Arial, sans-serif; max-width: 
   
   <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
   
-  <h2 style="color: #333; margin-bottom: 15px;">Partner With Authentic Canadian Creators</h2>
+  <p style="color: #444; line-height: 1.7; font-size: 15px;">Hello,</p>
+  
+  <p style="color: #444; line-height: 1.7; font-size: 15px;">I hope you're doing well.</p>
   
   <p style="color: #444; line-height: 1.7; font-size: 15px;">
-    We're reaching out because we believe your brand would be a perfect fit for <strong>TrueNorthUGC</strong> — Canada's premier marketplace connecting brands with talented UGC (User-Generated Content) creators.
+    I'm reaching out to introduce <strong>TrueNorthUGC</strong>, Canada's premier creator marketplace built to help brands connect directly with high-performing UGC creators who produce authentic, results-driven content.
   </p>
   
   <p style="color: #444; line-height: 1.7; font-size: 15px;">
-    Our platform makes it easy to find, collaborate with, and manage relationships with authentic Canadian content creators who can help bring your brand's story to life.
+    Our platform is designed for modern brands that want to launch campaigns faster, reduce agency costs, and work directly with talented creators who understand how to make content that converts on TikTok, Instagram, and other social platforms.
   </p>
   
-  <h3 style="color: #333; margin-top: 25px; margin-bottom: 15px;">Why Partner With TrueNorthUGC?</h3>
+  <h3 style="color: #333; margin-top: 25px; margin-bottom: 15px;">Here's why brands are choosing TrueNorthUGC:</h3>
   
   <ul style="color: #444; line-height: 2; padding-left: 20px; font-size: 15px;">
-    <li><strong>Vetted Canadian Creators</strong> — Access a curated network of talented UGC creators across Canada</li>
-    <li><strong>Easy Campaign Management</strong> — Post campaigns, review applications, and manage collaborations in one place</li>
-    <li><strong>Authentic Content</strong> — Get genuine, relatable content that resonates with your audience</li>
-    <li><strong>Secure Payments</strong> — Built-in PayPal integration for seamless, secure transactions</li>
-    <li><strong>Direct Communication</strong> — Message creators directly through our platform</li>
+    <li><strong>Vetted Creators</strong> – Access carefully selected creators who specialize in performance-focused, platform-native content.</li>
+    <li><strong>Easy Campaign Management</strong> – Post briefs, manage deliverables, and oversee campaigns from one streamlined dashboard.</li>
+    <li><strong>Authentic, High-Converting Content</strong> – Get relatable content that feels natural to audiences and drives engagement and sales.</li>
+    <li><strong>Secure Payments</strong> – Structured and secure transactions that protect both brands and creators.</li>
+    <li><strong>Direct Communication</strong> – Collaborate directly with creators for faster turnaround and clearer creative alignment.</li>
   </ul>
   
   <p style="color: #444; line-height: 1.7; font-size: 15px;">
-    Join brands already leveraging the power of authentic UGC content to connect with Canadian consumers.
+    Whether you're launching a new product, scaling paid social performance, or building stronger brand engagement, TrueNorthUGC gives you direct access to creator talent and full control over your campaigns.
   </p>
   
   <div style="text-align: center; margin: 35px 0;">
@@ -87,21 +89,14 @@ const htmlBody = `<html><body style="font-family: Arial, sans-serif; max-width: 
   </div>
   
   <p style="color: #444; line-height: 1.7; font-size: 15px;">
-    We'd love to have you on the platform! If you have any questions, simply reply to this email and we'll be happy to help.
+    If you'd like to discuss a potential campaign or see how the platform can support your marketing goals, simply reply to this email. I'd be happy to connect.
   </p>
   
   <p style="color: #444; margin-top: 25px;">
-    Looking forward to partnering with you,<br/>
-    <strong>The TrueNorthUGC Team</strong>
-  </p>
-</div>
-
-<div style="text-align: center; padding: 20px;">
-  <p style="color: #999; font-size: 12px;">
-    Questions? Reply to this email or contact us at <a href="mailto:TrueNorthUGCcanada@gmail.com" style="color: #dc2626;">TrueNorthUGCcanada@gmail.com</a>
-  </p>
-  <p style="color: #999; font-size: 12px;">
-    <a href="https://www.truenorthugc.com" style="color: #666;">www.truenorthugc.com</a>
+    Best regards,<br/>
+    <strong>Daniel Young</strong><br/>
+    Founder, TrueNorthUGC<br/>
+    <a href="https://www.truenorthugc.com" style="color: #dc2626;">www.truenorthugc.com</a>
   </p>
 </div>
 </body></html>`;
