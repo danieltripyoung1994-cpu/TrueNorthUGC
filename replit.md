@@ -77,9 +77,9 @@ Preferred communication style: Simple, everyday language.
 - **Contact Page**: Contact form at /contact with phone (1-226-220-1522) and email (TrueNorthUGCcanada@gmail.com). Form submissions are emailed to platform owner.
 
 ### Performance Optimizations (February 2026)
-- **Web Vitals Monitoring**: client/src/lib/performance.ts tracks CLS, LCP, TTFB, INP metrics
-- **Optimized Font Loading**: Reduced from 20+ Google Font families to only Inter and Plus Jakarta Sans with preload
-- **Image Optimization**: All images have explicit width/height to prevent CLS, fetchPriority="high" for above-fold, loading="lazy" for below-fold
+- **Web Vitals Monitoring**: client/src/lib/performance.ts tracks CLS, LCP, TTFB, INP, and FCP metrics with analytics beacon reporting to /api/analytics/vitals
+- **Optimized Font Loading**: Async font loading via media="print" onload pattern with preconnect/dns-prefetch for Google Fonts (Inter and Plus Jakarta Sans)
+- **Image Optimization**: All images have explicit width/height to prevent CLS, loading="eager" for above-fold, loading="lazy" for below-fold. OptimizedImage component at client/src/components/ui/optimized-image.tsx provides lazy loading with intersection observer and blur placeholders
 - **Code Splitting**: React.lazy for all page components with Suspense fallback
 - **Skeleton Loaders**: Contextual loading states showing headers/filters while content loads (client/src/components/ui/skeleton-loaders.tsx)
 - **React Query Caching**: Global 5-minute staleTime, 20-minute gcTime. Campaigns use 1-minute staleTime for freshness.
@@ -87,14 +87,18 @@ Preferred communication style: Simple, everyday language.
 - **Animation Optimization**: Reduced transitions (0.4s), prefers-reduced-motion support, conditional glow effects
 - **Route Prefetching**: Nav links prefetch data on hover for instant navigation
 - **Async Script Loading**: Vite module scripts are async by default, non-blocking rendering
+- **Responsive Utilities**: Added touch-target (48px min), safe-area-inset, mobile-only/desktop-only, and content-visibility-auto classes
 
-### A/B Testing Approach (Future)
-For future UI optimization, implement A/B testing using:
-1. **Feature Flags**: Use environment variables or database flags to toggle features
-2. **User Segmentation**: Assign users to test groups based on user ID hash
-3. **Metrics Collection**: Track conversions using Web Vitals + custom events
-4. **Test Areas**: Landing page CTAs, pricing page layouts, campaign card designs
-5. **Tools**: Consider PostHog, Splitbee, or custom implementation with React context
+### A/B Testing & User Feedback (February 2026)
+- **A/B Testing Framework**: client/src/lib/ab-testing.ts provides experiment management with localStorage persistence
+  - defineExperiment(): Create experiments with variants and weights
+  - getVariant(): Get assigned variant for user (consistent across sessions)
+  - trackEvent(): Track conversion events per experiment
+  - Analytics beacon to /api/analytics/experiment
+- **Feedback Widget**: client/src/components/FeedbackWidget.tsx - floating feedback button in bottom-right corner
+  - Positive/negative rating with optional text feedback
+  - Submits to /api/feedback endpoint
+  - Success confirmation with auto-close
 
 ### Project Structure
 ```
