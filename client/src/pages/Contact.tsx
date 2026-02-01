@@ -12,8 +12,10 @@ import { motion, useReducedMotion } from "framer-motion";
 
 export default function Contact() {
   usePageMeta({ 
-    title: "Contact Us", 
-    description: "Get in touch with TrueNorthUGC. We're here to help creators and brands connect." 
+    title: "Contact Us - Get in Touch", 
+    description: "Contact TrueNorthUGC for support, partnerships, or inquiries. Canada's leading UGC creator marketplace is here to help brands and content creators connect and succeed.",
+    keywords: "contact TrueNorthUGC, UGC support Canada, creator marketplace help, brand partnerships contact, Canadian UGC platform support",
+    canonicalPath: "/contact"
   });
   const { toast } = useToast();
   const prefersReducedMotion = useReducedMotion();

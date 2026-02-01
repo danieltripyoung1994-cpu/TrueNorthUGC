@@ -16,8 +16,10 @@ const EXPERIENCE_LEVELS = ["All Levels", "Beginner", "Intermediate", "Pro", "Eli
 
 export default function Directory() {
   usePageMeta({ 
-    title: "Browse Creators", 
-    description: "Discover talented Canadian UGC creators. Filter by niche, location, and experience level to find the perfect match for your brand." 
+    title: "Browse Canadian UGC Creators", 
+    description: "Discover and hire talented Canadian UGC creators for your brand campaigns. Filter by niche, location, and experience level. Find creators in Toronto, Vancouver, Montreal and across Canada.",
+    keywords: "Canadian UGC creators, hire content creators Canada, Toronto creators, Vancouver UGC, Montreal influencers, fitness creators Canada, beauty content creators, tech reviewers Canada",
+    canonicalPath: "/creators"
   });
   const [search, setSearch] = useState("");
   const [niche, setNiche] = useState<string>("All");

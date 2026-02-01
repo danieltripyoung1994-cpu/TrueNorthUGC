@@ -1,0 +1,21 @@
+# robots.txt for TrueNorthUGC
+# Canada's Premier UGC Creator Marketplace
+
+User-agent: *
+Allow: /
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.truenorthugc.com/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
