@@ -185,7 +185,6 @@ export default function Landing() {
               alt="TrueNorthUGC"
               loading="eager"
               decoding="async"
-              fetchpriority="high"
               width={800}
               height={800}
               className="absolute inset-0 w-full h-full object-contain scale-[1.35] -translate-y-[11%] opacity-30 mix-blend-lighten"

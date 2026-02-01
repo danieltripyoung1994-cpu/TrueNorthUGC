@@ -4,6 +4,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { FeedbackWidget } from "@/components/FeedbackWidget";
 import logoImage from "@assets/Photoroom_20260131_221621_1769915813253.png";
 
 const Landing = lazy(() => import("@/pages/Landing"));
@@ -28,7 +29,6 @@ function PageLoader() {
             width={144}
             height={144}
             loading="eager"
-            fetchpriority="high"
             className="w-28 h-28 sm:w-36 sm:h-36 object-contain animate-ios-breathe mix-blend-lighten drop-shadow-[0_0_30px_rgba(255,0,128,0.4)]" 
           />
         </div>
@@ -72,6 +72,7 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Router />
+        <FeedbackWidget />
       </TooltipProvider>
     </QueryClientProvider>
   );
