@@ -809,6 +809,65 @@ export async function registerRoutes(
     }
   });
 
+  // AI Campaign Brief Generator endpoint
+  app.post("/api/ai/generate-brief", isAuthenticated, async (req, res) => {
+    try {
+      const { productName, productDescription, targetAudience, campaignGoal, budget, platforms } = req.body;
+      
+      if (!productName || !campaignGoal) {
+        return res.status(400).json({ message: "Product name and campaign goal are required" });
+      }
+
+      const OpenAI = (await import("openai")).default;
+      const openai = new OpenAI({
+        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+      });
+
+      const platformsText = platforms?.length ? platforms.join(", ") : "TikTok, Instagram";
+      
+      const prompt = `You are an expert UGC (User Generated Content) marketing strategist. Generate a compelling campaign brief for a brand looking to work with content creators.
+
+Product/Brand: ${productName}
+${productDescription ? `Product Description: ${productDescription}` : ""}
+${targetAudience ? `Target Audience: ${targetAudience}` : ""}
+Campaign Goal: ${campaignGoal}
+${budget ? `Budget: ${budget}` : ""}
+Target Platforms: ${platformsText}
+
+Generate a professional campaign brief in JSON format with the following fields:
+{
+  "title": "A catchy, attention-grabbing campaign title",
+  "description": "A detailed 2-3 paragraph description explaining the campaign, what the brand is looking for, and the opportunity for creators",
+  "requirements": "Bullet points of creator requirements (experience, style, deliverables)",
+  "deliverables": ["Array of specific content deliverables expected"],
+  "hashtags": ["Array of relevant hashtags to use"],
+  "contentStyle": "Recommended content style (e.g., 'authentic', 'professional', 'casual')",
+  "keyMessages": ["Array of 3-4 key messages creators should convey"]
+}
+
+Make it engaging and attractive to Canadian UGC creators. Be specific and actionable.`;
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-5.2",
+        messages: [{ role: "user", content: prompt }],
+        response_format: { type: "json_object" },
+        max_completion_tokens: 1500,
+      });
+
+      const briefContent = response.choices[0]?.message?.content;
+      if (!briefContent) {
+        throw new Error("No response from AI");
+      }
+
+      const brief = JSON.parse(briefContent);
+      res.json({ success: true, brief });
+    } catch (error: any) {
+      console.error("AI brief generation error:", error);
+      res.status(500).json({ message: "Failed to generate campaign brief", error: error.message });
+    }
+  });
+
   // Auto-cleanup seed creators on startup
   (async () => {
     try {
