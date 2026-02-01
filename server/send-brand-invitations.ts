@@ -110,7 +110,7 @@ async function main() {
     
     const results = await sendBulkEmails(
       recipientEmails,
-      'Invitation to Partner with TrueNorthUGC — Canada\'s Premier Creator Marketplace',
+      'Invitation to Partner with TrueNorthUGC Canada\'s Premier Creator Marketplace',
       htmlBody
     );
     
