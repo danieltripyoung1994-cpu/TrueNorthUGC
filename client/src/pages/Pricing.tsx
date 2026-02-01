@@ -2,7 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Sparkles, Star, Crown, Zap, ArrowRight } from "lucide-react";
+import { Check, Sparkles, Star, Crown, Zap, ArrowRight, Trophy } from "lucide-react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
@@ -312,6 +312,128 @@ export default function Pricing() {
                         <ArrowRight className="ml-2 h-6 w-6" />
                       </Button>
                     </CardFooter>
+                  </Card>
+                </motion.div>
+              ))}
+            </motion.div>
+          </section>
+
+          {/* Creator Rewards Program Section */}
+          <section data-testid="section-creator-rewards">
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12"
+            >
+              <motion.div 
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cyan-500/20 to-cyan-400/10 flex items-center justify-center flex-shrink-0 shadow-lg shadow-cyan-500/10"
+              >
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                >
+                  <Sparkles className="h-6 w-6 sm:h-7 sm:w-7 text-cyan-400" />
+                </motion.div>
+              </motion.div>
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-black tracking-tight">Earn More as You Grow</h2>
+                <p className="text-sm sm:text-base text-muted-foreground">Unlock higher earnings with every campaign you complete</p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mb-8 p-4 sm:p-6 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 max-w-5xl mx-auto"
+            >
+              <p className="text-sm sm:text-base text-muted-foreground text-center">
+                <span className="text-cyan-400 font-semibold">Bonuses are automatically applied</span> as you complete more campaigns. 
+                No applications needed — just keep creating great content and watch your earnings grow!
+              </p>
+            </motion.div>
+            
+            <motion.div 
+              variants={container}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto"
+            >
+              {[
+                {
+                  name: "Rising Star",
+                  campaigns: "0-5 completed campaigns",
+                  earnings: "80%",
+                  bonus: "Base",
+                  icon: Star,
+                  description: "Start your journey and build your portfolio"
+                },
+                {
+                  name: "Creator Pro",
+                  campaigns: "6-15 completed campaigns",
+                  earnings: "82%",
+                  bonus: "+2%",
+                  icon: Zap,
+                  description: "Proven track record with consistent quality"
+                },
+                {
+                  name: "Top Performer",
+                  campaigns: "16-30 completed campaigns",
+                  earnings: "85%",
+                  bonus: "+5%",
+                  icon: Trophy,
+                  description: "Elite creator with exceptional results"
+                },
+                {
+                  name: "Elite Creator",
+                  campaigns: "31+ completed campaigns",
+                  earnings: "88%",
+                  bonus: "+8%",
+                  icon: Crown,
+                  description: "Industry leader with maximum rewards"
+                }
+              ].map((tier, index) => (
+                <motion.div 
+                  key={tier.name} 
+                  variants={item}
+                  whileHover={{ y: -4, scale: 1.02 }}
+                  transition={{ duration: 0.3 }}
+                  data-testid={`incentive-tier-${tier.name.toLowerCase().replace(' ', '-')}`}
+                >
+                  <Card className="flex flex-col h-full relative overflow-hidden transition-all duration-500 rounded-2xl group bg-card/50 backdrop-blur-sm border-cyan-500/20 hover:border-cyan-400/40 hover:shadow-lg hover:shadow-cyan-500/10">
+                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-4 text-center">
+                      <motion.div 
+                        className="mx-auto mb-3 h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-cyan-500/10 flex items-center justify-center"
+                        whileHover={{ scale: 1.1, rotate: 10 }}
+                      >
+                        <tier.icon className="h-6 w-6 sm:h-7 sm:w-7 text-cyan-400" />
+                      </motion.div>
+                      <CardTitle className="text-lg sm:text-xl font-black">{tier.name}</CardTitle>
+                      <CardDescription className="text-xs sm:text-sm">{tier.campaigns}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-1 px-4 sm:px-6 pb-4 sm:pb-6 text-center space-y-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="text-3xl sm:text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-cyan-300 tracking-tighter">{tier.earnings}</span>
+                        <span className="text-sm text-muted-foreground font-medium">earnings</span>
+                      </div>
+                      {tier.bonus !== "Base" && (
+                        <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 font-bold">
+                          {tier.bonus} bonus
+                        </Badge>
+                      )}
+                      {tier.bonus === "Base" && (
+                        <Badge className="bg-secondary/50 text-muted-foreground border-border/50 font-medium">
+                          Starting tier
+                        </Badge>
+                      )}
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{tier.description}</p>
+                    </CardContent>
                   </Card>
                 </motion.div>
               ))}
