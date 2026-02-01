@@ -491,26 +491,6 @@ export default function Pricing() {
                         {tier.price !== "Custom" && <span className="text-muted-foreground font-semibold">/month</span>}
                       </div>
 
-                      {tier.name === "Campaign Starter" && brandOffers.length > 0 && (
-                        <div className="p-6 rounded-3xl bg-pink-500/5 border border-pink-500/20 relative overflow-hidden group backdrop-blur-sm">
-                          <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                            <Star size={80} />
-                          </div>
-                          <p className="text-[10px] font-black text-pink-500 uppercase tracking-[0.2em] mb-2">Exclusive Partner Program</p>
-                          {brandOffers.map(offer => (
-                            <div key={offer.id}>
-                              <p className="font-bold text-lg leading-tight mb-1">{offer.title}</p>
-                              <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{offer.description}</p>
-                              <div className="flex items-center justify-between gap-4">
-                                <span className="text-3xl font-black text-pink-500">{offer.discount}</span>
-                                <div className="bg-background/50 backdrop-blur-sm px-4 py-2 rounded-xl border-2 border-pink-500/30 text-sm font-mono font-bold tracking-wider">
-                                  {offer.code}
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
 
                       {tier.name === "Enterprise" && (
                         <div className="p-6 rounded-3xl bg-secondary/30 border border-border/50">
