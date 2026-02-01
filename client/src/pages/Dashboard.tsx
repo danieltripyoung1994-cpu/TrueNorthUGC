@@ -560,7 +560,7 @@ export default function Dashboard() {
                     <div className="flex items-center gap-4">
                       <div className="h-16 w-16 rounded-full bg-muted overflow-hidden border shadow-inner">
                         {creatorProfile.profileImage ? (
-                          <img src={creatorProfile.profileImage} className="h-full w-full object-cover" alt="" />
+                          <img src={creatorProfile.profileImage} className="h-full w-full object-cover" alt="" loading="lazy" />
                         ) : (
                           <User className="h-full w-full p-4 text-muted-foreground" />
                         )}
@@ -626,7 +626,7 @@ export default function Dashboard() {
                                   {field.value && (
                                     <div className="mt-2 flex items-center gap-2">
                                       <div className="h-12 w-12 rounded-full overflow-hidden border">
-                                        <img src={field.value} className="h-full w-full object-cover" alt="Preview" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                                        <img src={field.value} className="h-full w-full object-cover" alt="Preview" loading="lazy" onError={(e) => (e.currentTarget.style.display = 'none')} />
                                       </div>
                                       <span className="text-xs text-muted-foreground">Preview</span>
                                     </div>
@@ -866,7 +866,7 @@ export default function Dashboard() {
                     <div className="flex items-center gap-4">
                       <div className="h-16 w-16 rounded-xl bg-muted overflow-hidden border shadow-inner">
                         {brandProfile?.logo ? (
-                          <img src={brandProfile.logo} className="h-full w-full object-cover" alt="" />
+                          <img src={brandProfile.logo} className="h-full w-full object-cover" alt="" loading="lazy" />
                         ) : (
                           <Building className="h-full w-full p-4 text-muted-foreground" />
                         )}
@@ -924,7 +924,7 @@ export default function Dashboard() {
                               {field.value && (
                                 <div className="mt-2 flex items-center gap-2">
                                   <div className="h-12 w-12 rounded-full overflow-hidden border">
-                                    <img src={field.value} className="h-full w-full object-cover" alt="Preview" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                                    <img src={field.value} className="h-full w-full object-cover" alt="Preview" loading="lazy" onError={(e) => (e.currentTarget.style.display = 'none')} />
                                   </div>
                                   <span className="text-xs text-muted-foreground">Preview</span>
                                 </div>

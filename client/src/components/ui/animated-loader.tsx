@@ -76,6 +76,8 @@ export function AnimatedLoader({
               alt="TrueNorthUGC" 
               width={144}
               height={144}
+              loading="eager"
+              fetchpriority="high"
               className={`${s.logo} object-contain mix-blend-lighten drop-shadow-[0_0_30px_rgba(255,0,128,0.4)]`} 
             />
           </motion.div>
