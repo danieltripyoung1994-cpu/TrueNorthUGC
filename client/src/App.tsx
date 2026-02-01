@@ -4,7 +4,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Loader2 } from "lucide-react";
+import logoImage from "@assets/Photoroom_20260131_221621_1769915813253.png";
 
 const Landing = lazy(() => import("@/pages/Landing"));
 const Directory = lazy(() => import("@/pages/Directory"));
@@ -18,8 +18,27 @@ const NotFound = lazy(() => import("@/pages/not-found"));
 
 function PageLoader() {
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    <div className="fixed inset-0 z-[9999] flex flex-col justify-center items-center bg-background">
+      <div className="relative flex flex-col items-center gap-6">
+        <div className="absolute -inset-20 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-cyan-500/20 blur-3xl rounded-full animate-pulse" />
+        <div className="relative">
+          <img 
+            src={logoImage} 
+            alt="TrueNorthUGC" 
+            className="w-28 h-28 sm:w-36 sm:h-36 object-contain animate-ios-breathe mix-blend-lighten drop-shadow-[0_0_30px_rgba(255,0,128,0.4)]" 
+          />
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-2xl sm:text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">
+            TrueNorthUGC
+          </span>
+          <div className="flex items-center gap-1.5 mt-2">
+            <div className="w-2 h-2 rounded-full bg-pink-500 animate-bounce" style={{ animationDelay: '0ms' }} />
+            <div className="w-2 h-2 rounded-full bg-purple-500 animate-bounce" style={{ animationDelay: '150ms' }} />
+            <div className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
