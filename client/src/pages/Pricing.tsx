@@ -60,7 +60,7 @@ export default function Pricing() {
     },
     {
       name: "Pro Creator",
-      price: "$0",
+      price: "$50",
       description: "Premium features for serious creators",
       features: [
         "Everything in Free Forever",
