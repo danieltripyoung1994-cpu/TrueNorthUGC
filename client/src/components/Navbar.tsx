@@ -45,6 +45,14 @@ export function Navbar() {
         Campaigns
       </Link>
       <Link 
+        href="/pricing" 
+        className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-pink-500 ${location === '/pricing' ? 'text-pink-500' : 'text-muted-foreground'}`}
+        onClick={onLinkClick}
+        data-testid={mobile ? "link-mobile-pricing" : "link-pricing"}
+      >
+        Pricing
+      </Link>
+      <Link 
         href="/contact" 
         className={`${mobile ? 'text-lg py-3 w-full' : 'text-sm'} font-medium transition-colors hover:text-pink-500 ${location === '/contact' ? 'text-pink-500' : 'text-muted-foreground'}`}
         onClick={onLinkClick}
