@@ -26,7 +26,9 @@ const GlowOrb = ({ className, prefersReducedMotion }: { className?: string; pref
 export default function Landing() {
   usePageMeta({ 
     title: "TrueNorthUGC", 
-    description: "Connect with top Canadian UGC creators and brands. Find campaigns, build your portfolio, and grow your creator business with TrueNorthUGC." 
+    description: "Canada's premier UGC creator marketplace. Connect brands with authentic Canadian content creators for user-generated content campaigns. Find creators by niche, location, and platform.",
+    keywords: "UGC creators Canada, Canadian content creators, user generated content marketplace, brand partnerships Canada, influencer marketing, creator economy Canada, Toronto UGC, Vancouver creators",
+    canonicalPath: "/"
   });
   const prefersReducedMotion = useReducedMotion();
   const heroRef = useRef(null);

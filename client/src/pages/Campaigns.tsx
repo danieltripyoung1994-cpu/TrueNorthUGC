@@ -90,8 +90,10 @@ function useBrandByUserId(userId: string | null) {
 
 export default function Campaigns() {
   usePageMeta({ 
-    title: "Campaigns", 
-    description: "Explore active brand campaigns looking for talented Canadian UGC creators. Apply to campaigns and start earning." 
+    title: "UGC Campaigns - Find Brand Opportunities", 
+    description: "Browse active UGC campaigns from Canadian brands seeking content creators. Apply to paid opportunities, build your portfolio, and grow your creator business with TrueNorthUGC.",
+    keywords: "UGC campaigns Canada, paid creator opportunities, brand deals Canada, content creator jobs, UGC opportunities, Canadian brand partnerships, creator campaigns",
+    canonicalPath: "/campaigns"
   });
   const [search, setSearch] = useState("");
   const [niche, setNiche] = useState<string>("All");

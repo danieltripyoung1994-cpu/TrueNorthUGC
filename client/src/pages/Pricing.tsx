@@ -26,8 +26,10 @@ const item = {
 
 export default function Pricing() {
   usePageMeta({ 
-    title: "Pricing", 
-    description: "Flexible pricing plans for creators and brands. Choose the perfect plan to grow your UGC business on TrueNorthUGC." 
+    title: "Pricing Plans for Creators & Brands", 
+    description: "Affordable pricing plans for Canadian UGC creators and brands. Start free or upgrade for premium features. Join Canada's leading UGC marketplace today.",
+    keywords: "UGC marketplace pricing, creator subscription plans, brand marketing costs, TrueNorthUGC plans, affordable UGC platform, creator economy pricing",
+    canonicalPath: "/pricing"
   });
   const [, setLocation] = useLocation();
   const { data: offers } = useQuery<Offer[]>({
