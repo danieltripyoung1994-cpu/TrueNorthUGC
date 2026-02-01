@@ -773,12 +773,12 @@ export async function registerRoutes(
     try {
       const creators = await storage.getCreators();
       const campaigns = await storage.getCampaigns();
-      const transactions = await storage.getAllTransactions();
       
       const completedCampaigns = campaigns.filter(c => c.status === "completed").length;
-      const totalPaidOut = transactions
-        .filter(t => t.status === "completed")
-        .reduce((sum, t) => sum + t.amount, 0);
+      // Estimate total paid based on completed campaigns with budgets
+      const totalPaidOut = campaigns
+        .filter(c => c.status === "completed" && c.budget)
+        .reduce((sum, c) => sum + parseInt(c.budget?.replace(/[^0-9]/g, "") || "0"), 0);
       
       res.json({
         totalCreators: creators.length,
