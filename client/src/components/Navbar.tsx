@@ -20,6 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, LogOut, User, LayoutDashboard, Menu, X } from "lucide-react";
 import { Notifications } from "@/components/Notifications";
 import logoPng from "@/assets/logo.png";
+import newLogoPng from "@assets/Photoroom_20260131_221621_1769915813253.png";
 
 export function Navbar() {
   const [location] = useLocation();
@@ -73,7 +74,7 @@ export function Navbar() {
         <Link href="/" className="flex items-center gap-2 group relative">
           <div className="absolute -inset-4 bg-pink-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
           <div className="absolute -inset-2 bg-purple-500/10 blur-lg rounded-full animate-pulse pointer-events-none" />
-          <img src={logoPng} alt="TrueNorthUGC Logo" className="h-8 sm:h-10 w-auto group-hover:rotate-6 transition-transform drop-shadow-[0_0_8px_rgba(255,0,128,0.3)]" />
+          <img src={newLogoPng} alt="TrueNorthUGC Logo" className="h-8 sm:h-10 w-auto group-hover:rotate-6 transition-transform drop-shadow-[0_0_8px_rgba(255,0,128,0.3)] mix-blend-lighten" />
           <span className="text-lg sm:text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 drop-shadow-[0_0_8px_rgba(255,0,128,0.3)]">TrueNorthUGC</span>
         </Link>
 
@@ -158,7 +159,7 @@ export function Navbar() {
             <SheetContent side="right" className="w-[280px] sm:w-[350px]">
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">
-                  <img src={logoPng} alt="TrueNorthUGC" className="h-8 w-auto" />
+                  <img src={newLogoPng} alt="TrueNorthUGC" className="h-8 w-auto mix-blend-lighten" />
                   <span>TrueNorthUGC</span>
                 </SheetTitle>
               </SheetHeader>
