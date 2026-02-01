@@ -49,13 +49,26 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     @apply tracking-tight font-bold;
+  }
+  
+  /* Prevent layout shift on zoom */
+  .container {
+    max-width: 100%;
   }
 }
 

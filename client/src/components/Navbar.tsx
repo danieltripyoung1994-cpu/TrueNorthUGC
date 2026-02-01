@@ -78,7 +78,7 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-6">
           <NavLinks />
           
           {isLoading ? (
@@ -124,20 +124,20 @@ export function Navbar() {
             </DropdownMenu>
             </div>
           ) : (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <a href="/api/login">
-                <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
+                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
                   Sign In
                 </Button>
               </a>
               <div className="flex items-center gap-2">
                 <a href="/api/login">
-                  <Button className="shadow-lg shadow-primary/20">
+                  <Button size="sm" className="shadow-lg shadow-primary/20">
                     Join as Creator
                   </Button>
                 </a>
                 <a href="/api/login">
-                  <Button variant="outline" className="border-primary/30 hover:bg-primary/5">
+                  <Button size="sm" variant="outline" className="border-primary/30 hover:bg-primary/5">
                     Join as Brand
                   </Button>
                 </a>
@@ -147,7 +147,7 @@ export function Navbar() {
         </div>
 
         {/* Mobile Navigation */}
-        <div className="flex md:hidden items-center gap-2">
+        <div className="flex lg:hidden items-center gap-2">
           {user && <Notifications />}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
