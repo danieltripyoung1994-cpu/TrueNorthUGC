@@ -19,6 +19,28 @@ export async function registerRoutes(
   // Object Storage routes for file uploads
   registerObjectStorageRoutes(app);
 
+  // Analytics endpoints (fire-and-forget, no response needed)
+  app.post("/api/analytics/vitals", (req, res) => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[Analytics] Web Vitals:", req.body);
+    }
+    res.status(204).send();
+  });
+
+  app.post("/api/analytics/experiment", (req, res) => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[Analytics] A/B Experiment:", req.body);
+    }
+    res.status(204).send();
+  });
+
+  app.post("/api/feedback", (req, res) => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[Feedback] Received:", req.body);
+    }
+    res.status(204).send();
+  });
+
   // Creator Routes
 
   // List creators

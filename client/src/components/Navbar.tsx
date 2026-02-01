@@ -81,7 +81,7 @@ export function Navbar() {
         <Link href="/" className="flex items-center gap-2 group relative">
           <div className="absolute -inset-4 bg-pink-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
           <div className="absolute -inset-2 bg-purple-500/10 blur-lg rounded-full animate-pulse pointer-events-none" />
-          <img src={newLogoPng} alt="TrueNorthUGC Logo" width={40} height={40} loading="eager" fetchpriority="high" className="h-8 sm:h-10 w-auto group-hover:rotate-6 transition-transform drop-shadow-[0_0_8px_rgba(255,0,128,0.3)] mix-blend-lighten" />
+          <img src={newLogoPng} alt="TrueNorthUGC Logo" width={40} height={40} loading="eager" className="h-8 sm:h-10 w-auto group-hover:rotate-6 transition-transform drop-shadow-[0_0_8px_rgba(255,0,128,0.3)] mix-blend-lighten" />
           <span className="text-lg sm:text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 drop-shadow-[0_0_8px_rgba(255,0,128,0.3)]">TrueNorthUGC</span>
         </Link>
 

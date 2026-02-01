@@ -81,9 +81,6 @@ export function OptimizedImage({
     },
   };
 
-  if (priority) {
-    (imgProps as any).fetchpriority = "high";
-  }
 
   if (srcSet && isInView) {
     imgProps.srcSet = srcSet;
