@@ -64,7 +64,49 @@ export const brands = pgTable("brands", {
     facebook?: string;
     canva?: string;
   }>().default({}),
+  // Brand subscription tier for feature gating
+  tier: text("tier").default("starter"), // starter, growth, premium
+  tierPurchasedAt: text("tier_purchased_at"),
 });
+
+// Brand tier feature definitions
+export const BRAND_TIER_FEATURES = {
+  starter: {
+    name: "Starter",
+    price: 199,
+    analytics: "basic", // impressions, clicks, basic engagement
+    creatorAccess: "limited", // select creator pool
+    campaignPlacement: "standard",
+    support: "email",
+    accountManager: false,
+    coBranded: false,
+    earlyAccess: false,
+  },
+  growth: {
+    name: "Growth",
+    price: 300,
+    analytics: "enhanced", // detailed engagement, demographics, performance insights
+    creatorAccess: "expanded", // broader creator pool
+    campaignPlacement: "priority",
+    support: "basic",
+    accountManager: false,
+    coBranded: false,
+    earlyAccess: false,
+  },
+  premium: {
+    name: "Premium",
+    price: 500,
+    analytics: "premium", // ROI analysis, trend forecasting, advanced reporting
+    creatorAccess: "full", // entire network
+    campaignPlacement: "featured",
+    support: "priority",
+    accountManager: true,
+    coBranded: true,
+    earlyAccess: true,
+  },
+} as const;
+
+export type BrandTier = keyof typeof BRAND_TIER_FEATURES;
 
 export const insertCreatorSchema = createInsertSchema(creators).omit({ id: true });
 export const insertBrandSchema = createInsertSchema(brands).omit({ id: true });

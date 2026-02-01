@@ -78,17 +78,34 @@ export default function Pricing() {
 
   const brandTiers = [
     {
-      name: "Campaign Starter",
-      price: "$299",
-      description: "Get high-quality UGC for your brand",
+      name: "Starter",
+      price: "$199",
+      tier: "starter",
+      description: "Launch your first UGC campaign",
       features: [
-        "Full access to creator network",
-        "Vetted Canadian creators only",
-        "Spark Ad codes on submissions",
-        "Lifetime content ownership",
-        "Custom content brief assistance",
-        "Dedicated campaign manager",
-        "Transparent 20% platform fee"
+        "Basic campaign placement",
+        "Limited analytics (impressions, clicks, engagement)",
+        "Access to select creator pool",
+        "Standard visibility on platform",
+        "Email support",
+        "20% platform fee on payments"
+      ],
+      buttonText: "Get Started",
+      variant: "outline" as const,
+      commission: "20% platform fee on creator payments (80% goes directly to creators)"
+    },
+    {
+      name: "Growth",
+      price: "$300",
+      tier: "growth",
+      description: "Scale your content strategy",
+      features: [
+        "Priority campaign placement",
+        "Enhanced analytics with demographics",
+        "Expanded creator pool access",
+        "Detailed performance insights",
+        "Basic support for optimization",
+        "20% platform fee on payments"
       ],
       buttonText: "Launch Campaign",
       variant: "default" as const,
@@ -97,19 +114,21 @@ export default function Pricing() {
       commission: "20% platform fee on creator payments (80% goes directly to creators)"
     },
     {
-      name: "Enterprise",
-      price: "Custom",
-      description: "Scale your UGC strategy",
+      name: "Premium",
+      price: "$500",
+      tier: "premium",
+      description: "Enterprise-grade UGC solution",
       features: [
-        "Unlimited campaigns",
-        "Advanced creator filtering",
-        "Custom content briefs",
+        "Premium analytics with ROI forecasting",
         "Dedicated account manager",
-        "Volume discounts available",
-        "Custom payment terms"
+        "Full creator network access",
+        "Co-branded campaign opportunities",
+        "First access to new features",
+        "Priority support & optimization"
       ],
       buttonText: "Contact Sales",
-      variant: "outline" as const
+      variant: "outline" as const,
+      commission: "20% platform fee on creator payments (80% goes directly to creators)"
     }
   ];
 

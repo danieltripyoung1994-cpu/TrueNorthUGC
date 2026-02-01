@@ -146,6 +146,76 @@ export async function registerRoutes(
     res.json(brand);
   });
 
+  // Brand tier feature endpoints
+  app.get("/api/brands/tier/features", isAuthenticated, async (req, res) => {
+    const userId = (req.user as any).claims.sub;
+    const brand = await storage.getBrandByUserId(userId);
+    if (!brand) {
+      return res.status(404).json({ message: "Brand profile not found" });
+    }
+    
+    const { BRAND_TIER_FEATURES } = await import("@shared/schema");
+    const tier = (brand.tier || "starter") as keyof typeof BRAND_TIER_FEATURES;
+    const features = BRAND_TIER_FEATURES[tier];
+    
+    res.json({
+      currentTier: tier,
+      features,
+      allTiers: BRAND_TIER_FEATURES,
+    });
+  });
+
+  // Upgrade brand tier (after successful payment)
+  const tierUpgradeSchema = z.object({
+    tier: z.enum(["starter", "growth", "premium"]),
+    paypalOrderId: z.string().min(1, "PayPal order ID is required"),
+  });
+  
+  app.post("/api/brands/tier/upgrade", isAuthenticated, async (req, res) => {
+    const userId = (req.user as any).claims.sub;
+    
+    // Validate input
+    const parseResult = tierUpgradeSchema.safeParse(req.body);
+    if (!parseResult.success) {
+      return res.status(400).json({ 
+        message: parseResult.error.errors[0].message,
+        errors: parseResult.error.errors 
+      });
+    }
+    
+    const { tier, paypalOrderId } = parseResult.data;
+    
+    const brand = await storage.getBrandByUserId(userId);
+    if (!brand) {
+      return res.status(404).json({ message: "Brand profile not found" });
+    }
+    
+    // Verify PayPal order exists and is completed
+    const transaction = await storage.getTransactionByPaypalOrderId(paypalOrderId);
+    if (!transaction) {
+      return res.status(400).json({ message: "Payment not found. Please complete payment first." });
+    }
+    
+    if (transaction.status !== "completed") {
+      return res.status(400).json({ message: "Payment not completed. Please complete payment first." });
+    }
+    
+    // Verify the payment amount matches the tier price
+    const { BRAND_TIER_FEATURES } = await import("@shared/schema");
+    const tierFeatures = BRAND_TIER_FEATURES[tier];
+    const paidAmount = parseFloat(transaction.amount);
+    
+    if (paidAmount < tierFeatures.price) {
+      return res.status(400).json({ 
+        message: `Payment amount ($${paidAmount}) does not match tier price ($${tierFeatures.price})` 
+      });
+    }
+    
+    // Update brand tier
+    const updatedBrand = await storage.updateBrandTier(userId, tier, paypalOrderId);
+    res.json(updatedBrand);
+  });
+
   // Offer Routes
   app.get("/api/offers", async (req, res) => {
     const target = (req.query.target as string) || undefined;
