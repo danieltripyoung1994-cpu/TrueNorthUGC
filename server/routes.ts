@@ -768,5 +768,22 @@ export async function registerRoutes(
     }
   });
 
+  // Auto-cleanup seed creators on startup
+  (async () => {
+    try {
+      const seedUserIds = ['seed-user-1', 'seed-user-2', 'seed-user-3'];
+      let deletedCount = 0;
+      for (const userId of seedUserIds) {
+        const deleted = await storage.deleteCreatorByUserId(userId);
+        if (deleted) deletedCount++;
+      }
+      if (deletedCount > 0) {
+        console.log(`[cleanup] Deleted ${deletedCount} seed creators from database`);
+      }
+    } catch (error) {
+      console.error('[cleanup] Failed to cleanup seed creators:', error);
+    }
+  })();
+
   return httpServer;
 }
