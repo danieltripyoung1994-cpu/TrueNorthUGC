@@ -128,10 +128,8 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
 
   const generateBriefMutation = useMutation({
     mutationFn: async (data: { productName: string; productDescription: string; campaignGoal: string; targetAudience: string; budget: string; platforms: string[] }) => {
-      return apiRequest("/api/ai/generate-brief", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
+      const response = await apiRequest("POST", "/api/ai/generate-brief", data);
+      return response.json();
     },
     onSuccess: (response: any) => {
       const brief = response.brief;
@@ -352,7 +350,7 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
               type="button"
               variant="outline"
               onClick={() => setShowAiGenerator(!showAiGenerator)}
-              className="w-full border-dashed border-pink-500/50 hover:border-pink-500 text-pink-500 hover:bg-pink-500/10"
+              className="w-full border-dashed border-pink-500/50 text-pink-500"
               data-testid="button-ai-generator-toggle"
             >
               <Wand2 className="mr-2 h-4 w-4" />
@@ -426,7 +424,7 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
                       type="button"
                       onClick={handleGenerateBrief}
                       disabled={generateBriefMutation.isPending}
-                      className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
+                      className="w-full bg-gradient-to-r from-pink-500 to-purple-500"
                       data-testid="button-generate-brief"
                     >
                       {generateBriefMutation.isPending ? (
