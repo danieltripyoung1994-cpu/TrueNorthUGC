@@ -25,6 +25,8 @@ function PageLoader() {
           <img 
             src={logoImage} 
             alt="TrueNorthUGC" 
+            width={144}
+            height={144}
             className="w-28 h-28 sm:w-36 sm:h-36 object-contain animate-ios-breathe mix-blend-lighten drop-shadow-[0_0_30px_rgba(255,0,128,0.4)]" 
           />
         </div>

@@ -150,6 +150,8 @@ export default function Profile() {
                 className="w-48 h-48 rounded-[2.5rem] object-cover shadow-2xl border-4 border-white/10 group-hover:scale-105 group-hover:shadow-pink-500/30 transition-all duration-500"
                 alt={creator.name}
                 loading="lazy"
+                width={192}
+                height={192}
               />
               <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-t from-pink-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </motion.div>
