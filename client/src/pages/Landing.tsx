@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Search, Sparkles, Star, Zap, Users, Shield, Globe, ChevronDown, Quote, Briefcase, DollarSign, Calendar, MapPin } from "lucide-react";
 import banffBg from "@assets/stock_images/scenic_background_of_f3c6840b.jpg";
-import logoPng from "@assets/Photoroom_20260124_081931_1769558537558.png";
+import logoPng from "@/assets/logo.png";
 import { useRef, useMemo } from "react";
 import { useCampaigns } from "@/hooks/use-campaigns";
 
