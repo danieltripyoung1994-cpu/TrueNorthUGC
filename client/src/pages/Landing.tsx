@@ -10,7 +10,15 @@ import newLogoPng from "@assets/Photoroom_20260131_221621_1769915813253.png";
 import { useRef, useMemo } from "react";
 import { useCampaigns } from "@/hooks/use-campaigns";
 
-const GlowOrb = ({ className, prefersReducedMotion }: { className?: string; prefersReducedMotion: boolean }) => (
+const GlowOrb = ({ 
+  className, 
+  prefersReducedMotion,
+  parallaxY 
+}: { 
+  className?: string; 
+  prefersReducedMotion: boolean;
+  parallaxY?: any;
+}) => (
   <motion.div
     initial={{ opacity: 0.6 }}
     animate={prefersReducedMotion ? { opacity: 0.6 } : { opacity: [0.4, 0.7, 0.4] }}
@@ -19,6 +27,7 @@ const GlowOrb = ({ className, prefersReducedMotion }: { className?: string; pref
       repeat: Infinity, 
       ease: "easeInOut" 
     }}
+    style={prefersReducedMotion ? {} : { y: parallaxY }}
     className={`absolute rounded-full blur-3xl ${className}`}
   />
 );
@@ -40,35 +49,54 @@ export default function Landing() {
   const heroOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 50]);
+  
+  // Parallax transforms for background elements (0.5x - 0.8x scroll speed)
+  const bgParallaxY = useTransform(scrollYProgress, [0, 1], [0, 150]); // 0.5x speed effect
+  const orbParallaxY1 = useTransform(scrollYProgress, [0, 1], [0, 80]); // 0.6x speed
+  const orbParallaxY2 = useTransform(scrollYProgress, [0, 1], [0, 120]); // 0.4x speed
+  const orbParallaxY3 = useTransform(scrollYProgress, [0, 1], [0, 100]); // 0.5x speed
 
   const containerVariants = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.05,
-        delayChildren: 0.1
+        staggerChildren: prefersReducedMotion ? 0 : 0.08,
+        delayChildren: prefersReducedMotion ? 0 : 0.1
       }
     }
-  }), []);
+  }), [prefersReducedMotion]);
 
   const itemVariants = useMemo(() => ({
-    hidden: { opacity: 0, y: 15 },
+    hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 15 },
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.3, ease: "easeOut" }
+      transition: { duration: prefersReducedMotion ? 0.1 : 0.3, ease: "easeOut" }
     }
-  }), []);
+  }), [prefersReducedMotion]);
 
   const cardHoverVariants = useMemo(() => ({
     rest: { scale: 1, y: 0 },
     hover: { 
-      scale: 1.01, 
+      scale: 1.02, 
       y: -4,
       transition: { duration: 0.2, ease: "easeOut" }
     }
   }), []);
+
+  // Section fade-in variant that respects reduced motion
+  const sectionVariants = useMemo(() => ({
+    hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: prefersReducedMotion ? 0.1 : 0.5, 
+        ease: "easeOut" 
+      }
+    }
+  }), [prefersReducedMotion]);
 
   const niches = ["Fitness", "Wellness", "Travel", "Tech", "Beauty", "Fashion", "Food", "Lifestyle", "Gaming", "Parenting"];
 
@@ -142,30 +170,35 @@ export default function Landing() {
       <Navbar />
       
       {/* Hero Section with Parallax */}
-      <section ref={heroRef} className="relative overflow-hidden min-h-[100vh] flex items-center">
+      <section ref={heroRef} className="relative overflow-hidden min-h-[100vh] flex items-center" style={{ position: 'relative' }}>
         {/* Animated Background */}
         <motion.div 
           className="absolute inset-0 z-0"
           style={prefersReducedMotion ? {} : { opacity: heroOpacity }}
         >
-          <img
-            src={newLogoPng}
-            alt="TrueNorthUGC"
-            loading="eager"
-            decoding="async"
-            fetchPriority="high"
-            width={800}
-            height={800}
-            className="absolute inset-0 w-full h-full object-contain scale-[1.35] -translate-y-[11%] opacity-30 mix-blend-lighten"
-          />
+          <motion.div
+            style={prefersReducedMotion ? {} : { y: bgParallaxY }}
+            className="absolute inset-0"
+          >
+            <img
+              src={newLogoPng}
+              alt="TrueNorthUGC"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              width={800}
+              height={800}
+              className="absolute inset-0 w-full h-full object-contain scale-[1.35] -translate-y-[11%] opacity-30 mix-blend-lighten"
+            />
+          </motion.div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background z-0" />
           
           {/* Simplified glow orbs - only render if motion is allowed */}
           {!prefersReducedMotion && (
             <>
-              <GlowOrb className="w-96 h-96 bg-pink-500/40 top-20 -left-48" prefersReducedMotion={!!prefersReducedMotion} />
-              <GlowOrb className="w-64 h-64 bg-purple-500/30 top-40 right-20" prefersReducedMotion={!!prefersReducedMotion} />
-              <GlowOrb className="w-80 h-80 bg-cyan-500/30 bottom-20 right-1/4" prefersReducedMotion={!!prefersReducedMotion} />
+              <GlowOrb className="w-96 h-96 bg-pink-500/40 top-20 -left-48" prefersReducedMotion={!!prefersReducedMotion} parallaxY={orbParallaxY1} />
+              <GlowOrb className="w-64 h-64 bg-purple-500/30 top-40 right-20" prefersReducedMotion={!!prefersReducedMotion} parallaxY={orbParallaxY2} />
+              <GlowOrb className="w-80 h-80 bg-cyan-500/30 bottom-20 right-1/4" prefersReducedMotion={!!prefersReducedMotion} parallaxY={orbParallaxY3} />
             </>
           )}
         </motion.div>
