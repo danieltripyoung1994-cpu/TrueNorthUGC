@@ -153,6 +153,9 @@ export default function Landing() {
             alt="TrueNorthUGC"
             loading="eager"
             decoding="async"
+            fetchPriority="high"
+            width={800}
+            height={800}
             className="absolute inset-0 w-full h-full object-contain scale-[1.35] -translate-y-[11%] opacity-30 mix-blend-lighten"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background z-0" />
@@ -182,6 +185,8 @@ export default function Landing() {
               <img
                 src={newLogoPng}
                 alt=""
+                width={24}
+                height={24}
                 className="mr-2 h-6 w-auto mix-blend-lighten"
               />
               Made for Canadian Creators
@@ -531,6 +536,8 @@ export default function Landing() {
                         src={testimonial.image}
                         alt={testimonial.name}
                         loading="lazy"
+                        width={56}
+                        height={56}
                         className="w-14 h-14 rounded-2xl object-cover border-2 border-primary/20"
                         data-testid={`img-testimonial-${idx}`}
                       />
@@ -757,6 +764,8 @@ export default function Landing() {
                 <img 
                   src={newLogoPng} 
                   alt="TrueNorthUGC Logo" 
+                  width={48}
+                  height={48}
                   className="h-12 w-auto mix-blend-lighten"
                   loading="lazy"
                 />
