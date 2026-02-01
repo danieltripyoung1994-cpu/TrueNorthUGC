@@ -1231,33 +1231,40 @@ interface EarningsTabProps {
 }
 
 function getTierInfo(completedCount: number) {
-  if (completedCount >= 31) {
-    return { name: "Elite Creator", icon: Crown, bonus: 500, min: 31, max: null, nextTier: null, nextBonus: null };
-  } else if (completedCount >= 16) {
-    return { name: "Top Performer", icon: Trophy, bonus: 350, min: 16, max: 30, nextTier: "Elite Creator", nextBonus: 500 };
-  } else if (completedCount >= 6) {
-    return { name: "Creator Pro", icon: Zap, bonus: 200, min: 6, max: 15, nextTier: "Top Performer", nextBonus: 350 };
+  if (completedCount >= 35) {
+    return { name: "Elite Creator", icon: Crown, bonus: 500, min: 35, max: null, nextTier: null, nextBonus: null };
+  } else if (completedCount >= 20) {
+    return { name: "Top Performer", icon: Trophy, bonus: 350, min: 20, max: 34, nextTier: "Elite Creator", nextBonus: 500 };
+  } else if (completedCount >= 10) {
+    return { name: "Creator Pro", icon: Zap, bonus: 200, min: 10, max: 19, nextTier: "Top Performer", nextBonus: 350 };
+  } else if (completedCount >= 3) {
+    return { name: "Rising Star", icon: Star, bonus: 100, min: 3, max: 9, nextTier: "Creator Pro", nextBonus: 200 };
   } else {
-    return { name: "Rising Star", icon: Star, bonus: 100, min: 0, max: 5, nextTier: "Creator Pro", nextBonus: 200 };
+    return { name: "New Creator", icon: Star, bonus: 0, min: 0, max: 2, nextTier: "Rising Star", nextBonus: 100 };
   }
 }
 
 function getProgressToNextTier(completedCount: number): { progress: number; remaining: number } {
-  if (completedCount >= 31) {
+  if (completedCount >= 35) {
     return { progress: 100, remaining: 0 };
-  } else if (completedCount >= 16) {
-    const tierStart = 16;
-    const tierEnd = 31;
+  } else if (completedCount >= 20) {
+    const tierStart = 20;
+    const tierEnd = 35;
     const progress = ((completedCount - tierStart) / (tierEnd - tierStart)) * 100;
     return { progress, remaining: tierEnd - completedCount };
-  } else if (completedCount >= 6) {
-    const tierStart = 6;
-    const tierEnd = 16;
+  } else if (completedCount >= 10) {
+    const tierStart = 10;
+    const tierEnd = 20;
+    const progress = ((completedCount - tierStart) / (tierEnd - tierStart)) * 100;
+    return { progress, remaining: tierEnd - completedCount };
+  } else if (completedCount >= 3) {
+    const tierStart = 3;
+    const tierEnd = 10;
     const progress = ((completedCount - tierStart) / (tierEnd - tierStart)) * 100;
     return { progress, remaining: tierEnd - completedCount };
   } else {
     const tierStart = 0;
-    const tierEnd = 6;
+    const tierEnd = 3;
     const progress = ((completedCount - tierStart) / (tierEnd - tierStart)) * 100;
     return { progress, remaining: tierEnd - completedCount };
   }

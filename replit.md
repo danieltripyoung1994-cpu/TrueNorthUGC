@@ -52,10 +52,10 @@ Preferred communication style: Simple, everyday language.
 - **Commission-Based Structure**: Creators join free (no subscription fees), brands pay $299 one-time fee to launch campaigns
 - **Platform Fee**: 20% platform fee on all creator payments (80% goes to creators, 20% to platform)
 - **Flat-Rate Milestone Bonus Program**: In addition to campaign earnings, creators earn cash bonuses when reaching campaign milestones:
-  - Rising Star (0-5 campaigns): $100 bonus
-  - Creator Pro (6-15 campaigns): $200 bonus
-  - Top Performer (16-30 campaigns): $350 bonus
-  - Elite Creator (31+ campaigns): $500 bonus
+  - Rising Star (3-9 campaigns): $100 bonus
+  - Creator Pro (10-19 campaigns): $200 bonus
+  - Top Performer (20-34 campaigns): $350 bonus
+  - Elite Creator (35+ campaigns): $500 bonus
   - Total possible bonuses: $1,150
 - **Earnings Dashboard**: New "Earnings" tab in Dashboard showing:
   - Creators: Total earnings, current tier, tier progress with next milestone bonus, transaction history
