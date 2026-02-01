@@ -145,14 +145,22 @@ export default function Profile() {
               transition={{ delay: 0.2 }}
               className="relative group shrink-0"
             >
-              <img 
-                src={creator.profileImage || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop"} 
-                className="w-48 h-48 rounded-[2.5rem] object-cover shadow-2xl border-4 border-white/10 group-hover:scale-105 group-hover:shadow-pink-500/30 transition-all duration-500"
-                alt={creator.name}
-                loading="lazy"
-                width={192}
-                height={192}
-              />
+              {creator.profileImage ? (
+                <img 
+                  src={creator.profileImage} 
+                  className="w-48 h-48 rounded-[2.5rem] object-cover shadow-2xl border-4 border-white/10 group-hover:scale-105 group-hover:shadow-pink-500/30 transition-all duration-500"
+                  alt={creator.name}
+                  loading="lazy"
+                  width={192}
+                  height={192}
+                />
+              ) : (
+                <div className="w-48 h-48 rounded-[2.5rem] bg-gradient-to-br from-pink-500/20 via-purple-500/20 to-cyan-400/20 shadow-2xl border-4 border-white/10 flex items-center justify-center group-hover:scale-105 group-hover:shadow-pink-500/30 transition-all duration-500">
+                  <span className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">
+                    {creator.name[0]?.toUpperCase()}
+                  </span>
+                </div>
+              )}
               <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-t from-pink-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </motion.div>
             <div className="space-y-6 flex-1">
