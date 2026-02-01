@@ -1,10 +1,17 @@
 import express, { type Request, Response, NextFunction } from "express";
+import compression from "compression";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
 
 const app = express();
 const httpServer = createServer(app);
+
+// Enable gzip compression for all responses
+app.use(compression({
+  level: 6, // Balanced compression level (1-9)
+  threshold: 1024, // Only compress responses > 1KB
+}));
 
 declare module "http" {
   interface IncomingMessage {
