@@ -12,6 +12,7 @@ export interface IStorage {
   getBrandByUserId(userId: string): Promise<Brand | undefined>;
   createBrand(brand: InsertBrand): Promise<Brand>;
   updateBrand(userId: string, updates: Partial<InsertBrand>): Promise<Brand>;
+  updateBrandTier(userId: string, tier: string, paypalOrderId?: string): Promise<Brand>;
 
   getOffers(target?: string): Promise<Offer[]>;
   createOffer(offer: InsertOffer): Promise<Offer>;
@@ -223,6 +224,18 @@ export class DatabaseStorage implements IStorage {
     const [updated] = await db
       .update(brands)
       .set(setData)
+      .where(eq(brands.userId, userId))
+      .returning();
+    return normalizeBrand(updated);
+  }
+
+  async updateBrandTier(userId: string, tier: string, paypalOrderId?: string): Promise<Brand> {
+    const [updated] = await db
+      .update(brands)
+      .set({
+        tier,
+        tierPurchasedAt: new Date().toISOString(),
+      })
       .where(eq(brands.userId, userId))
       .returning();
     return normalizeBrand(updated);

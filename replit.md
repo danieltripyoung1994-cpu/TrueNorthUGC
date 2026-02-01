@@ -49,7 +49,10 @@ Preferred communication style: Simple, everyday language.
 - **Notifications**: Real-time notification system for messages and interactions
 
 ### Payment Model (February 2026)
-- **Commission-Based Structure**: Creators join free (no subscription fees), brands pay $299 one-time fee to launch campaigns
+- **Three-Tier Brand Pricing Structure**:
+  - **Starter ($199)**: Basic campaign placement, limited analytics (impressions, clicks, engagement), select creator pool access, email support
+  - **Growth ($300)**: Priority campaign placement, enhanced analytics with demographics, expanded creator pool, detailed performance insights, basic support
+  - **Premium ($500)**: Featured campaign placement, premium analytics with ROI forecasting, full creator network access, dedicated account manager, co-branded campaigns, early feature access
 - **Platform Fee**: 20% platform fee on all creator payments (80% goes to creators, 20% to platform)
 - **Flat-Rate Milestone Bonus Program**: In addition to campaign earnings, creators earn cash bonuses when reaching campaign milestones:
   - Rising Star (3-9 campaigns): $100 bonus
