@@ -56,7 +56,7 @@ export default function Pricing() {
       variant: "default" as const,
       popular: true,
       highlight: true,
-      commission: "15% commission on successful paid collaborations"
+      commission: "You keep 80% of every payment - only 20% platform fee"
     },
     {
       name: "Pro Creator",
@@ -72,7 +72,7 @@ export default function Pricing() {
       ],
       buttonText: "Get Started",
       variant: "outline" as const,
-      commission: "15% commission on successful paid collaborations"
+      commission: "You keep 80% of every payment - only 20% platform fee"
     }
   ];
 
@@ -88,13 +88,13 @@ export default function Pricing() {
         "Lifetime content ownership",
         "Custom content brief assistance",
         "Dedicated campaign manager",
-        "Transparent 15% transaction fee"
+        "Transparent 20% platform fee"
       ],
       buttonText: "Launch Campaign",
       variant: "default" as const,
       popular: true,
       highlight: true,
-      commission: "15% fee on creator payments (85% goes to creators)"
+      commission: "20% platform fee on creator payments (80% goes directly to creators)"
     },
     {
       name: "Enterprise",

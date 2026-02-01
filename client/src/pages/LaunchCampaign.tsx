@@ -21,17 +21,18 @@ const item = {
 
 export default function LaunchCampaign() {
   const packageDetails = {
-    name: "Starter",
-    price: "$499",
+    name: "Campaign Starter",
+    price: "$299",
     features: [
-      "Full access to contests and deals",
-      "Access a vetted network of creators",
-      "Access Spark Ad codes on winning submissions",
-      "Lifetime Access to Winning Submissions",
-      "Achieve Content-Market Fit Faster",
-      "Validate content organically"
+      "Full access to vetted Canadian creators",
+      "Spark Ad codes on submissions",
+      "Lifetime content ownership",
+      "Custom content brief assistance",
+      "Dedicated campaign manager",
+      "20% platform fee on creator payments"
     ],
-    footer: "Cancel anytime"
+    footer: "One-time payment",
+    commission: "When you pay creators, 80% goes to them and 20% goes to the platform"
   };
 
   return (
@@ -98,9 +99,15 @@ export default function LaunchCampaign() {
                   </Button>
                   <div className="flex items-center gap-3 text-muted-foreground text-sm font-medium">
                     <ShieldCheck className="h-5 w-5 text-primary" />
-                    Secure Checkout by Stripe
+                    Secure Checkout via PayPal
                   </div>
                 </CardFooter>
+                <div className="px-8 pb-6">
+                  <div className="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
+                    <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-1">Transparent Payment Model</p>
+                    <p className="text-sm text-muted-foreground">{packageDetails.commission}</p>
+                  </div>
+                </div>
               </Card>
 
               {/* How it works */}
