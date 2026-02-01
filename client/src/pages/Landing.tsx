@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Search, Sparkles, Star, Zap, Users, Shield, Globe, ChevronDown, Quote, Briefcase, DollarSign, Calendar, MapPin } from "lucide-react";
-import banffBg from "@assets/stock_images/scenic_background_of_f3c6840b.jpg";
 import logoPng from "@/assets/logo.png";
 import { useRef, useMemo } from "react";
 import { useCampaigns } from "@/hooks/use-campaigns";
@@ -148,11 +147,11 @@ export default function Landing() {
           style={prefersReducedMotion ? {} : { opacity: heroOpacity }}
         >
           <img
-            src={banffBg}
-            alt=""
+            src={logoPng}
+            alt="TrueNorthUGC"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-contain opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background z-0" />
           
