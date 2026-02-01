@@ -99,21 +99,63 @@ export class DatabaseStorage implements IStorage {
       ));
     }
     
+    let results;
     if (conditions.length > 0) {
-      return await db.select().from(creators).where(or(...conditions));
+      results = await db.select({
+        creator: creators,
+        userProfileImage: users.profileImageUrl
+      }).from(creators)
+        .leftJoin(users, eq(creators.userId, users.id))
+        .where(or(...conditions));
+    } else {
+      results = await db.select({
+        creator: creators,
+        userProfileImage: users.profileImageUrl
+      }).from(creators)
+        .leftJoin(users, eq(creators.userId, users.id));
     }
-    return await db.select().from(creators);
+    
+    return results.map(r => {
+      const creator = normalizeCreator(r.creator);
+      if (!creator.profileImage && r.userProfileImage) {
+        creator.profileImage = r.userProfileImage;
+      }
+      return creator;
+    });
   }
 
   async getCreatorByHandle(handle: string): Promise<Creator | undefined> {
-    const [creator] = await db.select().from(creators).where(eq(creators.handle, handle));
+    const results = await db.select({
+      creator: creators,
+      userProfileImage: users.profileImageUrl
+    }).from(creators)
+      .leftJoin(users, eq(creators.userId, users.id))
+      .where(eq(creators.handle, handle));
+    
+    if (results.length === 0) return undefined;
+    
+    const creator = normalizeCreator(results[0].creator);
+    if (!creator.profileImage && results[0].userProfileImage) {
+      creator.profileImage = results[0].userProfileImage;
+    }
     return creator;
   }
 
   async getCreatorByUserId(userId: string): Promise<Creator | undefined> {
-    const [creator] = await db.select().from(creators).where(eq(creators.userId, userId));
-    if (!creator) return undefined;
-    return normalizeCreator(creator);
+    const results = await db.select({
+      creator: creators,
+      userProfileImage: users.profileImageUrl
+    }).from(creators)
+      .leftJoin(users, eq(creators.userId, users.id))
+      .where(eq(creators.userId, userId));
+    
+    if (results.length === 0) return undefined;
+    
+    const creator = normalizeCreator(results[0].creator);
+    if (!creator.profileImage && results[0].userProfileImage) {
+      creator.profileImage = results[0].userProfileImage;
+    }
+    return creator;
   }
 
   async createCreator(insertCreator: InsertCreator): Promise<Creator> {
