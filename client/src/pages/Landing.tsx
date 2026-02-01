@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Search, Sparkles, Star, Zap, Users, Shield, Globe, ChevronDown, Quote, Briefcase, DollarSign, Calendar, MapPin } from "lucide-react";
-import logoPng from "@/assets/logo.png";
 import newLogoPng from "@assets/Photoroom_20260131_221621_1769915813253.png";
 import { useRef, useMemo } from "react";
 import { useCampaigns } from "@/hooks/use-campaigns";
@@ -179,9 +178,9 @@ export default function Landing() {
               className="inline-flex items-center rounded-full border border-pink-500/40 bg-gradient-to-r from-pink-500/20 to-purple-500/20 px-5 py-2 text-sm font-semibold text-white backdrop-blur-xl shadow-[0_0_30px_rgba(255,0,128,0.3)]"
             >
               <img
-                src={logoPng}
+                src={newLogoPng}
                 alt=""
-                className="mr-2 h-6 w-auto"
+                className="mr-2 h-6 w-auto mix-blend-lighten"
               />
               Made for Canadian Creators
             </motion.div>
@@ -754,9 +753,9 @@ export default function Landing() {
             <div className="col-span-1 md:col-span-2 space-y-6">
               <div className="flex items-center gap-2">
                 <img 
-                  src={logoPng} 
+                  src={newLogoPng} 
                   alt="TrueNorthUGC Logo" 
-                  className="h-12 w-auto"
+                  className="h-12 w-auto mix-blend-lighten"
                   loading="lazy"
                 />
                 <span className="text-2xl font-black tracking-tighter">TrueNorthUGC</span>
