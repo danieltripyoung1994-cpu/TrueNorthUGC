@@ -50,14 +50,15 @@ Preferred communication style: Simple, everyday language.
 
 ### Payment Model (February 2026)
 - **Commission-Based Structure**: Creators join free (no subscription fees), brands pay $299 one-time fee to launch campaigns
-- **Transaction Fees**: 20% platform fee on all creator payments (80% goes to creators, 20% to platform)
-- **Tiered Incentive Program**: Creators earn bonus percentages based on completed campaigns:
-  - Rising Star (0-5 campaigns): Base 80% earnings
-  - Creator Pro (6-15 campaigns): 82% earnings (+2% bonus)
-  - Top Performer (16-30 campaigns): 85% earnings (+5% bonus)
-  - Elite Creator (31+ campaigns): 88% earnings (+8% bonus)
+- **Platform Fee**: 20% platform fee on all creator payments (80% goes to creators, 20% to platform)
+- **Flat-Rate Milestone Bonus Program**: In addition to campaign earnings, creators earn cash bonuses when reaching campaign milestones:
+  - Rising Star (0-5 campaigns): $100 bonus
+  - Creator Pro (6-15 campaigns): $200 bonus
+  - Top Performer (16-30 campaigns): $350 bonus
+  - Elite Creator (31+ campaigns): $500 bonus
+  - Total possible bonuses: $1,150
 - **Earnings Dashboard**: New "Earnings" tab in Dashboard showing:
-  - Creators: Total earnings, current tier, tier progress, transaction history
+  - Creators: Total earnings, current tier, tier progress with next milestone bonus, transaction history
   - Brands: Total spent, platform fees paid, creators paid, payment history
 - **Transaction Tracking**: All payments recorded in `transactions` table with paypalOrderId, amount, platformFee, creatorPayout, and status
 - **Hooks**: `useTransactions` hook fetches user transaction data from `/api/transactions`
