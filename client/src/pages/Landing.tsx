@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Search, Sparkles, Star, Zap, Users, Shield, Globe, ChevronDown, Quote, Briefcase, DollarSign, Calendar, MapPin } from "lucide-react";
 import logoPng from "@/assets/logo.png";
+import newLogoPng from "@assets/Photoroom_20260131_221621_1769915813253.png";
 import { useRef, useMemo } from "react";
 import { useCampaigns } from "@/hooks/use-campaigns";
 
@@ -147,7 +148,7 @@ export default function Landing() {
           style={prefersReducedMotion ? {} : { opacity: heroOpacity }}
         >
           <img
-            src={logoPng}
+            src={newLogoPng}
             alt="TrueNorthUGC"
             loading="eager"
             decoding="async"
