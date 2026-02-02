@@ -3,6 +3,7 @@ import type { Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
+import { registerChatRoutes } from "./replit_integrations/chat";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { sendBulkEmails } from "./gmail";
@@ -18,6 +19,9 @@ export async function registerRoutes(
 
   // Object Storage routes for file uploads
   registerObjectStorageRoutes(app);
+
+  // AI Chat routes for the assistant
+  registerChatRoutes(app);
 
   // Analytics endpoints (fire-and-forget, no response needed)
   app.post("/api/analytics/vitals", (req, res) => {
