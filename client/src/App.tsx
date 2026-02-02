@@ -5,6 +5,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { FeedbackWidget } from "@/components/FeedbackWidget";
+import { AiChatWidget } from "@/components/AiChatWidget";
 import logoImage from "@assets/Photoroom_20260131_221621_1769915813253.png";
 
 const Landing = lazy(() => import("@/pages/Landing"));
@@ -73,6 +74,7 @@ function App() {
         <Toaster />
         <Router />
         <FeedbackWidget />
+        <AiChatWidget />
       </TooltipProvider>
     </QueryClientProvider>
   );
