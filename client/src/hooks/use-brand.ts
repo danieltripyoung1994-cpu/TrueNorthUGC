@@ -14,11 +14,10 @@ export function useBrand() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [api.brands.me.path] });
+      queryClient.invalidateQueries({ queryKey: [api.{/brands.me.path\}});
     },
   });
-
-  return {
+return {
     brand,
     isLoading,
     error,
