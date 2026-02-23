@@ -14,7 +14,9 @@ export function useBrand() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [api.{/brands.me.path\}});
+      queryClient.invalidateQueries({
+        queryKey: ["brands", "me"]
+      });
     },
   });
 return {
