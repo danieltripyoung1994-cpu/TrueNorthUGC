@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "W73KBAXv1Mhs6zrHkn7Bf"
+uri = "file://project_files.tar.gz"
+type = "unspecified"
+title = "Project Files (tar.gz)"
