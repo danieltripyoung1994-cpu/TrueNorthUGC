@@ -205,19 +205,14 @@ export default function Profile() {
                           whileTap={{ scale: 0.9 }}
                         >
                           <Music2 className="h-6 w-6" />
-                        </motion.a>
+                        </motion.a
                       )}
-                      {creator.socialLinks?.youtube && (
-                        <motion.a 
-                          href={creator.socialLinks.youtube} 
-                          target="_blank" 
-                          rel="noreferrer" 
-                          className="text-muted-foreground hover:text-pink-500 transition-colors"
-                          whileHover={{ scale: 1.2, rotate: 5 }}
-                          whileTap={{ scale: 0.9 }}
-                        >
-                          <Youtube className="h-6 w-6" />
-                        </motion.a>
+      
+                      {creator.socialLinks?.youtube && ( <motion.a              href{creator.socialLinks.youtube} 
+target="_blank"          rel="noreferrer" 
+className="text-muted-foreground hover:text-pink-500 transition-colors" whileHover={{ scale: 1.2, rotate: 5 }}
+whileTap={{ scale: 0.9 }} >
+                               <Youtube className="h-6 w-6" /> </motion.a>
                       )}
                     </div>
                   </div>
