@@ -6,7 +6,8 @@ import { useReviewsByCreator } from "@/hooks/use-reviews";
 import { useParams, useLocation, Redirect } from "wouter";
 import {
   Share2, Link as LinkIcon, Settings, Youtube, Video, Star, MapPin,
-  Globe, MessageCircle, CheckCircle, Languages, Briefcase, ExternalLink
+  Globe, MessageCircle, CheckCircle, Languages, Briefcase, ExternalLink,
+  DollarSign, TrendingUp, FileText, BarChart2, Image, Film, Info
 } from "lucide-react";
 import { SiTiktok, SiInstagram, SiSnapchat, SiX, SiFacebook, SiYoutube, SiCanva } from "react-icons/si";
 import { ProfileSkeleton } from "@/components/ui/skeleton-loaders";
@@ -440,6 +441,57 @@ export default function Profile() {
                 <p className="text-xs text-muted-foreground mt-1">Niches</p>
               </Card>
           </motion.div>
+
+          {/* Rate Card / CPM Section */}
+          {(() => {
+            const rc = (creator as any).rateCard;
+            const hasRates = rc && (rc.cpmRate || rc.postRate || rc.storyRate || rc.videoRate || rc.minBudget);
+            if (!hasRates) return null;
+            const currency = rc.currency || "CAD";
+            const fmt = (v?: number) => v ? `$${v.toLocaleString()} ${currency}` : null;
+            const rates = [
+              { icon: <BarChart2 className="h-4 w-4 text-cyan-400" />, label: "CPM Rate", value: rc.cpmRate ? `$${rc.cpmRate} ${currency} / 1K views` : null },
+              { icon: <Image className="h-4 w-4 text-pink-400" />, label: "Static Post", value: fmt(rc.postRate) },
+              { icon: <TrendingUp className="h-4 w-4 text-purple-400" />, label: "Story / Short", value: fmt(rc.storyRate) },
+              { icon: <Film className="h-4 w-4 text-orange-400" />, label: "Video", value: fmt(rc.videoRate) },
+              { icon: <DollarSign className="h-4 w-4 text-green-400" />, label: "Min Budget", value: fmt(rc.minBudget) },
+            ].filter(r => r.value !== null);
+            return (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.28 }}
+                data-testid="section-rate-card"
+              >
+                <div className="space-y-5">
+                  <div className="flex items-center gap-4">
+                    <h2 className="text-3xl font-black tracking-tighter flex items-center gap-2">
+                      <DollarSign className="h-6 w-6 text-pink-500" />
+                      <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Rate Card</span>
+                    </h2>
+                    <div className="h-px bg-gradient-to-r from-pink-500/50 via-purple-500/50 to-transparent flex-1" />
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                    {rates.map(r => (
+                      <Card key={r.label} className="bg-card/50 backdrop-blur-sm border-white/10 p-4 flex items-start gap-3">
+                        <div className="p-2 rounded-lg bg-white/5 shrink-0">{r.icon}</div>
+                        <div>
+                          <p className="text-xs text-muted-foreground">{r.label}</p>
+                          <p className="font-bold text-sm sm:text-base" data-testid={`rate-${r.label.toLowerCase().replace(/\s+/g, '-')}`}>{r.value}</p>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                  {rc.notes && (
+                    <Card className="bg-card/50 backdrop-blur-sm border-white/10 p-4 flex gap-3 items-start">
+                      <Info className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+                      <p className="text-sm text-muted-foreground" data-testid="rate-notes">{rc.notes}</p>
+                    </Card>
+                  )}
+                </div>
+              </motion.div>
+            );
+          })()}
 
           {/* Portfolio Section */}
           {creator.portfolio && creator.portfolio.length > 0 && (

@@ -147,7 +147,16 @@ export default function Dashboard() {
       portfolio: [] as any[],
       location: "",
       languages: [] as string[],
-      experienceLevel: "Beginner"
+      experienceLevel: "Beginner",
+      rateCard: {
+        cpmRate: "" as string | number,
+        postRate: "" as string | number,
+        storyRate: "" as string | number,
+        videoRate: "" as string | number,
+        currency: "CAD",
+        minBudget: "" as string | number,
+        notes: ""
+      }
     }
   });
 
@@ -177,7 +186,16 @@ export default function Dashboard() {
         portfolio: creatorProfile.portfolio || [],
         location: (creatorProfile as any).location || "",
         languages: (creatorProfile as any).languages || [],
-        experienceLevel: (creatorProfile as any).experienceLevel || "Beginner"
+        experienceLevel: (creatorProfile as any).experienceLevel || "Beginner",
+        rateCard: {
+          cpmRate: (creatorProfile as any).rateCard?.cpmRate ?? "",
+          postRate: (creatorProfile as any).rateCard?.postRate ?? "",
+          storyRate: (creatorProfile as any).rateCard?.storyRate ?? "",
+          videoRate: (creatorProfile as any).rateCard?.videoRate ?? "",
+          currency: (creatorProfile as any).rateCard?.currency ?? "CAD",
+          minBudget: (creatorProfile as any).rateCard?.minBudget ?? "",
+          notes: (creatorProfile as any).rateCard?.notes ?? ""
+        }
       });
     }
   }, [creatorProfile, creatorForm]);
@@ -218,9 +236,21 @@ export default function Dashboard() {
         if (!socialLinks[key]) delete socialLinks[key];
       });
 
+      // Build rateCard — only include numeric fields that have values
+      const rateCardRaw = data.rateCard || {};
+      const rateCard: Record<string, number | string | undefined> = {};
+      if (rateCardRaw.cpmRate !== "" && rateCardRaw.cpmRate !== undefined) rateCard.cpmRate = Number(rateCardRaw.cpmRate);
+      if (rateCardRaw.postRate !== "" && rateCardRaw.postRate !== undefined) rateCard.postRate = Number(rateCardRaw.postRate);
+      if (rateCardRaw.storyRate !== "" && rateCardRaw.storyRate !== undefined) rateCard.storyRate = Number(rateCardRaw.storyRate);
+      if (rateCardRaw.videoRate !== "" && rateCardRaw.videoRate !== undefined) rateCard.videoRate = Number(rateCardRaw.videoRate);
+      if (rateCardRaw.minBudget !== "" && rateCardRaw.minBudget !== undefined) rateCard.minBudget = Number(rateCardRaw.minBudget);
+      if (rateCardRaw.currency) rateCard.currency = rateCardRaw.currency;
+      if (rateCardRaw.notes) rateCard.notes = rateCardRaw.notes;
+
       await updateCreator.mutateAsync({
         ...data,
-        socialLinks
+        socialLinks,
+        rateCard: Object.keys(rateCard).length > 0 ? rateCard : {}
       });
       setIsEditDialogOpen(false);
     } catch (e) {}
@@ -804,6 +834,57 @@ export default function Dashboard() {
                                     </button>
                                   );
                                 })}
+                              </div>
+                            </div>
+
+                            {/* Rate Card */}
+                            <div className="space-y-3 pt-4 border-t border-white/10">
+                              <h3 className="font-bold text-sm uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                <span className="text-pink-500">$</span> Rate Card
+                              </h3>
+                              <p className="text-xs text-muted-foreground">Set your rates so brands know what to expect. Leave blank to keep private.</p>
+                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                {[
+                                  { name: "rateCard.cpmRate" as const, label: "CPM ($/1K views)", placeholder: "5.00" },
+                                  { name: "rateCard.postRate" as const, label: "Static Post ($)", placeholder: "150" },
+                                  { name: "rateCard.storyRate" as const, label: "Story/Short ($)", placeholder: "100" },
+                                  { name: "rateCard.videoRate" as const, label: "Video ($)", placeholder: "350" },
+                                  { name: "rateCard.minBudget" as const, label: "Min Budget ($)", placeholder: "500" },
+                                ].map(({ name, label, placeholder }) => (
+                                  <div key={name} className="space-y-1">
+                                    <label className="text-xs font-medium text-muted-foreground">{label}</label>
+                                    <input
+                                      type="number"
+                                      min={0}
+                                      step="0.01"
+                                      placeholder={placeholder}
+                                      className="w-full h-9 rounded-lg border border-border/50 bg-background px-3 text-sm focus:border-pink-500/50 focus:outline-none"
+                                      data-testid={`input-rate-${name.replace(".", "-")}`}
+                                      {...creatorForm.register(name)}
+                                    />
+                                  </div>
+                                ))}
+                                <div className="space-y-1">
+                                  <label className="text-xs font-medium text-muted-foreground">Currency</label>
+                                  <select
+                                    className="w-full h-9 rounded-lg border border-border/50 bg-background px-3 text-sm focus:border-pink-500/50 focus:outline-none"
+                                    data-testid="select-rate-currency"
+                                    {...creatorForm.register("rateCard.currency")}
+                                  >
+                                    <option value="CAD">CAD</option>
+                                    <option value="USD">USD</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div className="space-y-1">
+                                <label className="text-xs font-medium text-muted-foreground">Rate Notes (optional)</label>
+                                <textarea
+                                  rows={2}
+                                  placeholder="e.g. Packages available, rush fees apply, etc."
+                                  className="w-full rounded-lg border border-border/50 bg-background px-3 py-2 text-sm focus:border-pink-500/50 focus:outline-none resize-none"
+                                  data-testid="textarea-rate-notes"
+                                  {...creatorForm.register("rateCard.notes")}
+                                />
                               </div>
                             </div>
                           </div>

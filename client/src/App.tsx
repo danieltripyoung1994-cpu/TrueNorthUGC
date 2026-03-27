@@ -16,6 +16,7 @@ const Pricing = lazy(() => import("@/pages/Pricing"));
 const LaunchCampaign = lazy(() => import("@/pages/LaunchCampaign"));
 const Campaigns = lazy(() => import("@/pages/Campaigns"));
 const Contact = lazy(() => import("@/pages/Contact"));
+const Brands = lazy(() => import("@/pages/Brands"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function PageLoader() {
@@ -60,6 +61,7 @@ function Router() {
         <Route path="/pricing" component={Pricing} />
         <Route path="/launch" component={LaunchCampaign} />
         <Route path="/campaigns" component={Campaigns} />
+        <Route path="/brands" component={Brands} />
         <Route path="/contact" component={Contact} />
         <Route component={NotFound} />
       </Switch>

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Search, FilterX, Megaphone, DollarSign, Calendar, MapPin, Package, Building, ExternalLink, Video, Users, Sparkles, Hash, AtSign, Clock, Shield, FileText } from "lucide-react";
+import { Search, FilterX, Megaphone, DollarSign, Calendar, MapPin, Package, Building, ExternalLink, Video, Users, Sparkles, Hash, AtSign, Clock, Shield, FileText, Trophy, BarChart2 } from "lucide-react";
 import { CardSkeleton } from "@/components/ui/skeleton-loaders";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
@@ -97,6 +97,7 @@ export default function Campaigns() {
   });
   const [search, setSearch] = useState("");
   const [niche, setNiche] = useState<string>("All");
+  const [dealType, setDealType] = useState<"all" | "campaign" | "contest">("all");
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
 
   const { data: campaigns, isLoading, isError } = useCampaigns("active");
@@ -108,8 +109,13 @@ export default function Campaigns() {
       campaign.description.toLowerCase().includes(search.toLowerCase());
     const matchesNiche = niche === "All" || 
       campaign.niches?.some(n => n.toLowerCase() === niche.toLowerCase());
-    return matchesSearch && matchesNiche;
+    const campaignDealType = (campaign as any).dealType || "campaign";
+    const matchesDeal = dealType === "all" || campaignDealType === dealType;
+    return matchesSearch && matchesNiche && matchesDeal;
   });
+
+  const campaignCount = campaigns?.filter(c => ((c as any).dealType || "campaign") === "campaign").length || 0;
+  const contestCount = campaigns?.filter(c => ((c as any).dealType || "campaign") === "contest").length || 0;
 
   const formatDeadline = (deadline: string | null) => {
     if (!deadline) return null;
@@ -179,6 +185,40 @@ export default function Campaigns() {
               Browse active campaigns from brands looking for talented creators like you.
             </motion.p>
           </div>
+        </motion.div>
+
+        {/* Deal Type Tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="flex gap-2 mb-5 sm:mb-7"
+        >
+          {[
+            { value: "all", label: "All Deals", icon: <Megaphone className="h-4 w-4" />, count: (campaignCount + contestCount) },
+            { value: "campaign", label: "Campaign Deals", icon: <Sparkles className="h-4 w-4" />, count: campaignCount },
+            { value: "contest", label: "Contest Deals", icon: <Trophy className="h-4 w-4" />, count: contestCount },
+          ].map(tab => (
+            <button
+              key={tab.value}
+              onClick={() => setDealType(tab.value as typeof dealType)}
+              data-testid={`tab-deal-${tab.value}`}
+              className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-semibold border transition-all duration-200 ${
+                dealType === tab.value
+                  ? "bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-pink-500/40 text-pink-400 shadow-sm shadow-pink-500/10"
+                  : "border-white/10 text-muted-foreground hover:border-white/20 hover:text-foreground"
+              }`}
+            >
+              {tab.icon}
+              <span className="hidden sm:inline">{tab.label}</span>
+              <span className="inline sm:hidden">{tab.label.split(" ")[0]}</span>
+              {!isLoading && (
+                <span className={`ml-0.5 px-1.5 py-0.5 rounded-full text-xs font-bold ${dealType === tab.value ? "bg-pink-500/20 text-pink-400" : "bg-card/80 text-muted-foreground"}`}>
+                  {tab.count}
+                </span>
+              )}
+            </button>
+          ))}
         </motion.div>
 
         <motion.div 
