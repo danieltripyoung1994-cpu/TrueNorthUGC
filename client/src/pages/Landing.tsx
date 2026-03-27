@@ -126,10 +126,7 @@ export default function Landing() {
   const [subscribed, setSubscribed] = useState(false);
   const newsletterMutation = useMutation({
     mutationFn: async (email: string) => {
-      return apiRequest("/api/newsletter/subscribe", {
-        method: "POST",
-        body: JSON.stringify({ email, type: "general" })
-      });
+      return apiRequest("POST", "/api/newsletter/subscribe", { email, type: "general" });
     },
     onSuccess: () => {
       setSubscribed(true);
