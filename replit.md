@@ -43,7 +43,7 @@ Preferred communication style: Simple, everyday language.
 
 ### Key Data Models
 - **Users**: Core user accounts (managed by Replit Auth)
-- **Creators**: Content creator profiles with portfolio, social links (TikTok, Instagram, YouTube, Twitter, Facebook, Canva), niches, location, languages, and experience level
+- **Creators**: Content creator profiles with portfolio, social links (TikTok, Instagram, YouTube, Twitter, Facebook, Canva), niches, location, languages, experience level, and `rateCard` (jsonb: cpmRate, postRate, storyRate, videoRate, currency, minBudget, notes)
 - **Brands**: Brand profiles with industry information, social links (Instagram, Twitter, LinkedIn, Facebook, Canva), niches, and location
 - **Messages**: Creator-brand messaging system with inbox/sent tabs
 - **Notifications**: Real-time notification system for messages and interactions
@@ -78,6 +78,10 @@ Preferred communication style: Simple, everyday language.
 - **Featured Campaigns**: Landing page displays active campaigns with empty state handling
 - **Reviews System**: Creators and brands can leave reviews and ratings after collaborations
 - **Gmail Integration**: Platform email communications via TrueNorthUGCcanada@gmail.com
+- **Rate Card (March 2026)**: Creators can set and display their rates (CPM, static post, story/short, video, min budget, currency, notes) on their public profiles. Editable from the Dashboard creator profile dialog. Displayed as a "Rate Card" section on profiles when any rate is set.
+- **Brands Directory (March 2026)**: New `/brands` page listing all brand profiles with search (by name/description/industry) and industry filter. Displays brand logo, name, industry, location, description, niche chips, social links, and a link to view their campaigns. Added "Brands" nav link to Navbar.
+- **Deal Type Tabs (March 2026)**: Campaigns page now has three tabs — "All Deals", "Campaign Deals", and "Contest Deals" — filtering campaigns by `dealType` field. Campaigns schema extended with `dealType` (campaign/contest), `prizeValue`, `contestRules`, `winnerCount`, `cpmRate`, `viewsGuaranteed` columns.
+- **Contest Campaigns (March 2026)**: CampaignFormModal has a deal type selector (Campaign Deal / Contest Deal) in the Basics tab. When "Contest Deal" is selected, contest-specific fields appear: Prize Value, Number of Winners, and Contest Rules / Eligibility. Navbar "Campaigns" link renamed to "Deals".
 - **Contact Page**: Contact form at /contact with phone (1-226-220-1522) and email (TrueNorthUGCcanada@gmail.com). Form submissions are emailed to platform owner.
 
 ### Performance Optimizations (February 2026)

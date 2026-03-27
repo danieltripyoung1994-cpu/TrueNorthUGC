@@ -48,6 +48,15 @@ export const creators = pgTable("creators", {
   location: text("location"),
   languages: jsonb("languages").$type<string[]>().default([]),
   experienceLevel: text("experience_level"), // e.g., Beginner, Pro, Elite
+  rateCard: jsonb("rate_card").$type<{
+    cpmRate?: number;       // $ per 1,000 views
+    postRate?: number;      // $ per static post
+    storyRate?: number;     // $ per story/short
+    videoRate?: number;     // $ per video
+    currency?: string;      // CAD by default
+    minBudget?: number;     // min project budget
+    notes?: string;         // rate notes
+  }>().default({}),
 });
 
 export const brands = pgTable("brands", {
@@ -223,6 +232,15 @@ export const campaigns = pgTable("campaigns", {
   briefDocument: text("brief_document"), // URL to campaign brief
   hashtags: jsonb("hashtags").$type<string[]>().default([]), // Required hashtags
   mentions: jsonb("mentions").$type<string[]>().default([]), // Required mentions
+  // Deal type — top-level categorization
+  dealType: text("deal_type").default("campaign"), // campaign, contest, cpm_deal
+  // Contest-specific fields
+  prizeValue: text("prize_value"), // e.g. "$500 cash prize"
+  contestRules: text("contest_rules"), // Eligibility / how to enter
+  winnerCount: integer("winner_count"), // Number of winners
+  // CPM deal fields
+  cpmRate: text("cpm_rate"), // e.g. "$5 CPM"
+  viewsGuaranteed: text("views_guaranteed"), // e.g. "50,000 views"
 });
 
 export const insertCampaignSchema = createInsertSchema(campaigns).omit({ id: true });

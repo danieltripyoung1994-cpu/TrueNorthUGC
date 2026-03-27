@@ -10,6 +10,7 @@ export interface IStorage {
   updateCreator(userId: string, updates: Partial<InsertCreator>): Promise<Creator>;
   deleteCreatorByUserId(userId: string): Promise<boolean>;
   
+  getBrands(): Promise<Brand[]>;
   getBrandByUserId(userId: string): Promise<Brand | undefined>;
   createBrand(brand: InsertBrand): Promise<Brand>;
   updateBrand(userId: string, updates: Partial<InsertBrand>): Promise<Brand>;
@@ -205,7 +206,8 @@ export class DatabaseStorage implements IStorage {
       portfolio: (updates.portfolio ?? existing.portfolio ?? []) as CreatorPortfolioItem[],
       location: updates.location !== undefined ? updates.location : existing.location,
       languages: (updates.languages ?? existing.languages ?? []) as string[],
-      experienceLevel: updates.experienceLevel !== undefined ? updates.experienceLevel : existing.experienceLevel
+      experienceLevel: updates.experienceLevel !== undefined ? updates.experienceLevel : existing.experienceLevel,
+      rateCard: updates.rateCard !== undefined ? updates.rateCard : (existing as any).rateCard ?? {}
     };
     const [updated] = await db
       .update(creators)
@@ -218,6 +220,11 @@ export class DatabaseStorage implements IStorage {
   async deleteCreatorByUserId(userId: string): Promise<boolean> {
     const result = await db.delete(creators).where(eq(creators.userId, userId)).returning();
     return result.length > 0;
+  }
+
+  async getBrands(): Promise<Brand[]> {
+    const results = await db.select().from(brands);
+    return results.map(normalizeBrand);
   }
 
   async getBrandByUserId(userId: string): Promise<Brand | undefined> {

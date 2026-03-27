@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useCreateCampaign, useUpdateCampaign } from "@/hooks/use-campaigns";
 import { type Campaign } from "@shared/schema";
-import { Loader2, Plus, X, ChevronDown, ChevronUp, Video, Instagram, Youtube, Hash, AtSign, Sparkles, Wand2 } from "lucide-react";
+import { Loader2, Plus, X, ChevronDown, ChevronUp, Video, Instagram, Youtube, Hash, AtSign, Sparkles, Wand2, Trophy, Megaphone } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion, AnimatePresence } from "framer-motion";
@@ -85,6 +85,7 @@ const campaignFormSchema = z.object({
   deadline: z.string().optional(),
   location: z.string().optional(),
   status: z.enum(["active", "paused", "closed"]),
+  dealType: z.enum(["campaign", "contest"]).default("campaign"),
   campaignType: z.string().optional(),
   experienceLevel: z.string().optional(),
   compensationType: z.string().optional(),
@@ -95,6 +96,10 @@ const campaignFormSchema = z.object({
   creatorCount: z.preprocess((val) => val === "" || val === undefined ? undefined : Number(val), z.number().optional()),
   applicationDeadline: z.string().optional(),
   briefDocument: z.string().optional(),
+  // Contest fields
+  prizeValue: z.string().optional(),
+  contestRules: z.string().optional(),
+  winnerCount: z.preprocess((val) => val === "" || val === undefined ? undefined : Number(val), z.number().optional()),
 });
 
 type CampaignFormValues = z.infer<typeof campaignFormSchema>;
@@ -178,6 +183,7 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
       deadline: "",
       location: "",
       status: "active",
+      dealType: "campaign",
       campaignType: "",
       experienceLevel: "any",
       compensationType: "fixed",
@@ -188,6 +194,9 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
       creatorCount: undefined,
       applicationDeadline: "",
       briefDocument: "",
+      prizeValue: "",
+      contestRules: "",
+      winnerCount: undefined,
     },
   });
 
@@ -211,6 +220,10 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
         creatorCount: campaign.creatorCount || undefined,
         applicationDeadline: campaign.applicationDeadline ? campaign.applicationDeadline.split("T")[0] : "",
         briefDocument: campaign.briefDocument || "",
+        dealType: ((campaign as any).dealType || "campaign") as "campaign" | "contest",
+        prizeValue: (campaign as any).prizeValue || "",
+        contestRules: (campaign as any).contestRules || "",
+        winnerCount: (campaign as any).winnerCount || undefined,
       });
       setNiches(campaign.niches || []);
       setPlatforms(campaign.platforms || []);
@@ -226,6 +239,7 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
         deadline: "",
         location: "",
         status: "active",
+        dealType: "campaign",
         campaignType: "",
         experienceLevel: "any",
         compensationType: "fixed",
@@ -236,6 +250,9 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
         creatorCount: undefined,
         applicationDeadline: "",
         briefDocument: "",
+        prizeValue: "",
+        contestRules: "",
+        winnerCount: undefined,
       });
       setNiches([]);
       setPlatforms([]);
@@ -318,6 +335,10 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
       creatorCount: data.creatorCount || null,
       applicationDeadline: data.applicationDeadline || null,
       briefDocument: data.briefDocument || null,
+      dealType: data.dealType || "campaign",
+      prizeValue: data.prizeValue || null,
+      contestRules: data.contestRules || null,
+      winnerCount: data.winnerCount || null,
     };
 
     try {
@@ -456,6 +477,42 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
               </TabsList>
 
               <TabsContent value="basics" className="space-y-6 pt-4">
+                {/* Deal Type Selector */}
+                <FormField
+                  control={form.control}
+                  name="dealType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Deal Type</FormLabel>
+                      <div className="flex gap-3">
+                        {[
+                          { value: "campaign", label: "Campaign Deal", icon: <Megaphone className="h-4 w-4" />, desc: "Paid / gifted UGC collaboration" },
+                          { value: "contest", label: "Contest Deal", icon: <Trophy className="h-4 w-4" />, desc: "Prize-based creator contest" },
+                        ].map(opt => (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => field.onChange(opt.value)}
+                            data-testid={`button-deal-type-${opt.value}`}
+                            className={`flex-1 flex items-start gap-2 p-3 rounded-xl border text-left transition-all ${
+                              field.value === opt.value
+                                ? "border-pink-500/50 bg-pink-500/10 text-pink-400"
+                                : "border-border/50 hover:border-border text-muted-foreground hover:text-foreground"
+                            }`}
+                          >
+                            {opt.icon}
+                            <div>
+                              <p className="font-semibold text-sm">{opt.label}</p>
+                              <p className="text-xs opacity-70">{opt.desc}</p>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name="title"
@@ -578,6 +635,69 @@ export function CampaignFormModal({ open, onOpenChange, campaign }: CampaignForm
                     )}
                   />
                 </div>
+
+                {/* Contest-specific fields */}
+                {form.watch("dealType") === "contest" && (
+                  <div className="space-y-4 p-4 rounded-xl border border-yellow-500/20 bg-yellow-500/5">
+                    <p className="text-sm font-semibold flex items-center gap-2 text-yellow-400">
+                      <Trophy className="h-4 w-4" /> Contest Details
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="prizeValue"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Prize Value</FormLabel>
+                            <FormControl>
+                              <Input placeholder="e.g. $500 cash prize" {...field} data-testid="input-prize-value" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="winnerCount"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Number of Winners</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min={1}
+                                placeholder="e.g. 3"
+                                {...field}
+                                value={field.value ?? ""}
+                                onChange={e => field.onChange(e.target.value === "" ? undefined : Number(e.target.value))}
+                                data-testid="input-winner-count"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <FormField
+                      control={form.control}
+                      name="contestRules"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Contest Rules / Eligibility</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Who can enter? How to submit? Judging criteria?"
+                              className="resize-none h-20"
+                              {...field}
+                              data-testid="textarea-contest-rules"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
 
                 <div>
                   <FormLabel>Target Platforms</FormLabel>

@@ -157,6 +157,12 @@ export async function registerRoutes(
     }
   });
 
+  // List all brands (public)
+  app.get("/api/brands", async (req, res) => {
+    const allBrands = await storage.getBrands();
+    res.json(allBrands);
+  });
+
   // Get brand by userId (public)
   app.get("/api/brands/:userId", async (req, res) => {
     const userId = req.params.userId;
