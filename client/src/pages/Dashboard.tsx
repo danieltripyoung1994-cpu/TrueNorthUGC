@@ -5,7 +5,7 @@ import { useBrand } from "@/hooks/use-brand";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera, Mail, Settings, Megaphone, Plus, Pencil, Trash2, Calendar, DollarSign, MapPin, Package, Upload, TrendingUp, Users, Star, Zap, Trophy, Crown } from "lucide-react";
+import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera, Mail, Settings, Megaphone, Plus, Pencil, Trash2, Calendar, DollarSign, MapPin, Package, Upload, TrendingUp, Users, Star, Zap, Trophy, Crown, CheckCircle2 } from "lucide-react";
 import { DashboardSkeleton } from "@/components/ui/skeleton-loaders";
 import { Link, useLocation } from "wouter";
 import { useState, useEffect, useRef } from "react";
@@ -29,6 +29,24 @@ import { useTransactions } from "@/hooks/use-transactions";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
+
+const CREATOR_NICHES = ["Fitness", "Beauty", "Tech", "Travel", "Food", "Fashion", "Lifestyle", "Gaming", "Health", "Finance", "Pets", "Parenting"];
+const CREATOR_LANGUAGES = ["English", "French", "Spanish", "Mandarin", "Punjabi", "Arabic", "Portuguese", "Tagalog"];
+
+function getProfileCompletion(profile: any): number {
+  if (!profile) return 0;
+  let score = 0;
+  if (profile.name) score += 15;
+  if (profile.handle) score += 10;
+  if (profile.bio) score += 15;
+  if (profile.profileImage) score += 15;
+  if (profile.niches && profile.niches.length > 0) score += 15;
+  if (profile.location) score += 10;
+  if (profile.portfolio && profile.portfolio.length > 0) score += 10;
+  const links = profile.socialLinks || {};
+  if (Object.values(links).some((v) => v)) score += 10;
+  return Math.min(score, 100);
+}
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -556,25 +574,61 @@ export default function Dashboard() {
                   <CardHeader>
                     <CardTitle className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Creator Profile Overview</CardTitle>
                   </CardHeader>
-                  <CardContent className="flex justify-between items-center">
-                    <div className="flex items-center gap-4">
-                      <div className="h-16 w-16 rounded-full bg-muted overflow-hidden border shadow-inner">
-                        {creatorProfile.profileImage ? (
-                          <img src={creatorProfile.profileImage} className="h-full w-full object-cover" alt="" loading="lazy" />
-                        ) : (
-                          <User className="h-full w-full p-4 text-muted-foreground" />
-                        )}
+                  <CardContent className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-4">
+                        <div className="h-16 w-16 rounded-full bg-muted overflow-hidden border shadow-inner shrink-0">
+                          {creatorProfile.profileImage ? (
+                            <img src={creatorProfile.profileImage} className="h-full w-full object-cover" alt="" loading="lazy" />
+                          ) : (
+                            <User className="h-full w-full p-4 text-muted-foreground" />
+                          )}
+                        </div>
+                        <div>
+                          <p className="font-bold text-lg">{creatorProfile.name}</p>
+                          <p className="text-sm text-muted-foreground">@{creatorProfile.handle}</p>
+                          {(creatorProfile as any).location && (
+                            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                              <MapPin className="h-3 w-3 text-pink-500" />
+                              {(creatorProfile as any).location}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-bold text-lg">{creatorProfile.name}</p>
-                        <p className="text-sm text-muted-foreground">@{creatorProfile.handle}</p>
+                      <div className="flex gap-2">
+                        <Link href={`/creators/${creatorProfile.handle}`}>
+                          <Button variant="outline" className="hover-elevate border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20" data-testid="link-view-profile">View Public Profile</Button>
+                        </Link>
                       </div>
                     </div>
-                    <div className="flex gap-2">
-                      <Link href={`/creators/${creatorProfile.handle}`}>
-                        <Button variant="outline" className="hover-elevate border-white/10 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20" data-testid="link-view-profile">View Public Profile</Button>
-                      </Link>
-                    </div>
+                    {/* Profile Completion Meter */}
+                    {(() => {
+                      const pct = getProfileCompletion(creatorProfile);
+                      const color = pct < 50 ? "text-orange-400" : pct < 80 ? "text-yellow-400" : "text-green-400";
+                      return (
+                        <div className="space-y-1.5" data-testid="profile-completion">
+                          <div className="flex justify-between items-center text-sm">
+                            <span className="flex items-center gap-1.5 font-medium text-muted-foreground">
+                              <CheckCircle2 className="h-4 w-4 text-pink-500" />
+                              Profile Strength
+                            </span>
+                            <span className={`font-bold ${color}`}>{pct}%</span>
+                          </div>
+                          <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 transition-all duration-700"
+                              style={{ width: `${pct}%` }}
+                              data-testid="profile-completion-bar"
+                            />
+                          </div>
+                          {pct < 100 && (
+                            <p className="text-xs text-muted-foreground">
+                              {pct < 50 ? "Add a bio, photo, niches, and social links to attract more brands." : pct < 80 ? "Almost there! Add portfolio videos and languages to complete your profile." : "Looking great! Add more portfolio videos to stand out even more."}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
 
@@ -681,12 +735,77 @@ export default function Dashboard() {
                                 <FormItem>
                                   <FormLabel>Experience Level</FormLabel>
                                   <FormControl>
-                                    <Input placeholder="Beginner, Pro, etc." {...field} />
+                                    <select
+                                      value={field.value || ""}
+                                      onChange={field.onChange}
+                                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                      data-testid="select-experience-level"
+                                    >
+                                      <option value="">Select level</option>
+                                      <option value="Beginner">Beginner</option>
+                                      <option value="Intermediate">Intermediate</option>
+                                      <option value="Pro">Pro</option>
+                                      <option value="Elite">Elite</option>
+                                    </select>
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
                               )}
                             />
+                            {/* Niches */}
+                            <div className="space-y-2">
+                              <p className="text-sm font-medium leading-none">Content Niches</p>
+                              <div className="flex flex-wrap gap-2" data-testid="niche-toggles">
+                                {CREATOR_NICHES.map((niche) => {
+                                  const selected = (creatorForm.watch("niches") || []).includes(niche);
+                                  return (
+                                    <button
+                                      key={niche}
+                                      type="button"
+                                      onClick={() => {
+                                        const current = creatorForm.getValues("niches") || [];
+                                        creatorForm.setValue(
+                                          "niches",
+                                          selected ? current.filter((n: string) => n !== niche) : [...current, niche],
+                                          { shouldValidate: true }
+                                        );
+                                      }}
+                                      data-testid={`niche-toggle-${niche}`}
+                                      className={`px-3 py-1 rounded-full text-xs font-bold border transition-all ${selected ? "bg-pink-500 border-pink-500 text-white" : "border-white/20 text-muted-foreground hover:border-pink-500/50"}`}
+                                    >
+                                      {niche}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                            {/* Languages */}
+                            <div className="space-y-2">
+                              <p className="text-sm font-medium leading-none">Languages</p>
+                              <div className="flex flex-wrap gap-2" data-testid="language-toggles">
+                                {CREATOR_LANGUAGES.map((lang) => {
+                                  const selected = (creatorForm.watch("languages") || []).includes(lang);
+                                  return (
+                                    <button
+                                      key={lang}
+                                      type="button"
+                                      onClick={() => {
+                                        const current = creatorForm.getValues("languages") || [];
+                                        creatorForm.setValue(
+                                          "languages",
+                                          selected ? current.filter((l: string) => l !== lang) : [...current, lang],
+                                          { shouldValidate: true }
+                                        );
+                                      }}
+                                      data-testid={`language-toggle-${lang}`}
+                                      className={`px-3 py-1 rounded-full text-xs font-bold border transition-all ${selected ? "bg-cyan-500 border-cyan-500 text-white" : "border-white/20 text-muted-foreground hover:border-cyan-500/50"}`}
+                                    >
+                                      {lang}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
                           </div>
                           <div className="space-y-4">
                             <h3 className="font-bold text-sm uppercase tracking-wider text-muted-foreground">Social Media</h3>
