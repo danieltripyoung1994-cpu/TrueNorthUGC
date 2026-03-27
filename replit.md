@@ -104,6 +104,20 @@ Preferred communication style: Simple, everyday language.
   - Submits to /api/feedback endpoint
   - Success confirmation with auto-close
 
+### Creator Profile Features (Updated)
+- **Stats Strip**: Always-visible grid on profile showing Portfolio Videos, Reviews, Avg Rating, and Niches count
+- **Social Links Display**: All platforms shown (Instagram, TikTok, YouTube, Twitter/X, Facebook, Canva) with correct icons
+- **Creator Metadata**: Location, experience level, and languages displayed with icons in profile header
+- **Available Badge**: Green "Available" indicator on creator avatar
+- **Message Creator button**: Visible to logged-in users viewing other profiles, routes to messages
+- **Profile Completion Meter**: Visible in Dashboard overview card, shows % completion with gradient bar and tips
+
+### Dashboard Improvements
+- **Niches Toggle**: Click-to-select niche chips in creator edit dialog (Fitness, Beauty, Tech, Travel, etc.)
+- **Languages Toggle**: Click-to-select language chips (English, French, Spanish, etc.)
+- **Experience Level Dropdown**: Replaced free-text with proper select (Beginner/Intermediate/Pro/Elite)
+- **getProfileCompletion()**: Utility function calculating profile completeness score (0–100)
+
 ### Project Structure
 ```
 client/           # React frontend
