@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Check, Sparkles, Star, Crown, Zap, ArrowRight, Trophy } from "lucide-react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
+import { PageTransition } from "@/components/ui/page-transition";
 import { useQuery } from "@tanstack/react-query";
 import { Offer } from "@shared/schema";
 import { Badge } from "@/components/ui/badge";
@@ -133,6 +134,7 @@ export default function Pricing() {
   ];
 
   return (
+    <PageTransition>
     <div className="min-h-screen bg-background overflow-hidden">
       <Navbar />
       <main className="container mx-auto px-4 py-16 sm:py-24 relative">

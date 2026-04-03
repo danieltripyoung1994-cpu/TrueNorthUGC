@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, FilterX, MapPin, Star, Users, Sparkles } from "lucide-react";
 import { CardSkeleton } from "@/components/ui/skeleton-loaders";
 import { motion, AnimatePresence } from "framer-motion";
+import { PageTransition } from "@/components/ui/page-transition";
 
 const NICHES = ["All", "Fitness", "Beauty", "Tech", "Travel", "Food", "Fashion", "Lifestyle", "Gaming"];
 const LOCATIONS = ["All Locations", "Ontario", "British Columbia", "Alberta", "Quebec", "Manitoba", "Saskatchewan", "Nova Scotia", "New Brunswick", "Newfoundland", "Prince Edward Island"];
@@ -59,6 +60,7 @@ export default function Directory() {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-screen bg-background overflow-hidden">
       <Navbar />
       
@@ -238,5 +240,6 @@ export default function Directory() {
         </AnimatePresence>
       </main>
     </div>
+    </PageTransition>
   );
 }

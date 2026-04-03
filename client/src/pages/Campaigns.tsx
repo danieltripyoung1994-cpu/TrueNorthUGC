@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Search, FilterX, Megaphone, DollarSign, Calendar, MapPin, Package, Building, ExternalLink, Video, Users, Sparkles, Hash, AtSign, Clock, Shield, FileText, Trophy, BarChart2 } from "lucide-react";
 import { CardSkeleton } from "@/components/ui/skeleton-loaders";
 import { motion, AnimatePresence } from "framer-motion";
+import { PageTransition } from "@/components/ui/page-transition";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 
@@ -142,6 +143,7 @@ export default function Campaigns() {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-screen bg-background overflow-hidden">
       <Navbar />
       
@@ -616,5 +618,6 @@ export default function Campaigns() {
         </Dialog>
       </main>
     </div>
+    </PageTransition>
   );
 }
