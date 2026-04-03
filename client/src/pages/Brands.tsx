@@ -11,6 +11,7 @@ import { Building2, Search, FilterX, Globe, ExternalLink, MapPin, Megaphone } fr
 import { SiInstagram, SiX, SiFacebook } from "react-icons/si";
 import { CardSkeleton } from "@/components/ui/skeleton-loaders";
 import { motion, AnimatePresence } from "framer-motion";
+import { PageTransition } from "@/components/ui/page-transition";
 import { useState } from "react";
 import { Link } from "wouter";
 
