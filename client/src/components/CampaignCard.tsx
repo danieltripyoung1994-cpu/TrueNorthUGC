@@ -4,7 +4,7 @@ import { type Campaign, type Brand } from "@shared/schema";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, DollarSign, MapPin, Package, Building, ArrowRight, Video, Users, Sparkles } from "lucide-react";
+import { Calendar, DollarSign, MapPin, Package, Building, ArrowRight, Video, Users, Sparkles, Trophy } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 const CAMPAIGN_TYPE_LABELS: Record<string, string> = {
@@ -101,6 +101,18 @@ export function CampaignCard({ campaign, onViewDetails }: CampaignCardProps) {
           </p>
 
           <div className="flex flex-wrap gap-1.5">
+            {(campaign as any).dealType === "contest" && (
+              <Badge className="text-xs bg-gradient-to-r from-amber-500 to-orange-500 border-0 text-white">
+                <Trophy className="h-3 w-3 mr-1" />
+                Contest
+              </Badge>
+            )}
+            {(campaign as any).dealType === "cpm_deal" && (
+              <Badge className="text-xs bg-gradient-to-r from-cyan-500 to-blue-500 border-0 text-white">
+                <Sparkles className="h-3 w-3 mr-1" />
+                CPM Deal
+              </Badge>
+            )}
             {campaign.campaignType && (
               <Badge variant="default" className="text-xs bg-gradient-to-r from-pink-500 to-purple-500 border-white/10">
                 {CAMPAIGN_TYPE_LABELS[campaign.campaignType] || campaign.campaignType}
