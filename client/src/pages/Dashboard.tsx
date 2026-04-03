@@ -39,12 +39,14 @@ function getProfileCompletion(profile: any): number {
   if (profile.name) score += 15;
   if (profile.handle) score += 10;
   if (profile.bio) score += 15;
-  if (profile.profileImage) score += 15;
-  if (profile.niches && profile.niches.length > 0) score += 15;
+  if (profile.profileImage) score += 10;
+  if (profile.niches && profile.niches.length > 0) score += 10;
   if (profile.location) score += 10;
   if (profile.portfolio && profile.portfolio.length > 0) score += 10;
   const links = profile.socialLinks || {};
   if (Object.values(links).some((v) => v)) score += 10;
+  const rc = profile.rateCard || {};
+  if (Object.values(rc).some((v) => v)) score += 10;
   return Math.min(score, 100);
 }
 

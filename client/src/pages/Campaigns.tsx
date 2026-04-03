@@ -379,6 +379,54 @@ export default function Campaigns() {
                   </div>
                 )}
 
+                {(selectedCampaign as any).dealType === "contest" && (
+                  <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-3">
+                    <h4 className="font-semibold flex items-center gap-2 text-amber-400">
+                      <Trophy className="h-5 w-5" />
+                      Contest Details
+                    </h4>
+                    {(selectedCampaign as any).prizeValue && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-muted-foreground">Prize Value:</span>
+                        <span className="font-semibold text-amber-300">{(selectedCampaign as any).prizeValue}</span>
+                      </div>
+                    )}
+                    {(selectedCampaign as any).winnerCount && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-muted-foreground">Winners:</span>
+                        <span className="font-semibold">{(selectedCampaign as any).winnerCount}</span>
+                      </div>
+                    )}
+                    {(selectedCampaign as any).contestRules && (
+                      <div className="text-sm">
+                        <p className="text-muted-foreground mb-1">Rules &amp; Eligibility:</p>
+                        <p className="text-foreground/80">{(selectedCampaign as any).contestRules}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {(selectedCampaign as any).dealType === "cpm_deal" && ((selectedCampaign as any).cpmRate || (selectedCampaign as any).viewsGuaranteed) && (
+                  <div className="p-4 rounded-xl border border-cyan-500/30 bg-cyan-500/5 space-y-3">
+                    <h4 className="font-semibold flex items-center gap-2 text-cyan-400">
+                      <BarChart2 className="h-5 w-5" />
+                      CPM Deal Terms
+                    </h4>
+                    {(selectedCampaign as any).cpmRate && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-muted-foreground">Rate:</span>
+                        <span className="font-semibold text-cyan-300">{(selectedCampaign as any).cpmRate} per 1,000 views</span>
+                      </div>
+                    )}
+                    {(selectedCampaign as any).viewsGuaranteed && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-muted-foreground">Views Guaranteed:</span>
+                        <span className="font-semibold">{(selectedCampaign as any).viewsGuaranteed}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {selectedCampaign.platforms && selectedCampaign.platforms.length > 0 && (
                   <div>
                     <h4 className="font-semibold mb-2 flex items-center gap-2">

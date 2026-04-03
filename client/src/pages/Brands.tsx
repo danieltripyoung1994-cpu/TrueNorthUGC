@@ -164,11 +164,27 @@ export default function Brands() {
               key="empty"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-20 bg-gradient-to-br from-secondary/20 to-secondary/5 rounded-3xl border border-dashed border-border"
+              className="text-center py-20 bg-gradient-to-br from-secondary/20 to-secondary/5 rounded-3xl border border-dashed border-border px-4"
             >
-              <Building2 className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
-              <h3 className="text-xl font-bold">No brands found</h3>
-              <p className="text-muted-foreground">Try adjusting your search or filters.</p>
+              <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                <Building2 className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+              </motion.div>
+              {brands?.length === 0 ? (
+                <>
+                  <h3 className="text-xl font-bold mb-2">No brands listed yet</h3>
+                  <p className="text-muted-foreground mb-6">Be the first brand to join the TrueNorthUGC directory and connect with Canadian creators.</p>
+                  <Link href="/dashboard">
+                    <Button className="bg-gradient-to-r from-pink-500 to-purple-500 hover:shadow-lg hover:shadow-pink-500/20 border-0 text-white">
+                      List Your Brand
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-xl font-bold">No brands found</h3>
+                  <p className="text-muted-foreground">Try adjusting your search or filters.</p>
+                </>
+              )}
             </motion.div>
           ) : (
             <motion.div
