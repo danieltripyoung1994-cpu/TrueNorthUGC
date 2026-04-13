@@ -54,6 +54,7 @@ export default function Brands() {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-screen bg-background overflow-hidden">
       <Navbar />
 
@@ -205,6 +206,7 @@ export default function Brands() {
         </AnimatePresence>
       </main>
     </div>
+    </PageTransition>
   );
 }
 
