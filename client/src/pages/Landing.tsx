@@ -552,6 +552,7 @@ export default function Landing() {
               >
                 <motion.a 
                   href="/api/login"
+                  target="_top"
                   variants={itemVariants}
                 >
                   <Button size="lg" className="text-lg px-8 py-6 rounded-2xl shadow-xl shadow-primary/20 w-full sm:w-auto">
@@ -701,7 +702,7 @@ export default function Landing() {
             <p className="text-muted-foreground mb-6">
               Bonuses are cumulative. Complete 35+ campaigns and you'll have earned <span className="text-cyan-400 font-bold">$1,150</span> in total milestone rewards!
             </p>
-            <a href="/api/login">
+            <a href="/api/login" target="_top">
               <Button size="lg" className="rounded-xl bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-600 hover:to-cyan-500 shadow-xl shadow-cyan-500/20" data-testid="button-start-earning">
                 Start Earning Today
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -834,7 +835,7 @@ export default function Landing() {
               <p className="text-muted-foreground max-w-md mx-auto mb-6">
                 Brands are getting ready to post exciting opportunities. Check back soon or register to be notified when new campaigns launch.
               </p>
-              <a href="/api/login">
+              <a href="/api/login" target="_top">
                 <Button size="lg" className="rounded-xl" data-testid="button-register-brand">
                   Register as a Brand
                 </Button>
@@ -1004,7 +1005,7 @@ export default function Landing() {
                 <p className="text-muted-foreground mb-4">
                   Know a creator or brand that would love TrueNorthUGC? Refer them and earn $25 for every successful signup that completes their first campaign!
                 </p>
-                <a href="/api/login">
+                <a href="/api/login" target="_top">
                   <Button variant="outline" className="rounded-xl border-purple-500/30 hover:border-purple-500/60" data-testid="button-start-referring">
                     Start Referring
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -1040,6 +1041,7 @@ export default function Landing() {
             >
               <motion.a 
                 href="/api/login"
+                target="_top"
                 variants={itemVariants}
               >
                 <Button size="lg" variant="secondary" className="text-lg px-10 py-7 rounded-2xl w-full sm:w-auto shadow-xl">
@@ -1089,7 +1091,7 @@ export default function Landing() {
               <ul className="space-y-4 text-muted-foreground">
                 <li><Link href="/creators" className="hover:text-primary transition-colors animated-underline">Discover Creators</Link></li>
                 <li><Link href="/pricing" className="hover:text-primary transition-colors animated-underline">Pricing</Link></li>
-                <li><a href="/api/login" className="hover:text-primary transition-colors animated-underline">Join as Creator</a></li>
+                <li><a href="/api/login" target="_top" className="hover:text-primary transition-colors animated-underline">Join as Creator</a></li>
                 <li><a href="mailto:TrueNorthUGCcanada@gmail.com" className="hover:text-primary transition-colors animated-underline">Contact Support</a></li>
               </ul>
             </div>

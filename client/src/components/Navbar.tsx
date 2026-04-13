@@ -141,18 +141,18 @@ export function Navbar() {
             </div>
           ) : (
             <div className="flex items-center gap-3">
-              <a href="/api/login">
+              <a href="/api/login" target="_top">
                 <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
                   Sign In
                 </Button>
               </a>
               <div className="flex items-center gap-2">
-                <a href="/api/login">
+                <a href="/api/login" target="_top">
                   <Button size="sm" className="shadow-lg shadow-primary/20">
                     Join as Creator
                   </Button>
                 </a>
-                <a href="/api/login">
+                <a href="/api/login" target="_top">
                   <Button size="sm" variant="outline" className="border-primary/30 hover:bg-primary/5">
                     Join as Brand
                   </Button>
@@ -207,17 +207,17 @@ export function Navbar() {
                     </div>
                   ) : (
                     <div className="space-y-3">
-                      <a href="/api/login" className="block">
+                      <a href="/api/login" target="_top" className="block">
                         <Button className="w-full shadow-lg shadow-primary/20">
                           Join as Creator
                         </Button>
                       </a>
-                      <a href="/api/login" className="block">
+                      <a href="/api/login" target="_top" className="block">
                         <Button variant="outline" className="w-full border-primary/30">
                           Join as Brand
                         </Button>
                       </a>
-                      <a href="/api/login" className="block">
+                      <a href="/api/login" target="_top" className="block">
                         <Button variant="ghost" className="w-full text-muted-foreground">
                           Sign In
                         </Button>

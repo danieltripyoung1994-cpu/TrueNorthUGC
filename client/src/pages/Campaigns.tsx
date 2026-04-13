@@ -98,7 +98,7 @@ export default function Campaigns() {
   });
   const [search, setSearch] = useState("");
   const [niche, setNiche] = useState<string>("All");
-  const [dealType, setDealType] = useState<"all" | "campaign" | "contest">("all");
+  const [dealType, setDealType] = useState<"all" | "campaign" | "contest" | "cpm_deal">("all");
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
 
   const { data: campaigns, isLoading, isError } = useCampaigns("active");
@@ -117,6 +117,7 @@ export default function Campaigns() {
 
   const campaignCount = campaigns?.filter(c => ((c as any).dealType || "campaign") === "campaign").length || 0;
   const contestCount = campaigns?.filter(c => ((c as any).dealType || "campaign") === "contest").length || 0;
+  const cpmCount = campaigns?.filter(c => ((c as any).dealType || "campaign") === "cpm_deal").length || 0;
 
   const formatDeadline = (deadline: string | null) => {
     if (!deadline) return null;
@@ -197,9 +198,10 @@ export default function Campaigns() {
           className="flex gap-2 mb-5 sm:mb-7"
         >
           {[
-            { value: "all", label: "All Deals", icon: <Megaphone className="h-4 w-4" />, count: (campaignCount + contestCount) },
+            { value: "all", label: "All Deals", icon: <Megaphone className="h-4 w-4" />, count: (campaignCount + contestCount + cpmCount) },
             { value: "campaign", label: "Campaign Deals", icon: <Sparkles className="h-4 w-4" />, count: campaignCount },
             { value: "contest", label: "Contest Deals", icon: <Trophy className="h-4 w-4" />, count: contestCount },
+            { value: "cpm_deal", label: "CPM Deals", icon: <BarChart2 className="h-4 w-4" />, count: cpmCount },
           ].map(tab => (
             <button
               key={tab.value}

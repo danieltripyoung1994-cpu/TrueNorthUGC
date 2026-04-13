@@ -9,7 +9,7 @@ import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera, Mail
 import { DashboardSkeleton } from "@/components/ui/skeleton-loaders";
 import { Link, useLocation } from "wouter";
 import { useState, useEffect, useRef } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -673,6 +673,7 @@ export default function Dashboard() {
                   <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-card/80 backdrop-blur-xl border-white/10">
                     <DialogHeader>
                       <DialogTitle className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Customize Your Profile</DialogTitle>
+                      <DialogDescription className="sr-only">Update your creator profile details, bio, social links, and rates.</DialogDescription>
                     </DialogHeader>
                     <Form {...creatorForm}>
                       <form onSubmit={creatorForm.handleSubmit(onCreatorSubmit)} className="space-y-6 pt-4">
@@ -1091,6 +1092,7 @@ export default function Dashboard() {
                   <DialogContent className="max-w-xl rounded-3xl bg-card/80 backdrop-blur-xl border-white/10">
                     <DialogHeader>
                       <DialogTitle className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">Brand Details</DialogTitle>
+                      <DialogDescription className="sr-only">Update your brand name, logo, website, and description.</DialogDescription>
                     </DialogHeader>
                     <Form {...brandForm}>
                       <form onSubmit={brandForm.handleSubmit(onBrandSubmit)} className="space-y-4 pt-4">
