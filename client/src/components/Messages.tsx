@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Loader2, Mail, Send, Inbox, ChevronDown, ChevronUp, Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -207,6 +207,7 @@ export function Messages() {
             <DialogContent className="max-w-lg mx-4 sm:mx-auto">
               <DialogHeader>
                 <DialogTitle>New Message</DialogTitle>
+                <DialogDescription className="sr-only">Compose and send a message to another user on the platform.</DialogDescription>
               </DialogHeader>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
