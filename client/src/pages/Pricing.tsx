@@ -550,5 +550,6 @@ export default function Pricing() {
         </div>
       </main>
     </div>
+    </PageTransition>
   );
 }
