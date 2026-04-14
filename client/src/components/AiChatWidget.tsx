@@ -160,7 +160,7 @@ export function AiChatWidget() {
     const res = await fetch("/api/conversations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "Aurora Chat" }),
+      body: JSON.stringify({ title: "Mercedes Chat" }),
       credentials: "include",
     });
     const data = await res.json();
@@ -272,7 +272,7 @@ export function AiChatWidget() {
                 <div className="flex items-center gap-2">
                   <div>
                     <h3 className="font-bold text-sm bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 leading-none">
-                      Aurora
+                      Mercedes
                     </h3>
                     <p className="text-xs text-muted-foreground leading-none mt-0.5">AI Assistant · Online</p>
                   </div>
@@ -331,7 +331,7 @@ export function AiChatWidget() {
                       <Sparkles className="w-7 h-7 text-pink-400" />
                     </motion.div>
                     <h4 className="font-bold text-base mb-1 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">
-                      Hey{user?.firstName ? `, ${user.firstName}` : ""}! I'm Aurora
+                      Hey{user?.firstName ? `, ${user.firstName}` : ""}! I'm Mercedes
                     </h4>
                     <p className="text-xs text-muted-foreground mb-5 leading-relaxed">
                       {role === "creator"
@@ -437,7 +437,7 @@ export function AiChatWidget() {
                 </motion.button>
               </div>
               <p className="text-[10px] text-muted-foreground/50 mt-1.5 text-center">
-                Shift+Enter for new line · Powered by Aurora AI
+                Shift+Enter for new line · Powered by Mercedes AI
               </p>
             </div>
           </motion.div>
