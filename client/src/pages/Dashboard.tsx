@@ -9,6 +9,7 @@ import { Loader2, LogOut, Building, User, Instagram, Music2, Globe, Camera, Mail
 import { DashboardSkeleton } from "@/components/ui/skeleton-loaders";
 import { Link, useLocation } from "wouter";
 import { useState, useEffect, useRef } from "react";
+import { normalizeSocialLink } from "@/lib/social-links";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
@@ -232,10 +233,11 @@ export default function Dashboard() {
 
   const onCreatorSubmit = async (data: any) => {
     try {
-      // Filter out empty social links
-      const socialLinks = { ...data.socialLinks };
-      Object.keys(socialLinks).forEach(key => {
-        if (!socialLinks[key]) delete socialLinks[key];
+      // Normalize and filter social links (converts handles → full URLs)
+      const socialLinks: Record<string, string> = {};
+      Object.entries(data.socialLinks || {}).forEach(([key, val]) => {
+        const normalized = normalizeSocialLink(key, val as string);
+        if (normalized) socialLinks[key] = normalized;
       });
 
       // Build rateCard — only include numeric fields that have values
@@ -260,10 +262,11 @@ export default function Dashboard() {
 
   const onBrandSubmit = async (data: any) => {
     try {
-      // Filter out empty social links
-      const socialLinks = { ...data.socialLinks };
-      Object.keys(socialLinks).forEach(key => {
-        if (!socialLinks[key]) delete socialLinks[key];
+      // Normalize and filter social links (converts handles → full URLs)
+      const socialLinks: Record<string, string> = {};
+      Object.entries(data.socialLinks || {}).forEach(([key, val]) => {
+        const normalized = normalizeSocialLink(key, val as string);
+        if (normalized) socialLinks[key] = normalized;
       });
 
       await updateBrand({
@@ -899,10 +902,10 @@ export default function Dashboard() {
                               render={({ field }) => (
                                 <FormItem>
                                   <FormLabel className="flex items-center gap-2">
-                                    <Instagram className="h-4 w-4" /> Instagram URL
+                                    <Instagram className="h-4 w-4" /> Instagram
                                   </FormLabel>
                                   <FormControl>
-                                    <Input placeholder="https://instagram.com/..." {...field} />
+                                    <Input placeholder="@yourhandle or full URL" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -914,10 +917,10 @@ export default function Dashboard() {
                               render={({ field }) => (
                                 <FormItem>
                                   <FormLabel className="flex items-center gap-2">
-                                    <Music2 className="h-4 w-4" /> TikTok URL
+                                    <Music2 className="h-4 w-4" /> TikTok
                                   </FormLabel>
                                   <FormControl>
-                                    <Input placeholder="https://tiktok.com/@..." {...field} />
+                                    <Input placeholder="@yourhandle or full URL" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -929,10 +932,10 @@ export default function Dashboard() {
                               render={({ field }) => (
                                 <FormItem>
                                   <FormLabel className="flex items-center gap-2">
-                                    <Globe className="h-4 w-4" /> YouTube Channel
+                                    <Globe className="h-4 w-4" /> YouTube
                                   </FormLabel>
                                   <FormControl>
-                                    <Input placeholder="https://youtube.com/..." {...field} />
+                                    <Input placeholder="@yourchannel or full URL" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -944,10 +947,10 @@ export default function Dashboard() {
                               render={({ field }) => (
                                 <FormItem>
                                   <FormLabel className="flex items-center gap-2">
-                                    <Globe className="h-4 w-4" /> Twitter/X URL
+                                    <Globe className="h-4 w-4" /> Twitter / X
                                   </FormLabel>
                                   <FormControl>
-                                    <Input placeholder="https://twitter.com/..." {...field} />
+                                    <Input placeholder="@yourhandle or full URL" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -959,10 +962,10 @@ export default function Dashboard() {
                               render={({ field }) => (
                                 <FormItem>
                                   <FormLabel className="flex items-center gap-2">
-                                    <Globe className="h-4 w-4" /> Facebook URL
+                                    <Globe className="h-4 w-4" /> Facebook
                                   </FormLabel>
                                   <FormControl>
-                                    <Input placeholder="https://facebook.com/..." {...field} />
+                                    <Input placeholder="yourname or full URL" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -977,7 +980,7 @@ export default function Dashboard() {
                                     <Camera className="h-4 w-4" /> Canva Portfolio
                                   </FormLabel>
                                   <FormControl>
-                                    <Input placeholder="https://canva.com/..." {...field} />
+                                    <Input placeholder="Paste your Canva portfolio link" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -1210,10 +1213,10 @@ export default function Dashboard() {
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel className="flex items-center gap-2">
-                                  <Instagram className="h-4 w-4" /> Instagram URL
+                                  <Instagram className="h-4 w-4" /> Instagram
                                 </FormLabel>
                                 <FormControl>
-                                  <Input placeholder="https://instagram.com/..." {...field} />
+                                  <Input placeholder="@yourhandle or full URL" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -1225,10 +1228,10 @@ export default function Dashboard() {
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel className="flex items-center gap-2">
-                                  <Globe className="h-4 w-4" /> Twitter/X URL
+                                  <Globe className="h-4 w-4" /> Twitter / X
                                 </FormLabel>
                                 <FormControl>
-                                  <Input placeholder="https://twitter.com/..." {...field} />
+                                  <Input placeholder="@yourhandle or full URL" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -1240,10 +1243,10 @@ export default function Dashboard() {
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel className="flex items-center gap-2">
-                                  <Globe className="h-4 w-4" /> Facebook URL
+                                  <Globe className="h-4 w-4" /> Facebook
                                 </FormLabel>
                                 <FormControl>
-                                  <Input placeholder="https://facebook.com/..." {...field} />
+                                  <Input placeholder="yourname or full URL" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -1255,10 +1258,10 @@ export default function Dashboard() {
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel className="flex items-center gap-2">
-                                  <Globe className="h-4 w-4" /> LinkedIn URL
+                                  <Globe className="h-4 w-4" /> LinkedIn
                                 </FormLabel>
                                 <FormControl>
-                                  <Input placeholder="https://linkedin.com/company/..." {...field} />
+                                  <Input placeholder="yourcompany or full URL" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -1273,7 +1276,7 @@ export default function Dashboard() {
                                   <Camera className="h-4 w-4" /> Canva Portfolio
                                 </FormLabel>
                                 <FormControl>
-                                  <Input placeholder="https://canva.com/..." {...field} />
+                                  <Input placeholder="Paste your Canva portfolio link" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>

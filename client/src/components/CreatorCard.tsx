@@ -1,3 +1,4 @@
+import { normalizeSocialLink } from "@/lib/social-links";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { type Creator } from "@shared/schema";
@@ -41,17 +42,17 @@ export function CreatorCard({ creator }: CreatorCardProps) {
           </Avatar>
           <div className="flex gap-2 mt-4">
             {creator.socialLinks?.instagram && (
-              <a href={creator.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-pink-500 hover:drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] transition-all">
+              <a href={normalizeSocialLink("instagram", creator.socialLinks.instagram)} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-pink-500 hover:drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] transition-all">
                 <Instagram className="h-4 w-4" />
               </a>
             )}
             {creator.socialLinks?.youtube && (
-              <a href={creator.socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-pink-500 hover:drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] transition-all">
+              <a href={normalizeSocialLink("youtube", creator.socialLinks.youtube)} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-pink-500 hover:drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] transition-all">
                 <Youtube className="h-4 w-4" />
               </a>
             )}
             {creator.socialLinks?.tiktok && (
-              <a href={creator.socialLinks.tiktok} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-pink-500 hover:drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] transition-all">
+              <a href={normalizeSocialLink("tiktok", creator.socialLinks.tiktok)} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-pink-500 hover:drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] transition-all">
                 <Video className="h-4 w-4" />
               </a>
             )}
