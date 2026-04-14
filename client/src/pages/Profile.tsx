@@ -1,3 +1,4 @@
+import { normalizeSocialLink } from "@/lib/social-links";
 import { Navbar } from "@/components/Navbar";
 import { useAuth } from "@/hooks/use-auth";
 import { useCreator, useMyCreatorProfile } from "@/hooks/use-creators";
@@ -134,7 +135,12 @@ export default function Profile() {
     ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
     : null;
 
-  const socialLinks = creator.socialLinks || {};
+  const socialLinksRaw = (creator.socialLinks || {}) as Record<string, string>;
+  const socialLinks: Record<string, string> = Object.fromEntries(
+    Object.entries(socialLinksRaw)
+      .map(([k, v]) => [k, normalizeSocialLink(k, v)])
+      .filter(([, v]) => v)
+  );
   const languages: string[] = (creator as any).languages || [];
   const location: string = (creator as any).location || "";
   const experienceLevel: string = (creator as any).experienceLevel || "";
