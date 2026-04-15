@@ -44,7 +44,7 @@ TrueNorthUGC is a platform that connects UGC content creators with brands for co
 
 ### Contact Information:
 - Email: TrueNorthUGCcanada@gmail.com
-- Phone: 1-226-220-1522
+- Phone: 1-437-242-5014
 - Contact Page: /contact
 
 ## Your Personality:
