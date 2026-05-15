@@ -161,7 +161,7 @@ function getMemoryResponse(content: string, messages: ChatMessage[], ctx: UserCo
       if (c.includes("niche") || c.includes("category")) topics.push("niches");
       if (c.includes("directory") || c.includes("find")) topics.push("creator directory");
       if (c.includes("ugc") || c.includes("content")) topics.push("ugc/content");
-      if (c.includes("earnings") || c.includes("dashboard")) topics.push("earnings");
+      if (c.includes("earnings") || c.includes("dashboard") || c.includes("balance") || c.includes("wallet") || c.includes("funds")) topics.push("earnings & balance");
     }
     const uniqueTopics = [...new Set(topics)];
     const topicText = uniqueTopics.length > 0
@@ -360,6 +360,66 @@ function getFallbackResponse(content: string, ctx: UserContext = {}, messages: C
   if (lower.match(/\b(hi|hello|hey|greetings|howdy|yo|what.s up|sup|hola)\b/)) {
     return getPersonalizedGreeting(ctx);
   }
+
+  // Specific money questions (balance/earnings) before general pricing/payment
+  if (lower.includes("balance") || lower.includes("wallet") || lower.includes("funds") || lower.includes("cash out") || lower.includes("cashout") || lower.includes("withdraw") || lower.includes("withdrawal") || lower.includes("payout") || lower.includes("how much do i have") || lower.includes("what's my money")) {
+    if (ctx.role === "creator") {
+      return r(`ok so your "balance" isn't a built-in bank account on the platform \ud83d\udcb0 here's how money actually works on truenorthugc:
+
+- **creators don't have a platform wallet** \u2014 payments go straight through paypal from the brand to you. no middleman holding your cash.
+- **when a brand pays**, they pay via paypal. your 80% cut lands in your paypal account directly (or however you have it set up with paypal).
+- **transaction history** shows every payment with amount, date, status, and fee breakdown in **dashboard \u2192 earnings**.
+- **paypal withdrawal** \u2014 once it's in your paypal, you can transfer to your bank, spend from paypal, or however you normally use paypal.
+
+if you want to see your "balance" in terms of earned money, head to **dashboard \u2192 earnings** \u2014 it'll show your total earnings to date, milestone bonuses, and transaction history. that's your financial snapshot on the platform \ud83d\udcca\n\n{role-tip}`);
+    }
+    if (ctx.role === "brand") {
+      return r(`brands don't have a "balance wallet" on truenorthugc \ud83d\udcb5 here's the deal:
+
+- **you pay per campaign via paypal** \u2014 no platform wallet, no pre-loaded balance. just pay as you go.
+- **dashboard \u2192 earnings** tracks everything:\n  - total spent on campaigns\n  - platform fees paid (20% per creator payment)\n  - creators you've paid\n  - full payment history with dates and status
+- **refunds or cancellations** are handled through paypal support directly if needed.
+
+if you're looking at "how much left in my budget," that's something you track yourself or in your brand dashboard. the platform shows what you've *spent*, not what's left. totally different flow than a wallet system \ud83d\udcab\n\n{role-tip}`);
+    }
+    return r(`truenorthugc doesn't use a "wallet" or "balance" system like some platforms \ud83d\udc40 here's how money works:
+
+- **creators get paid via paypal** directly from the brand. no platform holding your money. 80% of every payment goes straight to the creator.
+- **brands pay per campaign** through paypal. no pre-loaded balance or credits.
+- **everything tracked** in dashboard \u2192 earnings for both sides.
+- **paypal handles withdrawals** \u2014 once money is in your paypal account, you transfer to your bank or use it however you like.
+
+it's actually simpler and more transparent than a wallet system \u2014 you always know where your money is.\n\n{role-tip}`);
+  }
+
+  if (lower.includes("earnings") || lower.includes("transaction") || lower.includes("milestone") || lower.includes("revenue") || lower.includes("paid out") || lower.includes("how much money") || lower.includes("how much have i") || lower.includes("how much did i") || lower.includes("my earnings")) {
+    if (ctx.role === "creator") {
+      return r(`your earnings tab in the dashboard is basically your personal financial command center \ud83d\udcb8 here's what you'll see:
+
+- **total earnings to date** \u2014 watch that number grow. lowkey addictive ngl
+- **current milestone tier** \u2014 rising star, creator pro, top performer, or elite creator
+- **tier progress** \u2014 visual tracker showing how close you are to the next bonus
+- **transaction history** \u2014 every payment with amounts, fees, your payout, status
+- **milestone bonuses earned** \u2014 watch those $100-$500 bonuses stack up
+
+everything updates automatically when payments flow through paypal. it's your proof of progress and your motivation to keep creating \ud83d\ude80`);
+    }
+    return r(`the earnings tab gives you full financial transparency \ud83d\udcb8
+
+**for creators:**
+- total earnings + current milestone tier
+- progress tracker for next milestone bonus
+- complete transaction history
+
+**for brands:**
+- total spent on campaigns
+- platform fees paid
+- number of creators you've worked with
+- full payment history
+
+everything auto-updates through paypal. no spreadsheets needed \u2014 it's all right there in your dashboard \ud83d\udcab\n\n{role-tip}`);
+  }
+
   if (lower.match(/\b(pricing|cost|price|plan|subscription|tier|how much)\b/)) {
     return r(`ok so here's the pricing breakdown \ud83d\udcb8
 
@@ -442,6 +502,7 @@ top creators treat their profile like a living portfolio. update it regularly, a
 
 pro tip: the more detail in your campaign brief, the better responses you'll get. creators love clear expectations \u2014 it shows you know what you want \ud83d\udcab`);
   }
+
   if (lower.match(/\b(payment|pay|money|fee|commission|paypal|earn|income|how much do i get|80%|platform fee)\b/)) {
     if (ctx.role === "creator") {
       return r(`let's talk money bc your talent deserves to be paid well \ud83d\udcb0
@@ -586,33 +647,6 @@ unlike traditional influencer marketing where creators post on their own channel
 - portfolio building that works on any platform
 
 at truenorthugc, we connect canadian creators with brands who need that authentic, relatable content. it's a genuine win-win: creators get paid for their skills, brands get content that actually connects with people. that's the magic \u2728`);
-  }
-  if (lower.match(/\b(earnings|dashboard|transaction|history|spent|paid out|milestone)\b/)) {
-    if (ctx.role === "creator") {
-      return r(`your earnings tab in the dashboard is basically your personal financial command center \ud83d\udcb8 here's what you'll see:
-
-- **total earnings to date** \u2014 watch that number grow. lowkey addictive ngl
-- **current milestone tier** \u2014 rising star, creator pro, top performer, or elite creator
-- **tier progress** \u2014 visual tracker showing how close you are to the next bonus
-- **transaction history** \u2014 every payment with amounts, fees, your payout, status
-- **milestone bonuses earned** \u2014 watch those $100-$500 bonuses stack up
-
-everything updates automatically when payments flow through paypal. it's your proof of progress and your motivation to keep creating \ud83d\ude80`);
-    }
-    return r(`the earnings tab gives you full financial transparency \ud83d\udcb8
-
-**for creators:**
-- total earnings + current milestone tier
-- progress tracker for next milestone bonus
-- complete transaction history
-
-**for brands:**
-- total spent on campaigns
-- platform fees paid
-- number of creators you've worked with
-- full payment history
-
-everything auto-updates through paypal. no spreadsheets needed \u2014 it's all right there in your dashboard \ud83d\udcab\n\n{role-tip}`);
   }
   if (lower.match(/\b(who are you|your name|what is your name|mercedes|aurora|ai assistant)\b/)) {
     if (ctx.name) {

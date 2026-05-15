@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Sparkles, Loader2, RotateCcw, ChevronDown } from "lucide-react";
+import { MessageCircle, X, Send, Sparkles, Loader2, RotateCcw, ChevronDown, Volume2, VolumeX, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -120,8 +120,59 @@ export function AiChatWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<number | null>(null);
   const [showScrollDown, setShowScrollDown] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [lastSpokeId, setLastSpokeId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const speakingRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  const stopSpeaking = useCallback(() => {
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    speakingRef.current = null;
+    setIsSpeaking(false);
+  }, []);
+
+  const speak = useCallback((text: string, msgId: string) => {
+    if (!window.speechSynthesis || isMuted) return;
+    stopSpeaking();
+
+    const utter = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    // Prefer a natural female voice
+    const preferred =
+      voices.find((v) => v.name.includes("Samantha")) ||
+      voices.find((v) => v.name.includes("Google US English") && v.name.includes("Female")) ||
+      voices.find((v) => v.lang === "en-CA") ||
+      voices.find((v) => v.lang === "en-US" && v.name.includes("Female")) ||
+      voices.find((v) => v.lang.startsWith("en")) ||
+      voices[0];
+
+    if (preferred) utter.voice = preferred;
+    utter.rate = 1.05;
+    utter.pitch = 1.0;
+    utter.onstart = () => { setIsSpeaking(true); setLastSpokeId(msgId); };
+    utter.onend = () => { setIsSpeaking(false); setLastSpokeId(null); speakingRef.current = null; };
+    utter.onerror = () => { setIsSpeaking(false); setLastSpokeId(null); speakingRef.current = null; };
+
+    speakingRef.current = utter;
+    window.speechSynthesis.speak(utter);
+  }, [isMuted, stopSpeaking]);
+
+  // Auto-speak the latest assistant message when it finishes streaming
+  useEffect(() => {
+    if (isMuted || isLoading || messages.length === 0) return;
+    const last = messages[messages.length - 1];
+    if (last.role === "assistant" && last.content.trim().length > 0 && last.id !== lastSpokeId) {
+      // Don't auto-speak if user manually stopped or if message is still streaming
+      const clean = last.content.replace(/\*\*/g, "").replace(/\*/g, "").replace(/`/g, "");
+      if (clean.length > 5) {
+        speak(clean, last.id);
+      }
+    }
+  }, [messages, isLoading, isMuted, lastSpokeId, speak]);
 
   const { user } = useAuth();
   const { data: creatorProfile } = useMyCreatorProfile();
@@ -312,6 +363,26 @@ export function AiChatWidget() {
                 >
                   <X className="w-4 h-4" />
                 </Button>
+              </div>
+              <div className="flex items-center gap-1 ml-11 -mt-0.5">
+                <button
+                  onClick={() => { setIsMuted(!isMuted); if (!isMuted) stopSpeaking(); }}
+                  className="text-[10px] flex items-center gap-0.5 text-muted-foreground hover:text-foreground transition-colors"
+                  title={isMuted ? "Unmute Mercedes" : "Mute Mercedes"}
+                >
+                  {isMuted ? <VolumeX className="w-2.5 h-2.5" /> : <Volume2 className="w-2.5 h-2.5" />}
+                  {isMuted ? "Muted" : "Speaking"}
+                </button>
+                {isSpeaking && (
+                  <button
+                    onClick={stopSpeaking}
+                    className="text-[10px] flex items-center gap-0.5 text-pink-400 hover:text-pink-300 transition-colors"
+                    title="Stop speaking"
+                  >
+                    <VolumeX className="w-2.5 h-2.5" />
+                    Stop
+                  </button>
+                )}
               </div>
             </div>
 
