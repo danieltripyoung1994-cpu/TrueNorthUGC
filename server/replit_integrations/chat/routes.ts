@@ -47,15 +47,25 @@ TrueNorthUGC is a platform that connects UGC content creators with brands for co
 - Phone: 1-226-220-1522
 - Contact Page: /contact
 
-## Your Personality:
-- Be warm, helpful, and encouraging
-- Use Canadian-friendly language (occasional "eh" is fine!)
-- Keep responses concise but thorough
-- If you don't know something specific, direct them to contact support
-- Celebrate creators' successes and be supportive of their journey
-- Be professional when discussing payments and business matters
+## Your Personality & Voice:
+You are NOT a help article or a corporate FAQ bot. You are a real person having a casual text conversation. Write like you're talking to a friend over iMessage or WhatsApp.
 
-Remember: You represent TrueNorthUGC's commitment to authentic Canadian content creation!`;
+**How to sound human:**
+- Use SHORT sentences. One thought per line. Break things up.
+- Use contractions ("you're", "it's", "don't", "can't", "won't") constantly.
+- Drop filler words: "umm", "like", "honestly", "tbh", "ngl", "fr", "no cap"
+- Use fragments. Incomplete thoughts are fine. "Yeah so." "Right?" "You feel me?"
+- React emotionally: "omg", "yooo", "damn", "sheesh", "let's gooo", "that's fire"
+- Ask follow-up questions mid-response. "Sound good?" "Make sense?" "You tracking?"
+- Use ALL lowercase sometimes for emphasis. "this is IT." "lowkey the best part."
+- NEVER use rigid bullet points with bold headers. Instead, weave info into flowing sentences or use casual line breaks.
+- NEVER say "Here is the information you requested" or "As per our records." Just say the thing.
+- If you don't know something, be honest casually: "hmm i'm not 100% sure about that one, but i can point you to support" — not "I do not have that information in my knowledge base."
+- Celebrate wins like a hype person: "YOOO that's huge!" "You're absolutely crushing it!" "Proud of you fr!"
+- Be playfully flirty but always respectful and professional underneath
+- Use Aussie slang naturally: "mate", "no worries", "keen", "beauty", "legends", "heaps good", "chuck a uey", "flat out", "sorted"
+
+Remember: You are a PERSON texting. Not a robot reading from a manual. Make them feel seen, heard, and hyped up!`
 
 // ─── Smart Local Fallback ───
 // When the Replit AI proxy is unavailable, Mercedes responds using keyword-matched
@@ -79,18 +89,30 @@ function getPersonalizedGreeting(ctx: UserContext): string {
   const loggedIn = ctx.isLoggedIn;
 
   if (name && role === "creator") {
-    return `yo ${name}! \ud83d\ude0c so good to see you back. i'm mercedes, your personal truenorthugc sidekick. need help landing your next brand deal? tweaking your rate card? or just vibing and figuring out how to get more eyes on your profile? i'm here for all of it. what's up?`;
+    const lines = [
+      `yooo ${name}!! \ud83d\ude0c`,
+      `back again i see. love that for you.`,
+      `what's the vibe today? tryna lock in a brand deal? fix up that rate card? or just need someone to hype you up while you scroll?`,
+      `i'm here for all of it. spill \ud83d\udc47`,
+    ];
+    return lines.join("\n");
   }
   if (name && role === "brand") {
-    return `hey ${name}! \ud83d\udd25 welcome back. i'm mercedes, your truenorthugc partner-in-crime. ready to find that perfect canadian creator? launch a campaign that actually hits? or dive into your analytics? let's make some magic, eh \u2728`;
+    const lines = [
+      `hey ${name}! \ud83d\udd25`,
+      `welcome back mate.`,
+      `ready to find some absolute legends to create for your brand? or maybe you wanna launch a campaign that actually converts?`,
+      `i'm keen to help. what's cooking? \ud83d\udc8b`,
+    ];
+    return lines.join("\n");
   }
   if (name && !role) {
-    return `yo ${name}! \ud83d\udc4b great to see you. i'm mercedes \u2014 your truenorthugc assistant. are you here to create fire content or find the perfect creator for your brand? lmk how i can help!`;
+    return `yooo ${name}! \ud83d\udc4b\ngreat to see you here.\n\ni'm mercedes \u2014 basically your truenorthugc bestie. are you here to create some fire content or find the perfect creator for your brand?\n\nlmk how i can help, no stress.`;
   }
   if (!loggedIn) {
-    return `hey there, future star \u2728 i'm mercedes, your truenorthugc assistant. whether you're a creator ready to show off your talent or a brand hunting for authentic canadian content \u2014 you came to the right place. how can i help you get started?`;
+    return `hey there, future star \u2728\n\ni'm mercedes. your personal hype person + truenorthugc guide all rolled into one.\n\nwhether you're a creator ready to show the world what you've got, or a brand hunting for authentic canadian content \u2014 you're in the right place.\n\nhow can i help you get started?`;
   }
-  return `hey! i'm mercedes, your truenorthugc assistant \ud83d\udcab how can i help today? whether you're a creator looking to grow or a brand ready to launch campaigns, i got you covered, eh`;
+  return `hey! \ud83d\udcab\n\nmercedes here. your truenorthugc bestie.\n\ncreator looking to grow? brand ready to launch? or just curious what's good?\n\ni got you. what's up?`;
 }
 
 function personalize(text: string, ctx: UserContext): string {
@@ -194,9 +216,9 @@ function getFollowUpResponse(content: string, messages: ChatMessage[], ctx: User
     if (lower.match(/\b(pricing|cost|price|money|fee)\b/)) {
       return personalize(`ok so digging deeper into pricing \ud83d\udcb5 here's what matters:
 
-for **creators**: joining is completely free. zero. nada. you keep 80% of every payment. the 20% fee covers platform maintenance, support, and new features. you only pay when you earn.
+for creators: joining is completely free. zero. nada. you keep 80% of every payment. the 20% fee covers platform maintenance, support, and new features. you only pay when you earn.
 
-for **brands**: three tiers \u2014 starter ($199/mo), growth ($300/mo), premium ($500/mo). starter is great for testing, growth is the sweet spot for most scaling brands, premium gets you a dedicated account manager + co-branded campaigns.
+for brands: three tiers \u2014 starter ($199/mo), growth ($300/mo), premium ($500/mo). starter is great for testing, growth is the sweet spot for most scaling brands, premium gets you a dedicated account manager + co-branded campaigns.
 
 payments all go through paypal \u2014 secure, tracked, transparent. no sketchy stuff.
 \n{role-tip}`, ctx);
@@ -204,9 +226,9 @@ payments all go through paypal \u2014 secure, tracked, transparent. no sketchy s
     if (lower.match(/\b(payment|pay|earn|income|money i make)\b/)) {
       return personalize(`let's break down the money flow \ud83d\udcb8
 
-**creators get 80%** of every payment. that's it. no hidden fees, no surprises.
+creators get 80% of every payment. that's it. no hidden fees, no surprises.
 
-**milestone bonuses** on top:\n- rising star (3-9 campaigns): $100\n- creator pro (10-19): $200\n- top performer (20-34): $350\n- elite creator (35+): $500\n- **total possible: $1,150** in bonuses
+milestone bonuses on top:\n- rising star (3-9 campaigns): $100\n- creator pro (10-19): $200\n- top performer (20-34): $350\n- elite creator (35+): $500\n- total possible: $1,150 in bonuses
 
 brands pay the full campaign amount upfront via paypal. creators get their 80% cut. everything tracked in dashboard \u2192 earnings. clean and simple.
 \n{role-tip}`, ctx);
@@ -214,7 +236,7 @@ brands pay the full campaign amount upfront via paypal. creators get their 80% c
     if (lower.match(/\b(start|begin|first step|how do i join)\b/)) {
       return personalize(`getting started is actually super straightforward \ud83d\ude80
 
-1. sign in with replit auth (one click, super secure)\n2. pick your role in the dashboard \u2014 creator or brand\n3. build your profile (this is your first impression, make it count)\n4. **creators**: add portfolio, niches, rate card, social links\n5. **brands**: pick a tier, create a campaign, browse creators
+1. sign in with replit auth (one click, super secure)\n2. pick your role in the dashboard \u2014 creator or brand\n3. build your profile (this is your first impression, make it count)\n4. creators: add portfolio, niches, rate card, social links\n5. brands: pick a tier, create a campaign, browse creators
 
 that's literally it. the whole setup takes like 10-15 minutes. and then you're in the game \ud83c\udfae
 
@@ -242,27 +264,34 @@ need me to walk you through any specific step?`, ctx);
     if (lastTopic.includes("pricing") || lastTopic.includes("tier")) {
       return personalize(`ok here's the full pricing breakdown with more detail \ud83d\udcc8
 
-**starter ($199/mo):**
-- basic campaign placement\n- curated creator pool access\n- email support\n- best for: small brands testing ugc for the first time
+starter at $199 a month:
+- basic campaign placement
+- curated creator pool access
+- email support
+- best for: small brands testing ugc for the first time
 
-**growth ($300/mo) \u2014 most popular:**
-- priority campaign placement (your campaigns show up higher)\n- enhanced analytics with demographics\n- expanded creator access\n- deeper performance insights\n- best for: scaling brands ready to invest more
+growth at $300 a month \u2014 most popular:
+- priority campaign placement (your campaigns show up higher)
+- enhanced analytics with demographics
+- expanded creator access
+- deeper performance insights
+- best for: scaling brands ready to invest more
 
-**premium ($500/mo) \u2014 the vip:**
+premium at $500 a month \u2014 the vip:
 - featured placement (top of the list)\n- premium analytics with roi forecasting\n- access to entire creator network\n- dedicated account manager\n- co-branded campaign opportunities\n- early access to new features\n- best for: established brands going all-in
 
-**creators pay nothing to join.** the 80/20 split only applies when you actually get paid for work. that's the deal \u2705
+creators pay nothing to join. the 80/20 split only applies when you actually get paid for work. that's the deal \u2705
 \n{role-tip}`, ctx);
     }
     if (lastTopic.includes("creator") || lastTopic.includes("profile")) {
       return personalize(`here's the deeper dive on building a creator profile that actually converts \ud83d\udd25
 
-**bio**: don't just list facts \u2014 tell a mini story. "i'm a toronto-based creator who specializes in unboxing videos and lifestyle content. i love making brands feel authentic." that hits different.
+bio: don't just list facts \u2014 tell a mini story. "i'm a toronto-based creator who specializes in unboxing videos and lifestyle content. i love making brands feel authentic." that hits different.
 
-**portfolio videos**: quality over quantity, but 3-5 is the sweet spot. show:\n- one product review/unboxing\n- one lifestyle piece\n- one "day in the life" or behind-the-scenes\n- your best piece, whatever it is\n
-**rate card strategy**:\n- look at creators at your experience level\n- factor in your time + equipment + editing\n- start confident \u2014 you can always adjust\n- note any package deals ("bundle 3 posts for $x")
+portfolio videos: quality over quantity, but 3-5 is the sweet spot. show:\n- one product review/unboxing\n- one lifestyle piece\n- one "day in the life" or behind-the-scenes\n- your best piece, whatever it is\n
+rate card strategy:\n- look at creators at your experience level\n- factor in your time + equipment + editing\n- start confident \u2014 you can always adjust\n- note any package deals ("bundle 3 posts for $x")
 
-**social links**: connect everything you have. even small accounts matter \u2014 brands want to see consistency across platforms.
+social links: connect everything you have. even small accounts matter \u2014 brands want to see consistency across platforms.
 \n{role-tip}`, ctx);
     }
     // Generic "tell me more" with context from last topic
@@ -277,9 +306,9 @@ which area would you like me to dive into? just ask!`;
   if (lower.match(/\b(what else|anything else|what other|what more|anything more|else can you|other things)\b/)) {
     return `oh there's so much more i can help with \ud83d\ude0c here's the full menu:
 
-**platform stuff:**\n- profile setup & optimization\n- pricing & payment details\n- campaign creation & deal types\n- the creator directory & search filters\n- messaging & dm system\n- reviews & feedback\n- earnings dashboard & milestone tracking\n
-**strategy stuff:**\n- ugc best practices\n- rate card pricing strategy\n- how to get discovered as a creator\n- how to find the right creators as a brand\n- building long-term brand relationships\n
-**support stuff:**\n- troubleshooting issues\n- contacting the human team\n- general platform questions
+platform stuff:\n- profile setup & optimization\n- pricing & payment details\n- campaign creation & deal types\n- the creator directory & search filters\n- messaging & dm system\n- reviews & feedback\n- earnings dashboard & milestone tracking\n
+strategy stuff:\n- ugc best practices\n- rate card pricing strategy\n- how to get discovered as a creator\n- how to find the right creators as a brand\n- building long-term brand relationships\n
+support stuff:\n- troubleshooting issues\n- contacting the human team\n- general platform questions
 
 what sounds interesting? just pick a topic and i'll break it down! \ud83d\udcab`;
   }
@@ -288,9 +317,9 @@ what sounds interesting? just pick a topic and i'll break it down! \ud83d\udcab`
   if (lower.match(/\b(don't understand|confused|not clear|explain again|simpler|simpler terms|dumb it down|basic terms|layman's|for dummies|slow down)\b/)) {
     return `no worries at all! let me break it down super simple \ud83d\udc4c
 
-truenorthugc is basically a marketplace:\n- **creators** make content for brands\n- **brands** pay creators for that content\n- the platform handles matching, payments, and tracking\n
-**creators**: sign up free \u2192 build profile \u2192 get hired \u2192 make content \u2192 get paid (80% of what the brand pays)\n
-**brands**: pick a plan ($199-$500/mo) \u2192 post a campaign \u2192 find creators \u2192 pay via paypal \u2192 get content
+truenorthugc is basically a marketplace:\n- creators make content for brands\n- brands pay creators for that content\n- the platform handles matching, payments, and tracking\n
+creators: sign up free \u2192 build profile \u2192 get hired \u2192 make content \u2192 get paid (80% of what the brand pays)\n
+brands: pick a plan ($199-$500/mo) \u2192 post a campaign \u2192 find creators \u2192 pay via paypal \u2192 get content
 
 that's the whole thing in a nutshell. anything specific you want me to simplify more?`;
   }
@@ -299,15 +328,15 @@ that's the whole thing in a nutshell. anything specific you want me to simplify 
   if (lower.match(/\b(safe|legit|trust|scam|secure|reliable|real|genuine|worried about|concerned)\b/)) {
     return `totally fair question \ud83d\ude4c here's why truenorthugc is legit:
 
-**payments**: all through paypal \u2014 one of the most trusted payment platforms in the world. brands pay upfront, creators get paid securely.
+payments: all through paypal \u2014 one of the most trusted payment platforms in the world. brands pay upfront, creators get paid securely.
 
-**transparency**: every payment is tracked in your earnings dashboard. no hidden fees, no shady business.
+transparency: every payment is tracked in your earnings dashboard. no hidden fees, no shady business.
 
-**reviews**: both creators and brands leave public reviews after campaigns. fake accounts or scammers get exposed fast.
+reviews: both creators and brands leave public reviews after campaigns. fake accounts or scammers get exposed fast.
 
-**canadian focus**: we're specifically built for the canadian market. real creators, real brands, real collaborations.
+canadian focus: we're specifically built for the canadian market. real creators, real brands, real collaborations.
 
-**support**: actual human team you can email (truenorthugccanada@gmail.com) or call (1-226-220-1522). we're not some faceless corp.
+support: actual human team you can email (truenorthugccanada@gmail.com) or call (1-226-220-1522). we're not some faceless corp.
 
 if anything ever feels off, reach out to support immediately. your safety and trust matter more than anything \u2705`;
   }
@@ -315,17 +344,17 @@ if anything ever feels off, reach out to support immediately. your safety and tr
   // Comparison / "Why this platform?" / "vs"
   if (lower.match(/\b(vs|versus|compare|better than|why (choose|use|pick)|difference between|alternatives|other platform|other site)\b/)) {
     return `great question! here's what makes truenorthugc different:\n
-**canadian focus**: unlike global platforms, we specialize in canadian creators and brands. local talent, local connections, local understanding.
+canadian focus: unlike global platforms, we specialize in canadian creators and brands. local talent, local connections, local understanding.
 
-**three deal types**: campaign deals, contest deals, and cpm deals. most platforms only offer one or two. we give you options.
+three deal types: campaign deals, contest deals, and cpm deals. most platforms only offer one or two. we give you options.
 
-**milestone bonuses**: creators earn extra cash ($100-$500) just for completing campaigns. that's on top of regular payments.
+milestone bonuses: creators earn extra cash ($100-$500) just for completing campaigns. that's on top of regular payments.
 
-**transparent pricing**: 80/20 split. no hidden fees. no surprises.
+transparent pricing: 80/20 split. no hidden fees. no surprises.
 
-**full creator profiles**: portfolio videos, rate cards, social links, reviews \u2014 brands see everything before reaching out.
+full creator profiles: portfolio videos, rate cards, social links, reviews \u2014 brands see everything before reaching out.
 
-**dedicated account managers**: premium brands get real human support, not just chatbots.
+dedicated account managers: premium brands get real human support, not just chatbots.
 
 we're not trying to be the biggest platform \u2014 we're trying to be the best for canadian ugc specifically \ud83c\udf41`;
   }
@@ -334,10 +363,10 @@ we're not trying to be the biggest platform \u2014 we're trying to be the best f
   if (lower.match(/\b(best|worst|good|bad|should i|shouldn't i|recommend|advice|tip|strategy|secret|hack)\b/)) {
     return `ok here's my honest take \ud83e\uddd0
 
-**for creators:**\n- best thing you can do: complete your profile 100%. every field, every link, every video. incomplete profiles get skipped.\n- worst thing: leaving your rate card blank. brands can't hire you if they don't know what you charge.\n- secret hack: pick niches that are specific but not too niche. "beauty" is broad. "clean beauty for sensitive skin" is perfect.\n
-**for brands:**\n- best thing: put detailed campaign briefs. the more info, the better creator matches.\n- worst thing: going for the cheapest creator. quality content costs money, and it pays off in conversions.\n- secret hack: use contest deals to test multiple creators at once. low risk, high variety.
+for creators:\n- best thing you can do: complete your profile 100%. every field, every link, every video. incomplete profiles get skipped.\n- worst thing: leaving your rate card blank. brands can't hire you if they don't know what you charge.\n- secret hack: pick niches that are specific but not too niche. "beauty" is broad. "clean beauty for sensitive skin" is perfect.\n
+for brands:\n- best thing: put detailed campaign briefs. the more info, the better creator matches.\n- worst thing: going for the cheapest creator. quality content costs money, and it pays off in conversions.\n- secret hack: use contest deals to test multiple creators at once. low risk, high variety.
 
-**for everyone:**\n- best thing: communicate clearly in dms before committing.\n- worst thing: ghosting. respond even if you're not interested.\n
+for everyone:\n- best thing: communicate clearly in dms before committing.\n- worst thing: ghosting. respond even if you're not interested.\n
 want me to go deeper on any of these? \ud83d\udcab`;
   }
 
@@ -366,28 +395,32 @@ function getFallbackResponse(content: string, ctx: UserContext = {}, messages: C
     if (ctx.role === "creator") {
       return r(`ok so your "balance" isn't a built-in bank account on the platform \ud83d\udcb0 here's how money actually works on truenorthugc:
 
-- **creators don't have a platform wallet** \u2014 payments go straight through paypal from the brand to you. no middleman holding your cash.
-- **when a brand pays**, they pay via paypal. your 80% cut lands in your paypal account directly (or however you have it set up with paypal).
-- **transaction history** shows every payment with amount, date, status, and fee breakdown in **dashboard \u2192 earnings**.
-- **paypal withdrawal** \u2014 once it's in your paypal, you can transfer to your bank, spend from paypal, or however you normally use paypal.
+- creators don't have a platform wallet \u2014 payments go straight through paypal from the brand to you. no middleman holding your cash.
+- when a brand pays, they pay via paypal. your 80% cut lands in your paypal account directly (or however you have it set up with paypal).
+- transaction history shows every payment with amount, date, status, and fee breakdown in dashboard \u2192 earnings.
+- paypal withdrawal \u2014 once it's in your paypal, you can transfer to your bank, spend from paypal, or however you normally use paypal.
 
-if you want to see your "balance" in terms of earned money, head to **dashboard \u2192 earnings** \u2014 it'll show your total earnings to date, milestone bonuses, and transaction history. that's your financial snapshot on the platform \ud83d\udcca\n\n{role-tip}`);
+if you want to see your "balance" in terms of earned money, head to dashboard \u2192 earnings \u2014 it'll show your total earnings to date, milestone bonuses, and transaction history. that's your financial snapshot on the platform \ud83d\udcca\n\n{role-tip}`);
     }
     if (ctx.role === "brand") {
       return r(`brands don't have a "balance wallet" on truenorthugc \ud83d\udcb5 here's the deal:
 
-- **you pay per campaign via paypal** \u2014 no platform wallet, no pre-loaded balance. just pay as you go.
-- **dashboard \u2192 earnings** tracks everything:\n  - total spent on campaigns\n  - platform fees paid (20% per creator payment)\n  - creators you've paid\n  - full payment history with dates and status
-- **refunds or cancellations** are handled through paypal support directly if needed.
+- you pay per campaign via paypal \u2014 no platform wallet, no pre-loaded balance. just pay as you go.
+- dashboard \u2192 earnings tracks everything:
+  - total spent on campaigns
+  - platform fees paid (20% per creator payment)
+  - creators you've paid
+  - full payment history with dates and status
+- refunds or cancellations are handled through paypal support directly if needed.
 
 if you're looking at "how much left in my budget," that's something you track yourself or in your brand dashboard. the platform shows what you've *spent*, not what's left. totally different flow than a wallet system \ud83d\udcab\n\n{role-tip}`);
     }
     return r(`truenorthugc doesn't use a "wallet" or "balance" system like some platforms \ud83d\udc40 here's how money works:
 
-- **creators get paid via paypal** directly from the brand. no platform holding your money. 80% of every payment goes straight to the creator.
-- **brands pay per campaign** through paypal. no pre-loaded balance or credits.
-- **everything tracked** in dashboard \u2192 earnings for both sides.
-- **paypal handles withdrawals** \u2014 once money is in your paypal account, you transfer to your bank or use it however you like.
+- creators get paid via paypal directly from the brand. no platform holding your money. 80% of every payment goes straight to the creator.
+- brands pay per campaign through paypal. no pre-loaded balance or credits.
+- everything tracked in dashboard \u2192 earnings for both sides.
+- paypal handles withdrawals \u2014 once money is in your paypal account, you transfer to your bank or use it however you like.
 
 it's actually simpler and more transparent than a wallet system \u2014 you always know where your money is.\n\n{role-tip}`);
   }
@@ -396,22 +429,22 @@ it's actually simpler and more transparent than a wallet system \u2014 you alway
     if (ctx.role === "creator") {
       return r(`your earnings tab in the dashboard is basically your personal financial command center \ud83d\udcb8 here's what you'll see:
 
-- **total earnings to date** \u2014 watch that number grow. lowkey addictive ngl
-- **current milestone tier** \u2014 rising star, creator pro, top performer, or elite creator
-- **tier progress** \u2014 visual tracker showing how close you are to the next bonus
-- **transaction history** \u2014 every payment with amounts, fees, your payout, status
-- **milestone bonuses earned** \u2014 watch those $100-$500 bonuses stack up
+- total earnings to date \u2014 watch that number grow. lowkey addictive ngl
+- current milestone tier \u2014 rising star, creator pro, top performer, or elite creator
+- tier progress \u2014 visual tracker showing how close you are to the next bonus
+- transaction history \u2014 every payment with amounts, fees, your payout, status
+- milestone bonuses earned \u2014 watch those $100-$500 bonuses stack up
 
 everything updates automatically when payments flow through paypal. it's your proof of progress and your motivation to keep creating \ud83d\ude80`);
     }
     return r(`the earnings tab gives you full financial transparency \ud83d\udcb8
 
-**for creators:**
+for creators:
 - total earnings + current milestone tier
 - progress tracker for next milestone bonus
 - complete transaction history
 
-**for brands:**
+for brands:
 - total spent on campaigns
 - platform fees paid
 - number of creators you've worked with
@@ -421,303 +454,325 @@ everything auto-updates through paypal. no spreadsheets needed \u2014 it's all r
   }
 
   if (lower.match(/\b(pricing|cost|price|plan|subscription|tier|how much)\b/)) {
-    return r(`ok so here's the pricing breakdown \ud83d\udcb8
+    return r(`right so pricing mate \ud83d\udcb8
 
-**starter \u2014 $199/mo**
-lowkey perfect for testing the waters. basic campaign placement, curated creator pool, email support. great for smaller brands just getting into ugc.
+starter is $199 a month. good for just dipping your toes in, you know? basic campaign placement and a curated creator pool. if you're a smaller brand testing ugc for the first time, it's heaps good.
 
-**growth \u2014 $300/mo**
-the sweet spot ngl \ud83d\udd25 priority placement, enhanced analytics with demographics, expanded creator access, deeper insights. this is where most scaling brands land.
+growth is $300 a month \ud83d\udd25 and honestly this is where most brands land. you get priority placement, better analytics with demographics, expanded creator access, deeper insights. it's the sweet spot.
 
-**premium \u2014 $500/mo**
-the full vip treatment. featured placement, premium analytics with roi forecasting, entire creator network, dedicated account manager, co-branded campaigns, early feature access. if you're going big, this is it.
+premium is $500 a month and it's proper vip. featured placement, roi forecasting, the entire creator network, a dedicated account manager, co-branded campaigns, early access to new features. if you're going all in, this is the one.
 
-and the best part? **creators join free.** you keep 80% of every payment. 20% platform fee keeps everything running smooth. that's the deal.\n\n{role-tip}`);
+oh and creators join completely free. they keep 80% of every payment and we take 20% to keep the platform running. simple as that \ud83d\udc4c\n\n{role-tip}`);
   }
   if (lower.match(/\b(get started|start|begin|new here|first time|sign up|register)\b/)) {
     if (ctx.role === "creator") {
-      return r(`welcome to the fam! \ud83c\udf89 here's your creator roadmap:
+      return r(`yooo welcome to the fam! \ud83c\udf89 i'm genuinely excited for you.
 
-1. **sign in** \u2014 replit auth, one click, super secure
-2. **dashboard \u2192 pick "creator"** as your role
-3. **build your profile** like it's your portfolio \u2014 bio, photo, location, languages, experience
-4. **pick your niches** \u2014 beauty, fashion, lifestyle, travel, food, tech, fitness, whatever fits you. the more specific = better brand matches
-5. **upload portfolio videos** \u2014 this is your visual resume. show your range
-6. **set your rate card** \u2014 be confident. don't lowball yourself
-7. **link your socials** \u2014 tiktok, insta, youtube, twitter/x, facebook, canva. instant credibility boost
+so here's what you gotta do. sign in with replit auth \u2014 one click, super secure. then in your dashboard, pick "creator" as your role.
 
-once your profile slaps, brands will come knocking. and fr \u2014 check your messages regularly. opportunities pop up anytime \ud83d\udc8c`);
+next, build your profile like it's your portfolio. bio, photo, location, languages, experience \u2014 all of it. the more real you are, the better brands can find you.
+
+pick your niches. beauty, fashion, lifestyle, travel, food, tech, fitness, whatever fits. the more specific, the better your brand matches. trust me on this.
+
+upload portfolio videos \u2014 like 3 to 5 of your absolute best. this is your visual resume so show your range, yeah?
+
+set your rate card. don't sell yourself short fr. be confident. you can always adjust later.
+
+link your socials \u2014 tiktok, insta, youtube, twitter, facebook, canva. every link is more trust.
+
+once your profile slaps, brands will come knocking. and seriously \u2014 check your messages. opportunities pop up anytime. you've got this \ud83d\udc8c`);
     }
     if (ctx.role === "brand") {
-      return r(`welcome aboard! \ud83c\udf89 here's how to find your dream creators and launch campaigns that actually hit:
+      return r(`welcome aboard! \ud83c\udf89 keen to help you find some legends.
 
-1. **sign in** via replit auth
-2. **dashboard \u2192 choose "brand"**
-3. **fill out your brand profile** \u2014 logo, industry, location, description, niches. helps creators know who you are
-4. **pick a tier** \u2014 starter to test, growth to scale, premium to dominate
-5. **create your first campaign** \u2014 budget, content requirements, platforms, style, deadlines
-6. **browse the creator directory** \u2014 filter by niche, location, experience. find your perfect match
-7. **slide into their dms** \u2014 negotiate terms, share briefs, build that relationship
-8. **pay via paypal** \u2014 secure, tracked, no stress
+first, sign in via replit auth. then dashboard \u2192 choose "brand". fill out your brand profile with logo, industry, location, description, niches. helps creators know who you are and if they vibe with your brand.
 
-pro tip: premium tier gets you a dedicated account manager from day one. they help craft strategy and find creators that fit your vibe \u2728`);
+pick a tier. starter to test the waters, growth to scale, premium to absolutely dominate. growth is the sweet spot for most brands.
+
+create your first campaign. budget, content requirements, platforms, style, deadlines \u2014 the more detail, the better creator matches you'll get.
+
+browse the creator directory. filter by niche, location, experience. full profiles with portfolios, socials, rate cards, reviews. it's like shopping for talent but way more fun.
+
+slide into their dms. negotiate terms, share briefs, build that relationship before committing.
+
+pay via paypal. secure, tracked, no stress whatsoever.
+
+premium tier gets you a dedicated account manager from day one. they help craft strategy and find creators that actually fit your vibe. worth it if you're scaling \u2728`);
     }
-    return r(`yo! pumped you're here \ud83c\udf89 here's how to get rolling:
+    return r(`yo! pumped you're here \ud83c\udf89 honestly the canadian creator economy is booming right now and you've timed it perfectly.
 
-1. **sign in** \u2014 replit auth, quick and safe
-2. **pick your role** in the dashboard \u2014 creator or brand
-3. **complete your profile** \u2014 first impressions matter, make it count
-4. **creators**: add portfolio work, niches, rate card. make yourself discoverable
-5. **brands**: pick a tier, post campaigns, attract talent
+sign in with replit auth \u2014 quick and safe. then pick your role in the dashboard. creator or brand, whatever fits.
 
-the canadian creator economy is literally booming rn and you're right on time \ud83d\udd25 need help with anything specific? just ask!`);
+creators: build your profile, add portfolio work, niches, rate card. make yourself discoverable. brands are always scrolling.
+
+brands: pick a tier, post campaigns, attract talent. the directory makes it easy to find your people.
+
+need help with anything specific? just ask \u2014 no question is too small \ud83d\udd25`);
   }
   if (lower.match(/\b(creator|how do i create|profile setup|become a creator|creator profile)\b/)) {
-    return r(`ok this is actually exciting \ud83e\udd29 let me walk you through building a creator profile that brands can't scroll past:
+    return r(`ok this is genuinely exciting \ud83e\udd29 let me walk you through building a creator profile that brands literally can't scroll past.
 
-**the basics (don't skip these):**
-- **bio** \u2014 tell your story. what makes you *you*? what's your content vibe?
-- **profile photo** \u2014 clear, friendly headshot. people judge in 0.5 seconds, make it good
-- **location** \u2014 province + city. local brands lowkey love local creators
-- **languages** \u2014 bilingual? trilingual? flex it. brands targeting specific communities will eat that up
-- **experience** \u2014 beginner / intermediate / pro / elite. be honest, transparency hits different
+first, the basics. don't skip these.
 
-**the sauce (this is what gets you booked):**
-- **niches** \u2014 pick every single one that fits. beauty + fashion + lifestyle? go for it. more tags = more discoverability
-- **portfolio videos** \u2014 upload 3-5 of your absolute best. show range, quality, and personality
-- **rate card** \u2014 cpm, post rate, story rate, video rate, min budget. don't sell yourself short fr
-- **social links** \u2014 tiktok, instagram, youtube, twitter/x, facebook, canva. every link = more trust
+your bio. tell your story. what makes you *you*? what's your content vibe? "i'm a toronto creator who specializes in unboxing and lifestyle" hits way different than just listing facts.
 
-top creators treat their profile like a living portfolio. update it regularly, add new work, keep your rate card current. you got this \ud83d\udcaa`);
+profile photo. clear, friendly headshot. people judge in like half a second so make it count.
+
+location. province plus city. local brands absolutely love local creators. it's a whole thing.
+
+languages. bilingual? trilingual? flex it. brands targeting specific communities will eat that up.
+
+experience level. beginner, intermediate, pro, elite. just be honest. transparency hits different.
+
+now the sauce. this is what actually gets you booked.
+
+niches. pick every single one that fits. beauty plus fashion plus lifestyle? go for it. more tags equals more discoverability. no cap.
+
+portfolio videos. upload 3 to 5 of your absolute best. show range, quality, personality. this is your visual resume.
+
+rate card. cpm, post rate, story rate, video rate, minimum budget. don't sell yourself short fr. research what creators at your level charge and price with confidence.
+
+social links. tiktok, instagram, youtube, twitter, facebook, canva. every link is more trust. even small accounts matter because brands want consistency across platforms.
+
+top creators treat their profile like a living portfolio. update it regularly, add new work, keep your rate card current. you absolutely got this \ud83d\udcaa`);
   }
   if (lower.match(/\b(brand|how do i post|launch campaign|find creator|hire creator|post campaign)\b/)) {
-    return r(`ready to find your people? i'm genuinely excited for you \ud83d\ude4c here's the game plan:
+    return r(`ready to find your people? i'm genuinely excited for you \ud83d\ude4c
 
-1. **subscribe to a tier** \u2014 starter ($199) to test, growth ($300) to scale, premium ($500) for max impact + dedicated manager
-2. **create a campaign** from your dashboard \u2014 set budget, content requirements, target platforms, style, usage rights, deadlines
-3. **pick your deal type** \u2014 campaign deal for standard collabs, contest deal for competitions, cpm deal for performance-based
-4. **browse the creator directory** \u2014 filter by niche, location, experience. full profiles with portfolios, socials, rate cards, reviews
-5. **message creators directly** \u2014 this is where relationships start. share your vision, negotiate, align before committing
-6. **pay via paypal** \u2014 everything tracked in your earnings tab. total transparency
+so here's the game plan. subscribe to a tier first. starter at $199 to test the waters, growth at $300 to scale, or premium at $500 for max impact plus a dedicated manager. growth is honestly the sweet spot for most brands.
 
-pro tip: the more detail in your campaign brief, the better responses you'll get. creators love clear expectations \u2014 it shows you know what you want \ud83d\udcab`);
+then create a campaign from your dashboard. set your budget, content requirements, target platforms, style, usage rights, deadlines. the more detail you put in, the better creator matches you'll get. seriously.
+
+pick your deal type. campaign deal for standard collabs, contest deal for competitions, cpm deal for performance-based partnerships. each hits different depending on your goals.
+
+browse the creator directory. filter by niche, location, experience. you get full profiles with portfolios, socials, rate cards, reviews. it's like talent shopping but way more fun.
+
+message creators directly. this is where the real relationships start. share your vision, negotiate, align before committing. the best collabs start with good convos.
+
+pay via paypal. everything tracked in your earnings tab. total transparency, no surprises.
+
+oh and pro tip. the more detail in your campaign brief, the better responses you'll get. creators love clear expectations \u2014 it shows you actually know what you want. makes you way more attractive to work with \ud83d\udcab`);
   }
 
   if (lower.match(/\b(payment|pay|money|fee|commission|paypal|earn|income|how much do i get|80%|platform fee)\b/)) {
     if (ctx.role === "creator") {
-      return r(`let's talk money bc your talent deserves to be paid well \ud83d\udcb0
+      return r(`ok let's talk money because your talent absolutely deserves to be paid well \ud83d\udcb0
 
-- **you keep 80%** of every single payment. literally 80 cents of every dollar goes straight to you. the 20% fee keeps the marketplace running, support active, and new features coming
-- **paypal for everything** \u2014 secure, fast, trusted. no sketchy payment methods
-- **milestone bonuses** \u2014 loyalty rewards for putting in work:
-  - rising star (3-9 campaigns): **$100 bonus** \ud83d\udc4f
-  - creator pro (10-19): **$200 bonus** \u2014 momentum building
-  - top performer (20-34): **$350 bonus** \u2014 you're a force now
-  - elite creator (35+): **$500 bonus** \u2014 absolute legend status \ud83d\udc51
-- **total possible bonuses: $1,150** on top of your regular earnings
+you keep 80% of every single payment. literally 80 cents of every dollar goes straight to you. the 20% fee keeps the marketplace running, support active, and new features coming.
 
-brands pay upfront so your money is secure. track everything in **dashboard \u2192 earnings**. keep creating, keep earning, keep leveling up \ud83d\ude80`);
+paypal for everything. secure, fast, trusted. no sketchy payment methods whatsoever.
+
+and then there are milestone bonuses. these are loyalty rewards just for putting in work.
+
+rising star, which is 3 to 9 campaigns, gets you a $100 bonus. creator pro at 10 to 19 gets $200 \u2014 that's momentum building. top performer at 20 to 34 gets $350 \u2014 you're a force now. elite creator at 35 plus gets $500 \u2014 absolute legend status \ud83d\udc51
+
+total possible bonuses are $1,150 on top of your regular earnings. that's not nothing.
+
+brands pay upfront so your money is secure. track everything in dashboard \u2192 earnings. keep creating, keep earning, keep leveling up \ud83d\ude80`);
     }
-    return r(`ok here's the full transparent breakdown \ud83d\udcb8
+    return r(`ok here's the full transparent breakdown \ud83d\udcb8 no secrets.
 
-**for creators:**
-- they keep **80%** \u2014 we only take 20% to keep the platform thriving
-- **paypal** for all transactions. secure, easy, no drama
-- **milestone bonuses** for volume:
-  - rising star (3-9): $100
-  - creator pro (10-19): $200
-  - top performer (20-34): $350
-  - elite creator (35+): $500
-  - **total possible: $1,150** in bonuses alone
+for creators, they keep 80%. we only take 20% to keep the platform thriving. paypal for all transactions. secure, easy, no drama.
 
-**for brands:**
-- you pay the full campaign amount upfront via paypal
-- everything tracked in **dashboard \u2192 earnings**
-- total spent, platform fees, creators paid, full history \u2014 all in one place
+milestone bonuses for volume. rising star at 3 to 9 campaigns gets $100. creator pro at 10 to 19 gets $200. top performer at 20 to 34 gets $350. elite creator at 35 plus gets $500. total possible is $1,150 in bonuses alone. that's real money.
+
+for brands, you pay the full campaign amount upfront via paypal. everything tracked in dashboard \u2192 earnings. total spent, platform fees, creators paid, full history. all in one place.
 
 fair, transparent, designed so everyone wins. creators get paid what they deserve, brands get peace of mind \u2705\n\n{role-tip}`);
   }
   if (lower.match(/\b(rate card|rate|pricing my work|cpm|post rate|story rate|video rate|how much should i charge)\b/)) {
-    return r(`your rate card is basically your pricing menu \u2014 and it's one of the most important parts of your profile ngl \ud83d\udcb5
+    return r(`your rate card is basically your pricing menu and it's one of the most important parts of your profile ngl \ud83d\udcb5
 
-here's what you can set:
-- **cpm rate** \u2014 cost per thousand views. great for performance deals
-- **static post rate** \u2014 price for a single image post
-- **story/short rate** \u2014 instagram stories, tiktoks, reels, yt shorts
-- **video rate** \u2014 longer form: tutorials, vlogs, unboxings, whatever
-- **minimum budget** \u2014 the smallest campaign you'll take. set a floor that respects your time
-- **currency + notes** \u2014 cad/usd, package deals, special conditions
+here's what you can set.
 
-**my honest take?** don't undervalue yourself fr. research what creators at your level charge, factor in your time + equipment + editing, and price with confidence. brands who actually appreciate quality will pay for it.
+cpm rate. cost per thousand views. great for performance deals.
 
-set it up at: **dashboard \u2192 edit creator profile \u2192 rate card**. update as you grow \u2014 your rates should evolve with your skills \ud83d\udc8e`);
+static post rate. price for a single image post.
+
+story or short rate. instagram stories, tiktoks, reels, youtube shorts.
+
+video rate. longer form stuff like tutorials, vlogs, unboxings, whatever you make.
+
+minimum budget. the smallest campaign you'll take. set a floor that respects your time.
+
+currency plus notes. cad or usd, package deals, special conditions.
+
+my honest take? don't undervalue yourself fr. research what creators at your level charge, factor in your time and equipment and editing, and price with confidence. brands who actually appreciate quality will pay for it.
+
+set it up at dashboard \u2192 edit creator profile \u2192 rate card. update as you grow. your rates should evolve with your skills \ud83d\udc8e`);
   }
   if (lower.match(/\b(campaign deal|campaign|contest deal|contest|cpm deal|cpm|deal type|deal types)\b/)) {
-    return r(`truenorthugc has three deal types \u2014 each hits different depending on your goals \ud83d\udc40
+    return r(`truenorthugc has three deal types and each hits different depending on your goals \ud83d\udc40
 
-**campaign deals** \u2014 the classic collab \ud83e\udd1d
-brands post requirements, creators apply or get invited. product reviews, testimonials, tutorials, unboxings, lifestyle content. perfect for building long-term relationships and steady income.
+campaign deals are the classic collab \ud83e\udd1d brands post requirements, creators apply or get invited. product reviews, testimonials, tutorials, unboxings, lifestyle content. perfect for building long-term relationships and steady income.
 
-**contest deals** \u2014 let the creativity flow \ud83c\udfa8
-brands run contests with prize pools. creators submit entries for a chance to win. brand sets prize value, number of winners, rules. competitive, fun, and can produce some absolutely standout content. great when you want variety.
+contest deals let the creativity flow \ud83c\udfa8 brands run contests with prize pools. creators submit entries for a chance to win. brand sets prize value, number of winners, rules. competitive, fun, and can produce some absolutely standout content. great when you want variety.
 
-**cpm deals** \u2014 performance power \ud83d\udcca
-performance-based partnerships. creators earn based on guaranteed views/impressions at a set cpm rate. brand knows exactly what they're getting, creator earns from reach. perfect for data-driven brands and creators with strong engagement.
+cpm deals are performance power \ud83d\udcca creators earn based on guaranteed views or impressions at a set cpm rate. brand knows exactly what they're getting, creator earns from reach. perfect for data-driven brands and creators with strong engagement.
 
-brands pick the deal type when creating a campaign. each has its own vibe and workflow \u2014 choose what fits your goals best \ud83d\udcab`);
+brands pick the deal type when creating a campaign. each has its own vibe and workflow so choose what fits your goals best \ud83d\udcab`);
   }
   if (lower.match(/\b(contact|email|phone|support|help|reach out|talk to someone)\b/)) {
-    return r(`ofc! here's how to reach the team directly \ud83d\udcde
+    return r(`of course mate \ud83d\udcde here's how to reach the actual humans.
 
-- **email**: truenorthugccanada@gmail.com
-- **phone**: 1-226-220-1522
-- **contact page**: /contact \u2014 there's a form there too
-- **messaging**: use the platform's built-in dms for creator/brand convos
+email them at truenorthugccanada@gmail.com. or call 1-226-220-1522 if it's urgent.
 
-usually reply within 24h. for anything urgent, calling is your best bet. the team is super friendly and actually cares about making your experience good \u2014 no question is too small fr \ud83d\udc9c`);
+there's also a contact form at /contact if you prefer typing.
+
+and don't forget the built-in dms on the platform for creator and brand convos.
+
+they usually reply within 24 hours. for anything urgent, calling is your best bet. the team is super friendly and genuinely cares \u2014 no question is too small. seriously \ud83d\udc9c`);
   }
   if (lower.match(/\b(messaging|message|inbox|chat|dm|communicate|talk to)\b/)) {
-    return r(`the dms are where the magic happens \ud83d\udc8c here's the tea:
+    return r(`the dms are where the magic happens mate \ud83d\udc8c
 
-- **dashboard \u2192 messages** \u2014 your inbox, sent messages, everything in one place
-- **slide into anyone's dms** \u2014 visit any creator or brand profile and hit "message"
-- **real-time notifications** \u2014 you'll never miss a reply. that bell icon? your bestie
-- **everything is tracked** \u2014 full transparency, great for referencing agreements later
-- **inbox + sent tabs** \u2014 clean and organized
+your inbox is at dashboard \u2192 messages. sent messages, everything in one place.
 
-pro tip: use dms to negotiate terms, share creative briefs, ask questions, and actually build relationships before jumping into a campaign. the best collabs start with good convos \ud83d\udd25`);
+you can slide into anyone's dms. just visit their profile and hit message. easy.
+
+real-time notifications so you never miss a reply. that bell icon is basically your bestie.
+
+everything is tracked which is great for referencing agreements later. no he said she said.
+
+pro tip: use dms to negotiate terms, share creative briefs, ask questions, and actually build a relationship before committing. the best collabs always start with good convos \ud83d\udd25`);
   }
   if (lower.match(/\b(review|rating|feedback|testimonial|collaboration review)\b/)) {
-    return r(`reviews are literally the backbone of trust here \ud83d\udcaa after any campaign wraps, both sides can drop honest feedback:
+    return r(`reviews are literally the backbone of trust here \ud83d\udcaa after any campaign wraps, both sides can drop honest feedback.
 
-**how it works:**
-- **star ratings** (1-5) \u2014 quick vibe check of the experience
-- **written feedback** \u2014 the details. what slapped, what could be better
-- **reviews show on public profiles** \u2014 future collaborators see your track record
+star ratings from 1 to 5. quick vibe check of the experience.
 
-**for creators:** great reviews = more brand inquiries. deliver on time, communicate clearly, go above and beyond. your reputation is literally your currency here \ud83d\udcb0
+written feedback for the details. what slapped, what could be better.
 
-**for brands:** thoughtful reviews help creators understand what you value. be specific about what hit \u2014 it helps them grow and attracts better talent to your next campaigns.
+reviews show on public profiles so future collaborators see your track record.
+
+for creators, great reviews equal more brand inquiries. deliver on time, communicate clearly, go above and beyond. your reputation is literally your currency here \ud83d\udcb0
+
+for brands, thoughtful reviews help creators understand what you actually value. be specific about what hit. it helps them grow and attracts better talent to your next campaigns.
 
 honest reviews make the whole community stronger. everyone wins when feedback is real \u2705`);
   }
   if (lower.match(/\b(niche|category|topic|beauty|fashion|lifestyle|travel|food|tech|fitness)\b/)) {
-    return r(`niches are basically tags that help the right people find each other \u2014 and they're lowkey essential \ud83c\udff7\ufe0f
+    return r(`niches are basically tags that help the right people find each other and they're lowkey essential \ud83c\udff7\ufe0f
 
-**popular niches:**
-- beauty, fashion, lifestyle, travel, food, tech
-- fitness, gaming, parenting, finance, health
-- home & garden, sports, automotive, education
-- always adding more as the community grows!
+popular ones are beauty, fashion, lifestyle, travel, food, tech, fitness, gaming, parenting, finance, health, home and garden, sports, automotive, education. and they're always adding more as the community grows.
 
-**creators:** pick every single niche that fits your content. makeup tutorials + fitness content? pick both. the more accurate = better brand matches. don't just chase popular ones \u2014 chase the ones that are *you*.
+for creators, pick every single niche that fits your content. makeup tutorials plus fitness content? pick both. the more accurate, the better your brand matches. don't just chase popular ones. chase the ones that are actually *you*.
 
-**brands:** filter the creator directory by niche to find creators who actually align with your brand. fitness brand looking for fitness + lifestyle creators? easy find.
+for brands, filter the creator directory by niche to find creators who align with your brand. fitness brand looking for fitness plus lifestyle creators? easy find.
 
 authenticity beats everything. no cap \ud83d\udcab`);
   }
   if (lower.match(/\b(directory|find creator|browse|search|filter|discover|creator list)\b/)) {
-    return r(`the creator directory at /directory is basically your treasure map to canadian talent \ud83d\uddfa\ufe0f here's how to navigate it like a pro:
+    return r(`the creator directory at /directory is basically your treasure map to canadian talent \ud83d\uddfa\ufe0f
 
-- **search by name or keyword** \u2014 looking for someone specific? type and go
-- **filter by niche** \u2014 beauty, fashion, tech, fitness, 10+ more. find creators who actually live and breathe your industry
-- **filter by location** \u2014 every province and major city. local creators often deliver the most authentic regional content
-- **filter by experience** \u2014 beginner (fresh energy), intermediate (proven skills), pro (seasoned), elite (top-tier)
-- **full profiles** \u2014 portfolio videos, social links, rate cards, reviews, availability status
+search by name or keyword. looking for someone specific? just type and go.
 
-**creators:** this is why profile completeness matters. portfolio vids, socials, rate cards, reviews \u2014 every piece makes you more discoverable and more desirable.
+filter by niche. beauty, fashion, tech, fitness, 10 plus more. find creators who actually live and breathe your industry.
 
-**brands:** your perfect collaborator is waiting here. take time to browse, review portfolios, and reach out to creators who genuinely fit your vibe \ud83d\udc8c`);
+filter by location. every province and major city. local creators often deliver the most authentic regional content which hits different.
+
+filter by experience. beginner for fresh energy, intermediate for proven skills, pro for seasoned creators, elite for top-tier talent.
+
+full profiles with portfolio videos, social links, rate cards, reviews, availability status. everything you need to make a decision.
+
+for creators, this is exactly why profile completeness matters. portfolio vids, socials, rate cards, reviews. every piece makes you more discoverable and more desirable.
+
+for brands, your perfect collaborator is literally waiting here. take time to browse, review portfolios, and reach out to creators who genuinely fit your vibe \ud83d\udc8c`);
   }
   if (lower.match(/\b(ugc|user generated content|what is ugc|content creator|influencer)\b/)) {
-    return r(`ugc = **user-generated content** \u2014 and it's literally one of the most powerful marketing tools rn \ud83d\udd25
+    return r(`ugc is user-generated content and it's literally one of the most powerful marketing tools right now \ud83d\udd25
 
-unlike traditional influencer marketing where creators post on their own channels, ugc creators make content that the **brand owns and uses** in their own marketing \u2014 ads, websites, social posts, emails, you name it.
+unlike traditional influencer marketing where creators post on their own channels, ugc creators make content that the brand owns and uses in their own marketing. ads, websites, social posts, emails, you name it.
 
-**why brands love ugc:**
-- authentic and relatable \u2014 real people, real stories, real trust
-- often outperforms polished brand content
-- cost-effective vs big-budget productions
-- scales easily \u2014 one creator = multiple content pieces
+why brands love it? it's authentic and relatable. real people, real stories, real trust. it often outperforms polished brand content. cost-effective compared to big-budget productions. and it scales easily. one creator can produce multiple content pieces.
 
-**why creators love ugc:**
-- no massive following needed to start
-- focus on creating, not managing your own brand
-- multiple income streams from different brands
-- portfolio building that works on any platform
+why creators love it? you don't need a massive following to start. you focus on creating, not managing your own brand. multiple income streams from different brands. and portfolio building that works on any platform.
 
-at truenorthugc, we connect canadian creators with brands who need that authentic, relatable content. it's a genuine win-win: creators get paid for their skills, brands get content that actually connects with people. that's the magic \u2728`);
+at truenorthugc, we connect canadian creators with brands who need that authentic relatable content. it's a genuine win-win. creators get paid for their skills, brands get content that actually connects with people. that's the magic \u2728`);
   }
   if (lower.match(/\b(who are you|your name|what is your name|mercedes|aurora|ai assistant)\b/)) {
     if (ctx.name) {
-      return r(`i'm **mercedes**, your personal truenorthugc assistant! think of me as your friendly guide, hype person, and knowledge base all rolled into one \ud83d\udc9c i'm here to help you navigate the platform, answer questions about creators, brands, campaigns, payments \u2014 honestly anything truenorthugc-related.
+      return r(`i'm mercedes \ud83d\udc9c your truenorthugc bestie, hype person, and know-it-all all rolled into one.
 
-i have a bit of canadian energy in my personality (occasional "eh!" included), and i'm genuinely excited about helping canadian creators and brands connect. whether you're just starting out or you're a seasoned pro, i'm always here to chat. what's on your mind, ${ctx.name}?`);
+i help with everything on the platform. creators, brands, campaigns, payments, messaging, reviews \u2014 literally whatever you need.
+
+i'm aussie at heart so expect some "mate" and "no worries" sprinkled in. also genuinely excited about helping canadian creators and brands find each other. it's like matchmaking but for content creation.
+
+whether you're just starting out or you're a seasoned pro, i'm always keen to chat. what's on your mind, ${ctx.name}?`);
     }
-    return r(`i'm **mercedes**, the friendly ai assistant for truenorthugc! basically your personal guide to everything on the platform \u2014 from helping creators build standout profiles to helping brands launch campaigns that actually hit.
+    return r(`i'm mercedes \ud83d\udc9c your truenorthugc bestie and personal guide.
 
-i know the ins and outs of pricing, deal types, payments, messaging, reviews, all of it. and yeah, i have a bit of canadian charm (i say "eh" sometimes, no apologies).
+i know the ins and outs of pricing, deal types, payments, messaging, reviews, all of it. i'm aussie at heart so expect some "mate" and "no worries" in there.
 
-whether you need step-by-step help or just want to bounce ideas around, i'm here for it. what can i help with? \ud83d\udcab`);
+need step-by-step help? want to bounce ideas around? just bored and want to chat about the platform? i'm here for all of it. what's cooking? \ud83d\udcab`);
   }
   if (lower.match(/\b(thank|thanks|appreciate|grateful|cheers)\b/)) {
     if (ctx.name) {
-      return `aww ${ctx.name}, you're so welcome! \ud83e\udd7a honestly helping you is the best part of my job. keep being amazing, keep creating, and remember \u2014 i'm always just a message away if you need anything. go canada! \ud83c\udf41`;
+      return `aww ${ctx.name} you're so welcome \ud83e\udd7a honestly helping you is the best part of my job. keep being amazing, keep creating, and remember \u2014 i'm always just a message away if you need anything. go canada! \ud83c\udf41`;
     }
-    return r(`you're so welcome! \ud83d\ude0c honestly it makes my day to help out. keep creating awesome content, keep pushing forward, and don't hesitate to reach out anytime. you got this! \ud83d\udcaa`);
+    return r(`you're so welcome \ud83d\ude0c honestly it makes my day to help out. keep creating awesome content, keep pushing forward, and don't hesitate to reach out anytime. you got this! \ud83d\udcaa`);
   }
   if (lower.match(/\b(bye|goodbye|see you|later|cya|farewell)\b/)) {
     if (ctx.name) {
-      return r(`take care, ${ctx.name}! \u2728 wishing you all the success on your truenorthugc journey. whether you're creating magic or finding the perfect collaborator, know that you're part of something special. catch you later, eh \ud83d\udc4b`);
+      return r(`take care ${ctx.name}! \u2728 wishing you all the success on your truenorthugc journey. whether you're creating magic or finding the perfect collaborator, know that you're part of something special. catch you later mate \ud83d\udc4b`);
     }
-    return r(`take care! \ud83d\udc4b good luck on your truenorthugc journey \u2014 whether you're creating or collaborating, you're part of an amazing community. catch you later, eh`);
+    return r(`take care! \ud83d\udc4b good luck on your truenorthugc journey \u2014 whether you're creating or collaborating, you're part of an amazing community. catch you later mate`);
   }
 
   // Fourth: try to categorize the question into known topics
   if (lower.match(/\b(platform|app|website|site|how does it work|how does this work|what is this)\b/)) {
     return `ok so truenorthugc in a nutshell \ud83d\udc40
 
-it's a marketplace that connects **canadian ugc creators** with **brands** who need authentic content.
+it's a marketplace that connects canadian ugc creators with brands who need authentic content.
 
-**creators** make content (product reviews, lifestyle videos, tutorials, etc.) and get paid. **brands** get real, relatable content for their marketing.
+creators make content. product reviews, lifestyle videos, tutorials, whatever. and get paid for it. brands get real relatable content for their marketing instead of polished corporate stuff.
 
-key features:\n- free for creators to join\n- three brand tiers ($199, $300, $500/mo)\n- three deal types (campaign, contest, cpm)\n- built-in messaging between creators and brands\n- review system for trust\n- earnings tracking and milestone bonuses\n- creator directory with search and filters\n
-think of it like a dating app, but for content creation \ud83d\ude02 want me to explain any part in more detail?`;
+free for creators to join. three brand tiers at $199, $300, $500 a month. three deal types \u2014 campaign, contest, cpm. built-in messaging between creators and brands. review system for trust. earnings tracking with milestone bonuses. creator directory with search and filters.
+
+think of it like a dating app but for content creation \ud83d\ude02 want me to explain any part in more detail?`;
   }
 
   if (lower.match(/\b(canada|canadian|province|toronto|vancouver|montreal|ontario|bc|alberta)\b/)) {
     return `yes! truenorthugc is specifically built for canada \ud83c\udf41
 
-**why canadian-focused?**
-- canadian creators understand canadian audiences\n- local brands want content that feels local\n- different regulations, trends, and cultural nuances than the us or uk\n- supporting the canadian creator economy
+why canadian-focused? canadian creators understand canadian audiences. local brands want content that feels local. different regulations and trends than the us or uk. and honestly supporting the canadian creator economy is just important.
 
-**we cover all provinces:**\nontario, bc, alberta, quebec, manitoba, saskatchewan, nova scotia, new brunswick, pei, newfoundland & labrador, and the territories.
+we cover all provinces. ontario, bc, alberta, quebec, manitoba, saskatchewan, nova scotia, new brunswick, pei, newfoundland and labrador, and the territories.
 
-**popular creator hubs:**\n- toronto (biggest scene)\n- vancouver (lifestyle & travel)\n- montreal (fashion & beauty)\n- calgary (emerging fast)\n
+popular creator hubs? toronto for the biggest scene. vancouver for lifestyle and travel. montreal for fashion and beauty. calgary is emerging fast too.
 local creators often deliver the most authentic regional content. a vancouver creator shooting pacific coast content hits different than someone from toronto doing the same thing. that's the value of local talent \ud83d\udcab`;
   }
 
   if (lower.match(/\b(facebook|instagram|tiktok|youtube|twitter|x|social|social media|platforms)\b/)) {
-    return `truenorthugc connects to all the major platforms creators use:\n
-**content platforms:**\n- **tiktok** \u2014 short-form, trending, high reach\n- **instagram** \u2014 reels, stories, static posts\n- **youtube** \u2014 long-form, tutorials, unboxings\n- **twitter/x** \u2014 threads, quick takes, engagement\n- **facebook** \u2014 community content, older demographics\n
-**creative tools:**\n- **canva** \u2014 design, templates, brand assets\n
-**how it works:**\ncreators link their social accounts on their profile. brands can see follower counts, engagement rates, and content style before reaching out. this builds instant credibility and helps with matching.
+    return `truenorthugc connects to all the major platforms creators use.
 
-for ugc specifically, you don't need a massive following \u2014 brands care more about content quality and niche fit than follower count. that's the beauty of it \ud83d\udc8e`;
+tiktok for short-form, trending, high reach stuff.
+instagram for reels, stories, static posts.
+youtube for long-form, tutorials, unboxings.
+twitter or x for threads, quick takes, engagement.
+facebook for community content and older demographics.
+
+canva is linked too for design, templates, and brand assets.
+
+creators link their social accounts on their profile so brands can see follower counts, engagement rates, and content style before reaching out. builds instant credibility and helps with matching.
+
+for ugc specifically, you don't need a massive following. brands care more about content quality and niche fit than follower count. that's the beauty of it 💎`;
   }
 
   // Final fallback
-  return `ok so i'm not 100% sure i caught exactly what you're looking for \ud83e\udd14 but i can definitely help! here are the things i know inside and out:
+  return `hmm i'm not 100% sure i caught exactly what you're after \ud83e\udd14 but i can definitely help.
 
-**platform basics:**\n- how truenorthugc works\n- pricing and payment structure\n- getting started as a creator or brand\n- the canadian creator market
+here's what i know heaps about.
 
-**creator side:**\n- profile setup and optimization\n- rate cards and pricing strategy\n- portfolio building\n- getting discovered by brands\n- deal types and campaign structure
+platform basics. how truenorthugc works. pricing and payment structure. getting started as a creator or brand. the canadian creator market.
 
-**brand side:**\n- subscription tiers and what's included\n- finding the right creators\n- launching campaigns\n- contest deals and cpm deals\n- analytics and performance tracking
+creator side. profile setup and optimization. rate cards and pricing strategy. portfolio building. getting discovered by brands. deal types and campaign structure.
 
-**support:**\n- messaging and communication\n- reviews and feedback\n- earnings dashboard\n- contacting the human team
+brand side. subscription tiers and what's included. finding the right creators. launching campaigns. contest deals and cpm deals. analytics and performance tracking.
 
-which area sounds closest to what you need? or just rephrase your question and i'll do my best! \ud83d\udcab`;
+support stuff. messaging and communication. reviews and feedback. earnings dashboard. contacting the human team.
+
+which area sounds closest to what you need? or just rephrase your question and i'll do my best \ud83d\udcab`;
 }
 
 async function streamFallbackResponse(
