@@ -141,18 +141,19 @@ export function AiChatWidget() {
 
     const utter = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis.getVoices();
-    // Prefer a natural female voice
+    // Prefer a sultry Australian female voice
     const preferred =
+      voices.find((v) => v.lang === "en-AU" && /karen|lisa|grace|sophie|harper|jessie|olivia|ruby|amanda|matilda/i.test(v.name)) ||
+      voices.find((v) => v.lang === "en-AU" && v.name.includes("Female")) ||
+      voices.find((v) => v.lang === "en-AU") ||
+      voices.find((v) => v.name.includes("Karen") && v.lang === "en-AU") ||
       voices.find((v) => v.name.includes("Samantha")) ||
-      voices.find((v) => v.name.includes("Google US English") && v.name.includes("Female")) ||
-      voices.find((v) => v.lang === "en-CA") ||
-      voices.find((v) => v.lang === "en-US" && v.name.includes("Female")) ||
       voices.find((v) => v.lang.startsWith("en")) ||
       voices[0];
 
     if (preferred) utter.voice = preferred;
-    utter.rate = 1.05;
-    utter.pitch = 1.0;
+    utter.rate = 0.98;  // slightly slower = more sultry
+    utter.pitch = 1.05; // slightly higher = playful, sexy energy
     utter.onstart = () => { setIsSpeaking(true); setLastSpokeId(msgId); };
     utter.onend = () => { setIsSpeaking(false); setLastSpokeId(null); speakingRef.current = null; };
     utter.onerror = () => { setIsSpeaking(false); setLastSpokeId(null); speakingRef.current = null; };
