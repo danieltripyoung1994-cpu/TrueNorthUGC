@@ -152,8 +152,8 @@ export function AiChatWidget() {
       voices[0];
 
     if (preferred) utter.voice = preferred;
-    utter.rate = 0.98;  // slightly slower = more sultry
-    utter.pitch = 1.05; // slightly higher = playful, sexy energy
+    utter.rate = 0.92;  // slower = more natural, less robotic
+    utter.pitch = 1.02; // subtle lift = warm and engaging
     utter.onstart = () => { setIsSpeaking(true); setLastSpokeId(msgId); };
     utter.onend = () => { setIsSpeaking(false); setLastSpokeId(null); speakingRef.current = null; };
     utter.onerror = () => { setIsSpeaking(false); setLastSpokeId(null); speakingRef.current = null; };
@@ -167,8 +167,17 @@ export function AiChatWidget() {
     if (isMuted || isLoading || messages.length === 0) return;
     const last = messages[messages.length - 1];
     if (last.role === "assistant" && last.content.trim().length > 0 && last.id !== lastSpokeId) {
-      // Don't auto-speak if user manually stopped or if message is still streaming
-      const clean = last.content.replace(/\*\*/g, "").replace(/\*/g, "").replace(/`/g, "");
+      // Strip markdown, emojis, and URLs so TTS sounds natural
+      const clean = last.content
+        .replace(/\*\*/g, "")
+        .replace(/\*/g, "")
+        .replace(/`/g, "")
+        .replace(/!\[.*?\]\(.*?\)/g, "")
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+        .replace(/https?:\/\/[^\s]+/g, "")
+        .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, "")
+        .replace(/\s+/g, " ")
+        .trim();
       if (clean.length > 5) {
         speak(clean, last.id);
       }
