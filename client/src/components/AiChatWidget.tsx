@@ -162,27 +162,22 @@ export function AiChatWidget() {
     window.speechSynthesis.speak(utter);
   }, [isMuted, stopSpeaking]);
 
-  // Auto-speak the latest assistant message when it finishes streaming
-  useEffect(() => {
-    if (isMuted || isLoading || messages.length === 0) return;
-    const last = messages[messages.length - 1];
-    if (last.role === "assistant" && last.content.trim().length > 0 && last.id !== lastSpokeId) {
-      // Strip markdown, emojis, and URLs so TTS sounds natural
-      const clean = last.content
-        .replace(/\*\*/g, "")
-        .replace(/\*/g, "")
-        .replace(/`/g, "")
-        .replace(/!\[.*?\]\(.*?\)/g, "")
-        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-        .replace(/https?:\/\/[^\s]+/g, "")
-        .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, "")
-        .replace(/\s+/g, " ")
-        .trim();
-      if (clean.length > 5) {
-        speak(clean, last.id);
-      }
+  // Speak a specific message on demand
+  const speakMessage = useCallback((content: string, msgId: string) => {
+    const clean = content
+      .replace(/\*\*/g, "")
+      .replace(/\*/g, "")
+      .replace(/`/g, "")
+      .replace(/!\[.*?\]\(.*?\)/g, "")
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      .replace(/https?:\/\/[^\s]+/g, "")
+      .replace(/(\ud83c[\udde0-\uddff])|(\ud83d[\udc00-\ude4f\ude80-\udeff])|([\u2600-\u26FF\u2700-\u27BF])/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (clean.length > 5) {
+      speak(clean, msgId);
     }
-  }, [messages, isLoading, isMuted, lastSpokeId, speak]);
+  }, [speak]);
 
   const { user } = useAuth();
   const { data: creatorProfile } = useMyCreatorProfile();
@@ -308,6 +303,39 @@ export function AiChatWidget() {
     setConversationId(null);
     setTimeout(() => textareaRef.current?.focus(), 100);
   };
+
+  // Voice input (SpeechRecognition) — declared after sendMessage to avoid TDZ
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
+  const startListening = useCallback(() => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Voice input isn't supported in your browser. Try Chrome or Edge.");
+      return;
+    }
+    const rec = new SpeechRecognition();
+    rec.lang = "en-US";
+    rec.continuous = false;
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    rec.onstart = () => setIsListening(true);
+    rec.onend = () => setIsListening(false);
+    rec.onerror = () => setIsListening(false);
+    rec.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      if (transcript.trim()) {
+        sendMessage(transcript.trim());
+      }
+    };
+    recognitionRef.current = rec;
+    rec.start();
+  }, [sendMessage]);
+
+  const stopListening = useCallback(() => {
+    recognitionRef.current?.stop();
+    setIsListening(false);
+  }, []);
 
   const roleLabel = role === "creator" ? "Creator" : role === "brand" ? "Brand" : null;
   const roleBadgeClass = role === "creator"
@@ -458,20 +486,44 @@ export function AiChatWidget() {
                             <Sparkles className="w-3 h-3 text-white" />
                           </div>
                         )}
-                        <div
-                          className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 ${
-                            msg.role === "user"
-                              ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-br-sm"
-                              : "bg-white/6 border border-white/10 rounded-bl-sm"
-                          }`}
-                          data-testid={`chat-message-${msg.role}-${idx}`}
-                        >
-                          {msg.role === "assistant" && !msg.content && isLoading && idx === messages.length - 1 ? (
-                            <TypingDots />
-                          ) : msg.role === "assistant" ? (
-                            renderMarkdown(msg.content)
-                          ) : (
-                            <p className="text-sm leading-relaxed">{msg.content}</p>
+                        <div className="flex flex-col gap-1 max-w-[82%]">
+                          <div
+                            className={`rounded-2xl px-3.5 py-2.5 ${
+                              msg.role === "user"
+                                ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-br-sm"
+                                : "bg-white/6 border border-white/10 rounded-bl-sm"
+                            }`}
+                            data-testid={`chat-message-${msg.role}-${idx}`}
+                          >
+                            {msg.role === "assistant" && !msg.content && isLoading && idx === messages.length - 1 ? (
+                              <TypingDots />
+                            ) : msg.role === "assistant" ? (
+                              renderMarkdown(msg.content)
+                            ) : (
+                              <p className="text-sm leading-relaxed">{msg.content}</p>
+                            )}
+                          </div>
+                          {msg.role === "assistant" && msg.content && !isLoading && (
+                            <button
+                              onClick={() => {
+                                if (lastSpokeId === msg.id) {
+                                  stopSpeaking();
+                                } else {
+                                  speakMessage(msg.content, msg.id);
+                                }
+                              }}
+                              className={`self-start ml-1 flex items-center gap-1 text-[10px] transition-colors ${
+                                lastSpokeId === msg.id ? "text-pink-400" : "text-muted-foreground/60 hover:text-pink-400"
+                              }`}
+                              title={lastSpokeId === msg.id ? "Stop speaking" : "Play voice"}
+                            >
+                              {lastSpokeId === msg.id ? (
+                                <VolumeX className="w-3 h-3" />
+                              ) : (
+                                <Volume2 className="w-3 h-3" />
+                              )}
+                              {lastSpokeId === msg.id ? "Playing..." : "Listen"}
+                            </button>
                           )}
                         </div>
                       </motion.div>
@@ -498,22 +550,41 @@ export function AiChatWidget() {
             {/* Input */}
             <div className="px-4 py-3 border-t border-white/10 bg-background/40">
               <div className="flex gap-2 items-end">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.93 }}
+                  onClick={isListening ? stopListening : startListening}
+                  disabled={isLoading}
+                  className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
+                    isListening
+                      ? "bg-pink-500/20 border border-pink-500/50 text-pink-400 animate-pulse"
+                      : "bg-white/5 border border-white/10 text-muted-foreground hover:text-pink-400 hover:border-pink-500/30"
+                  }`}
+                  title={isListening ? "Stop listening" : "Talk to Mercedes"}
+                  data-testid="button-voice-input"
+                >
+                  {isListening ? (
+                    <Mic className="w-4 h-4" />
+                  ) : (
+                    <Mic className="w-4 h-4" />
+                  )}
+                </motion.button>
                 <Textarea
                   ref={textareaRef}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask me anything… (Enter to send)"
+                  placeholder={isListening ? "Listening... speak now" : "Ask me anything… (Enter to send)"}
                   className="flex-1 bg-white/5 border-white/10 focus:border-pink-500/50 rounded-xl resize-none min-h-[40px] max-h-[120px] text-sm py-2.5 leading-relaxed placeholder:text-muted-foreground/50"
                   rows={1}
-                  disabled={isLoading}
+                  disabled={isLoading || isListening}
                   data-testid="input-chat-message"
                 />
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.93 }}
                   onClick={() => sendMessage()}
-                  disabled={!input.trim() || isLoading}
+                  disabled={!input.trim() || isLoading || isListening}
                   className="flex-shrink-0 w-9 h-9 rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-pink-500/25 transition-shadow"
                   data-testid="button-send-message"
                 >
@@ -525,7 +596,7 @@ export function AiChatWidget() {
                 </motion.button>
               </div>
               <p className="text-[10px] text-muted-foreground/50 mt-1.5 text-center">
-                Shift+Enter for new line · Powered by Mercedes AI
+                {isListening ? "Listening... click mic to stop" : "Shift+Enter for new line · Click mic to talk · Powered by Mercedes AI"}
               </p>
             </div>
           </motion.div>
