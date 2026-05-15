@@ -183,10 +183,17 @@ export function AiChatWidget() {
         setConversationId(convId);
       }
 
+      // Build user context for Mercedes to personalize responses
+      const userContext = {
+        name: user?.firstName || null,
+        role: role === "creator" ? "creator" : role === "brand" ? "brand" : null,
+        isLoggedIn: !!user,
+      };
+
       const res = await fetch(`/api/conversations/${convId}/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: userMessage }),
+        body: JSON.stringify({ content: userMessage, userContext }),
         credentials: "include",
       });
 
