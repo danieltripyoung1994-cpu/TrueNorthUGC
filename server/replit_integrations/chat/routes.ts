@@ -67,6 +67,12 @@ interface UserContext {
   isLoggedIn?: boolean;
 }
 
+interface ChatMessage {
+  role: string;
+  content: string;
+  createdAt: Date;
+}
+
 function getPersonalizedGreeting(ctx: UserContext): string {
   const name = ctx.name;
   const role = ctx.role;
@@ -114,10 +120,243 @@ function personalize(text: string, ctx: UserContext): string {
   return result;
 }
 
-function getFallbackResponse(content: string, ctx: UserContext = {}): string {
+function buildConversationSummary(messages: ChatMessage[]): string {
+  // Summarize the last few exchanges for context-aware responses
+  const recent = messages.slice(-6);
+  const summary: string[] = [];
+  for (const msg of recent) {
+    const preview = msg.content.slice(0, 80).replace(/\n/g, " ");
+    summary.push(`${msg.role}: ${preview}${msg.content.length > 80 ? "..." : ""}`);
+  }
+  return summary.join("\n");
+}
+
+function getMemoryResponse(content: string, messages: ChatMessage[], ctx: UserContext): string | null {
+  const lower = content.toLowerCase();
+  const messageCount = messages.filter(m => m.role === "user").length;
+  const assistantCount = messages.filter(m => m.role === "assistant").length;
+  const lastAssistant = messages.filter(m => m.role === "assistant").pop();
+  const lastTopic = lastAssistant?.content.slice(0, 100).replace(/\n/g, " ").replace(/\*/g, "") || "";
+
+  // Memory / conversation awareness
+  if (lower.match(/\b(remember|memorize|memory|do you know|what did we|what have we|our conversation|this chat|earlier we|before we|previous|last time|can you recall|can you see|read (above|back|previous))\b/)) {
+    if (messageCount === 0) {
+      return `this is actually the start of our conversation, ${ctx.name || "friend"}! \ud83d\udc40 so there's nothing to remember yet \u2014 but from this point on, i can see everything we talk about in this chat. every question, every answer, it's all right here. what would you like to discuss first?`;
+    }
+    if (messageCount === 1) {
+      return `yep, i can see this chat! so far you've asked one question and i answered it. not a ton of history yet, but it counts \ud83d\ude09 anything else on your mind?`;
+    }
+    const topics = [];
+    for (const msg of messages.filter(m => m.role === "user")) {
+      const c = msg.content.toLowerCase();
+      if (c.includes("price") || c.includes("cost") || c.includes("how much")) topics.push("pricing");
+      if (c.includes("start") || c.includes("begin") || c.includes("new")) topics.push("getting started");
+      if (c.includes("creator") || c.includes("profile")) topics.push("creator profiles");
+      if (c.includes("brand") || c.includes("campaign")) topics.push("brand campaigns");
+      if (c.includes("payment") || c.includes("money") || c.includes("pay")) topics.push("payments");
+      if (c.includes("rate") || c.includes("cpm")) topics.push("rate cards");
+      if (c.includes("deal") || c.includes("contest")) topics.push("deal types");
+      if (c.includes("message") || c.includes("dm") || c.includes("chat")) topics.push("messaging");
+      if (c.includes("review") || c.includes("rating")) topics.push("reviews");
+      if (c.includes("niche") || c.includes("category")) topics.push("niches");
+      if (c.includes("directory") || c.includes("find")) topics.push("creator directory");
+      if (c.includes("ugc") || c.includes("content")) topics.push("ugc/content");
+      if (c.includes("earnings") || c.includes("dashboard")) topics.push("earnings");
+    }
+    const uniqueTopics = [...new Set(topics)];
+    const topicText = uniqueTopics.length > 0
+      ? `so far we've talked about: ${uniqueTopics.join(", ")}.`
+      : `we've had ${messageCount} messages back and forth so far.`;
+
+    return `for sure! i can see everything in this conversation \ud83d\udc40 ${topicText} \n
+last thing we discussed was about "${lastTopic}..." \n
+i don't have perfect long-term memory like a human (i'm more like a really attentive friend who takes notes \ud83d\udcdd), but within this chat i can reference anything we've discussed. want to pick up where we left off or talk about something new?`;
+  }
+
+  // "Can you see our messages?" / "What did I ask?"
+  if (lower.match(/\b(what did i ask|what did i say|what was my question|what did we talk about|summarize|recap|what happened)\b/)) {
+    const summary = buildConversationSummary(messages.slice(-8));
+    return `here's what we've covered in this chat so far:\n\n${summary}\n\nthat's the gist of it! want to dive deeper into any of these topics or switch gears? \ud83d\udcab`;
+  }
+
+  return null;
+}
+
+function getFollowUpResponse(content: string, messages: ChatMessage[], ctx: UserContext): string | null {
+  const lower = content.toLowerCase();
+  const lastAssistant = messages.filter(m => m.role === "assistant").pop();
+  const lastUser = messages.filter(m => m.role === "user").pop();
+  const lastTopic = lastAssistant?.content.slice(0, 200).toLowerCase() || "";
+
+  // Follow-up questions that reference previous context
+  if (lower.match(/\b(what about|how about|and what about|tell me about|explain|can you explain)\b/)) {
+    // Try to infer what the follow-up is about from keywords
+    if (lower.match(/\b(pricing|cost|price|money|fee)\b/)) {
+      return personalize(`ok so digging deeper into pricing \ud83d\udcb5 here's what matters:
+
+for **creators**: joining is completely free. zero. nada. you keep 80% of every payment. the 20% fee covers platform maintenance, support, and new features. you only pay when you earn.
+
+for **brands**: three tiers \u2014 starter ($199/mo), growth ($300/mo), premium ($500/mo). starter is great for testing, growth is the sweet spot for most scaling brands, premium gets you a dedicated account manager + co-branded campaigns.
+
+payments all go through paypal \u2014 secure, tracked, transparent. no sketchy stuff.
+\n{role-tip}`, ctx);
+    }
+    if (lower.match(/\b(payment|pay|earn|income|money i make)\b/)) {
+      return personalize(`let's break down the money flow \ud83d\udcb8
+
+**creators get 80%** of every payment. that's it. no hidden fees, no surprises.
+
+**milestone bonuses** on top:\n- rising star (3-9 campaigns): $100\n- creator pro (10-19): $200\n- top performer (20-34): $350\n- elite creator (35+): $500\n- **total possible: $1,150** in bonuses
+
+brands pay the full campaign amount upfront via paypal. creators get their 80% cut. everything tracked in dashboard \u2192 earnings. clean and simple.
+\n{role-tip}`, ctx);
+    }
+    if (lower.match(/\b(start|begin|first step|how do i join)\b/)) {
+      return personalize(`getting started is actually super straightforward \ud83d\ude80
+
+1. sign in with replit auth (one click, super secure)\n2. pick your role in the dashboard \u2014 creator or brand\n3. build your profile (this is your first impression, make it count)\n4. **creators**: add portfolio, niches, rate card, social links\n5. **brands**: pick a tier, create a campaign, browse creators
+
+that's literally it. the whole setup takes like 10-15 minutes. and then you're in the game \ud83c\udfae
+
+need me to walk you through any specific step?`, ctx);
+    }
+    // Generic follow-up that references previous topic
+    const topicHint = lastTopic.includes("pricing") ? "pricing" :
+      lastTopic.includes("payment") || lastTopic.includes("money") ? "payments" :
+      lastTopic.includes("creator") ? "creator profiles" :
+      lastTopic.includes("brand") || lastTopic.includes("campaign") ? "brand campaigns" :
+      lastTopic.includes("deal") ? "deal types" :
+      lastTopic.includes("rate") ? "rate cards" :
+      lastTopic.includes("message") ? "messaging" :
+      lastTopic.includes("review") ? "reviews" :
+      lastTopic.includes("niche") ? "niches" :
+      lastTopic.includes("directory") ? "the creator directory" :
+      lastTopic.includes("ugc") ? "ugc" :
+      "truenorthugc";
+
+    return `for sure! since we were talking about ${topicHint}, here's more detail:\n\ni can also help with related stuff like:\n- getting started and profile setup\n- payments, earnings, and rate cards\n- finding creators or launching campaigns\n- messaging, reviews, and deal types\n- anything else about the platform\n\nwhat specifically would you like to know more about? \ud83d\udcab`;
+  }
+
+  // "Tell me more" / "Go on" / "Continue"
+  if (lower.match(/\b(tell me more|go on|continue|expand|elaborate|more details|more info|dig deeper)\b/)) {
+    if (lastTopic.includes("pricing") || lastTopic.includes("tier")) {
+      return personalize(`ok here's the full pricing breakdown with more detail \ud83d\udcc8
+
+**starter ($199/mo):**
+- basic campaign placement\n- curated creator pool access\n- email support\n- best for: small brands testing ugc for the first time
+
+**growth ($300/mo) \u2014 most popular:**
+- priority campaign placement (your campaigns show up higher)\n- enhanced analytics with demographics\n- expanded creator access\n- deeper performance insights\n- best for: scaling brands ready to invest more
+
+**premium ($500/mo) \u2014 the vip:**
+- featured placement (top of the list)\n- premium analytics with roi forecasting\n- access to entire creator network\n- dedicated account manager\n- co-branded campaign opportunities\n- early access to new features\n- best for: established brands going all-in
+
+**creators pay nothing to join.** the 80/20 split only applies when you actually get paid for work. that's the deal \u2705
+\n{role-tip}`, ctx);
+    }
+    if (lastTopic.includes("creator") || lastTopic.includes("profile")) {
+      return personalize(`here's the deeper dive on building a creator profile that actually converts \ud83d\udd25
+
+**bio**: don't just list facts \u2014 tell a mini story. "i'm a toronto-based creator who specializes in unboxing videos and lifestyle content. i love making brands feel authentic." that hits different.
+
+**portfolio videos**: quality over quantity, but 3-5 is the sweet spot. show:\n- one product review/unboxing\n- one lifestyle piece\n- one "day in the life" or behind-the-scenes\n- your best piece, whatever it is\n
+**rate card strategy**:\n- look at creators at your experience level\n- factor in your time + equipment + editing\n- start confident \u2014 you can always adjust\n- note any package deals ("bundle 3 posts for $x")
+
+**social links**: connect everything you have. even small accounts matter \u2014 brands want to see consistency across platforms.
+\n{role-tip}`, ctx);
+    }
+    // Generic "tell me more" with context from last topic
+    return `happy to go deeper! \ud83e\uddd0 since we were just discussing something related to the platform, here's what i can expand on:
+
+i know the full details about:\n- profile setup and optimization\n- pricing, payments, and earnings\n- campaign creation and deal types\n- finding and connecting with creators\n- messaging, reviews, and the directory\n- ugc strategy and best practices
+
+which area would you like me to dive into? just ask!`;
+  }
+
+  // "What else?" / "Anything else?" / "What else can you do?"
+  if (lower.match(/\b(what else|anything else|what other|what more|anything more|else can you|other things)\b/)) {
+    return `oh there's so much more i can help with \ud83d\ude0c here's the full menu:
+
+**platform stuff:**\n- profile setup & optimization\n- pricing & payment details\n- campaign creation & deal types\n- the creator directory & search filters\n- messaging & dm system\n- reviews & feedback\n- earnings dashboard & milestone tracking\n
+**strategy stuff:**\n- ugc best practices\n- rate card pricing strategy\n- how to get discovered as a creator\n- how to find the right creators as a brand\n- building long-term brand relationships\n
+**support stuff:**\n- troubleshooting issues\n- contacting the human team\n- general platform questions
+
+what sounds interesting? just pick a topic and i'll break it down! \ud83d\udcab`;
+  }
+
+  // "I don't understand" / "Explain again" / "Simpler"
+  if (lower.match(/\b(don't understand|confused|not clear|explain again|simpler|simpler terms|dumb it down|basic terms|layman's|for dummies|slow down)\b/)) {
+    return `no worries at all! let me break it down super simple \ud83d\udc4c
+
+truenorthugc is basically a marketplace:\n- **creators** make content for brands\n- **brands** pay creators for that content\n- the platform handles matching, payments, and tracking\n
+**creators**: sign up free \u2192 build profile \u2192 get hired \u2192 make content \u2192 get paid (80% of what the brand pays)\n
+**brands**: pick a plan ($199-$500/mo) \u2192 post a campaign \u2192 find creators \u2192 pay via paypal \u2192 get content
+
+that's the whole thing in a nutshell. anything specific you want me to simplify more?`;
+  }
+
+  // "Is this safe?" / "Is it legit?" / "Trust"
+  if (lower.match(/\b(safe|legit|trust|scam|secure|reliable|real|genuine|worried about|concerned)\b/)) {
+    return `totally fair question \ud83d\ude4c here's why truenorthugc is legit:
+
+**payments**: all through paypal \u2014 one of the most trusted payment platforms in the world. brands pay upfront, creators get paid securely.
+
+**transparency**: every payment is tracked in your earnings dashboard. no hidden fees, no shady business.
+
+**reviews**: both creators and brands leave public reviews after campaigns. fake accounts or scammers get exposed fast.
+
+**canadian focus**: we're specifically built for the canadian market. real creators, real brands, real collaborations.
+
+**support**: actual human team you can email (truenorthugccanada@gmail.com) or call (1-226-220-1522). we're not some faceless corp.
+
+if anything ever feels off, reach out to support immediately. your safety and trust matter more than anything \u2705`;
+  }
+
+  // Comparison / "Why this platform?" / "vs"
+  if (lower.match(/\b(vs|versus|compare|better than|why (choose|use|pick)|difference between|alternatives|other platform|other site)\b/)) {
+    return `great question! here's what makes truenorthugc different:\n
+**canadian focus**: unlike global platforms, we specialize in canadian creators and brands. local talent, local connections, local understanding.
+
+**three deal types**: campaign deals, contest deals, and cpm deals. most platforms only offer one or two. we give you options.
+
+**milestone bonuses**: creators earn extra cash ($100-$500) just for completing campaigns. that's on top of regular payments.
+
+**transparent pricing**: 80/20 split. no hidden fees. no surprises.
+
+**full creator profiles**: portfolio videos, rate cards, social links, reviews \u2014 brands see everything before reaching out.
+
+**dedicated account managers**: premium brands get real human support, not just chatbots.
+
+we're not trying to be the biggest platform \u2014 we're trying to be the best for canadian ugc specifically \ud83c\udf41`;
+  }
+
+  // "Good / Bad / Best / Worst" advice
+  if (lower.match(/\b(best|worst|good|bad|should i|shouldn't i|recommend|advice|tip|strategy|secret|hack)\b/)) {
+    return `ok here's my honest take \ud83e\uddd0
+
+**for creators:**\n- best thing you can do: complete your profile 100%. every field, every link, every video. incomplete profiles get skipped.\n- worst thing: leaving your rate card blank. brands can't hire you if they don't know what you charge.\n- secret hack: pick niches that are specific but not too niche. "beauty" is broad. "clean beauty for sensitive skin" is perfect.\n
+**for brands:**\n- best thing: put detailed campaign briefs. the more info, the better creator matches.\n- worst thing: going for the cheapest creator. quality content costs money, and it pays off in conversions.\n- secret hack: use contest deals to test multiple creators at once. low risk, high variety.
+
+**for everyone:**\n- best thing: communicate clearly in dms before committing.\n- worst thing: ghosting. respond even if you're not interested.\n
+want me to go deeper on any of these? \ud83d\udcab`;
+  }
+
+  return null;
+}
+
+function getFallbackResponse(content: string, ctx: UserContext = {}, messages: ChatMessage[] = []): string {
   const lower = content.toLowerCase();
   const r = (text: string) => personalize(text, ctx);
 
+  // First: check for memory/conversation awareness questions
+  const memoryResponse = getMemoryResponse(content, messages, ctx);
+  if (memoryResponse) return memoryResponse;
+
+  // Second: check for follow-up questions that reference context
+  const followUpResponse = getFollowUpResponse(content, messages, ctx);
+  if (followUpResponse) return followUpResponse;
+
+  // Third: keyword-matched topic responses
   if (lower.match(/\b(hi|hello|hey|greetings|howdy|yo|what.s up|sup|hola)\b/)) {
     return getPersonalizedGreeting(ctx);
   }
@@ -207,7 +446,7 @@ pro tip: the more detail in your campaign brief, the better responses you'll get
     if (ctx.role === "creator") {
       return r(`let's talk money bc your talent deserves to be paid well \ud83d\udcb0
 
-- **you keep 80%** of every payment. literally 80 cents of every dollar goes straight to you. the 20% fee keeps the marketplace running, support active, and new features coming
+- **you keep 80%** of every single payment. literally 80 cents of every dollar goes straight to you. the 20% fee keeps the marketplace running, support active, and new features coming
 - **paypal for everything** \u2014 secure, fast, trusted. no sketchy payment methods
 - **milestone bonuses** \u2014 loyalty rewards for putting in work:
   - rising star (3-9 campaigns): **$100 bonus** \ud83d\udc4f
@@ -400,24 +639,61 @@ whether you need step-by-step help or just want to bounce ideas around, i'm here
     return r(`take care! \ud83d\udc4b good luck on your truenorthugc journey \u2014 whether you're creating or collaborating, you're part of an amazing community. catch you later, eh`);
   }
 
-  return r(`ok that's actually a great question \ud83e\udd14 i want to make sure i give you the best answer. could you share a bit more detail? sometimes rephrasing or adding context helps me pinpoint exactly what you need.
+  // Fourth: try to categorize the question into known topics
+  if (lower.match(/\b(platform|app|website|site|how does it work|how does this work|what is this)\b/)) {
+    return `ok so truenorthugc in a nutshell \ud83d\udc40
 
-in the meantime:
-- **dashboard** \u2014 your personal hub with role-specific tools
-- **directory** \u2014 discover creators or browse active campaigns
-- **contact page** (/contact) \u2014 reach our human team
-- **email**: truenorthugccanada@gmail.com
+it's a marketplace that connects **canadian ugc creators** with **brands** who need authentic content.
 
-what would you like to explore? \ud83d\udcab`);
+**creators** make content (product reviews, lifestyle videos, tutorials, etc.) and get paid. **brands** get real, relatable content for their marketing.
+
+key features:\n- free for creators to join\n- three brand tiers ($199, $300, $500/mo)\n- three deal types (campaign, contest, cpm)\n- built-in messaging between creators and brands\n- review system for trust\n- earnings tracking and milestone bonuses\n- creator directory with search and filters\n
+think of it like a dating app, but for content creation \ud83d\ude02 want me to explain any part in more detail?`;
+  }
+
+  if (lower.match(/\b(canada|canadian|province|toronto|vancouver|montreal|ontario|bc|alberta)\b/)) {
+    return `yes! truenorthugc is specifically built for canada \ud83c\udf41
+
+**why canadian-focused?**
+- canadian creators understand canadian audiences\n- local brands want content that feels local\n- different regulations, trends, and cultural nuances than the us or uk\n- supporting the canadian creator economy
+
+**we cover all provinces:**\nontario, bc, alberta, quebec, manitoba, saskatchewan, nova scotia, new brunswick, pei, newfoundland & labrador, and the territories.
+
+**popular creator hubs:**\n- toronto (biggest scene)\n- vancouver (lifestyle & travel)\n- montreal (fashion & beauty)\n- calgary (emerging fast)\n
+local creators often deliver the most authentic regional content. a vancouver creator shooting pacific coast content hits different than someone from toronto doing the same thing. that's the value of local talent \ud83d\udcab`;
+  }
+
+  if (lower.match(/\b(facebook|instagram|tiktok|youtube|twitter|x|social|social media|platforms)\b/)) {
+    return `truenorthugc connects to all the major platforms creators use:\n
+**content platforms:**\n- **tiktok** \u2014 short-form, trending, high reach\n- **instagram** \u2014 reels, stories, static posts\n- **youtube** \u2014 long-form, tutorials, unboxings\n- **twitter/x** \u2014 threads, quick takes, engagement\n- **facebook** \u2014 community content, older demographics\n
+**creative tools:**\n- **canva** \u2014 design, templates, brand assets\n
+**how it works:**\ncreators link their social accounts on their profile. brands can see follower counts, engagement rates, and content style before reaching out. this builds instant credibility and helps with matching.
+
+for ugc specifically, you don't need a massive following \u2014 brands care more about content quality and niche fit than follower count. that's the beauty of it \ud83d\udc8e`;
+  }
+
+  // Final fallback
+  return `ok so i'm not 100% sure i caught exactly what you're looking for \ud83e\udd14 but i can definitely help! here are the things i know inside and out:
+
+**platform basics:**\n- how truenorthugc works\n- pricing and payment structure\n- getting started as a creator or brand\n- the canadian creator market
+
+**creator side:**\n- profile setup and optimization\n- rate cards and pricing strategy\n- portfolio building\n- getting discovered by brands\n- deal types and campaign structure
+
+**brand side:**\n- subscription tiers and what's included\n- finding the right creators\n- launching campaigns\n- contest deals and cpm deals\n- analytics and performance tracking
+
+**support:**\n- messaging and communication\n- reviews and feedback\n- earnings dashboard\n- contacting the human team
+
+which area sounds closest to what you need? or just rephrase your question and i'll do my best! \ud83d\udcab`;
 }
 
 async function streamFallbackResponse(
   res: Response,
   content: string,
   saveFn: (text: string) => Promise<unknown>,
-  ctx: UserContext = {}
+  ctx: UserContext = {},
+  messages: ChatMessage[] = []
 ): Promise<void> {
-  const response = getFallbackResponse(content, ctx);
+  const response = getFallbackResponse(content, ctx, messages);
   const tokens = response.split(/(\s+)/); // keep whitespace tokens for natural streaming
 
   let index = 0;
@@ -544,12 +820,13 @@ export function registerChatRoutes(app: Express): void {
         // If AI proxy fails (401, etc.), seamlessly fall back to local knowledge base
         if (aiError.status === 401 || aiError.statusCode === 401 || !streamOk) {
           console.log("[Mercedes] AI proxy unavailable, using smart fallback for:", content.slice(0, 50));
-          // Save the fallback response after streaming completes
+          // Pass full conversation history for context-aware responses
           await streamFallbackResponse(
             res,
             content,
             (text) => chatStorage.createMessage(conversationId, "assistant", text),
-            userContext || {}
+            userContext || {},
+            messages
           );
           return;
         }
