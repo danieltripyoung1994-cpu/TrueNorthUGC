@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Sparkles, Loader2, RotateCcw, ChevronDown, Volume2, VolumeX, Mic } from "lucide-react";
+import { MessageCircle, X, Send, Sparkles, Loader2, RotateCcw, ChevronDown, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -120,64 +120,8 @@ export function AiChatWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<number | null>(null);
   const [showScrollDown, setShowScrollDown] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [lastSpokeId, setLastSpokeId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const speakingRef = useRef<SpeechSynthesisUtterance | null>(null);
-
-  const stopSpeaking = useCallback(() => {
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
-    speakingRef.current = null;
-    setIsSpeaking(false);
-  }, []);
-
-  const speak = useCallback((text: string, msgId: string) => {
-    if (!window.speechSynthesis || isMuted) return;
-    stopSpeaking();
-
-    const utter = new SpeechSynthesisUtterance(text);
-    const voices = window.speechSynthesis.getVoices();
-    // Prefer a sultry Australian female voice
-    const preferred =
-      voices.find((v) => v.lang === "en-AU" && /karen|lisa|grace|sophie|harper|jessie|olivia|ruby|amanda|matilda/i.test(v.name)) ||
-      voices.find((v) => v.lang === "en-AU" && v.name.includes("Female")) ||
-      voices.find((v) => v.lang === "en-AU") ||
-      voices.find((v) => v.name.includes("Karen") && v.lang === "en-AU") ||
-      voices.find((v) => v.name.includes("Samantha")) ||
-      voices.find((v) => v.lang.startsWith("en")) ||
-      voices[0];
-
-    if (preferred) utter.voice = preferred;
-    utter.rate = 0.92;  // slower = more natural, less robotic
-    utter.pitch = 1.02; // subtle lift = warm and engaging
-    utter.onstart = () => { setIsSpeaking(true); setLastSpokeId(msgId); };
-    utter.onend = () => { setIsSpeaking(false); setLastSpokeId(null); speakingRef.current = null; };
-    utter.onerror = () => { setIsSpeaking(false); setLastSpokeId(null); speakingRef.current = null; };
-
-    speakingRef.current = utter;
-    window.speechSynthesis.speak(utter);
-  }, [isMuted, stopSpeaking]);
-
-  // Speak a specific message on demand
-  const speakMessage = useCallback((content: string, msgId: string) => {
-    const clean = content
-      .replace(/\*\*/g, "")
-      .replace(/\*/g, "")
-      .replace(/`/g, "")
-      .replace(/!\[.*?\]\(.*?\)/g, "")
-      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-      .replace(/https?:\/\/[^\s]+/g, "")
-      .replace(/(\ud83c[\udde0-\uddff])|(\ud83d[\udc00-\ude4f\ude80-\udeff])|([\u2600-\u26FF\u2700-\u27BF])/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
-    if (clean.length > 5) {
-      speak(clean, msgId);
-    }
-  }, [speak]);
 
   const { user } = useAuth();
   const { data: creatorProfile } = useMyCreatorProfile();
@@ -402,25 +346,12 @@ export function AiChatWidget() {
                   <X className="w-4 h-4" />
                 </Button>
               </div>
+              {/* AI Status indicator */}
               <div className="flex items-center gap-1 ml-11 -mt-0.5">
-                <button
-                  onClick={() => { setIsMuted(!isMuted); if (!isMuted) stopSpeaking(); }}
-                  className="text-[10px] flex items-center gap-0.5 text-muted-foreground hover:text-foreground transition-colors"
-                  title={isMuted ? "Unmute Mercedes" : "Mute Mercedes"}
-                >
-                  {isMuted ? <VolumeX className="w-2.5 h-2.5" /> : <Volume2 className="w-2.5 h-2.5" />}
-                  {isMuted ? "Muted" : "Speaking"}
-                </button>
-                {isSpeaking && (
-                  <button
-                    onClick={stopSpeaking}
-                    className="text-[10px] flex items-center gap-0.5 text-pink-400 hover:text-pink-300 transition-colors"
-                    title="Stop speaking"
-                  >
-                    <VolumeX className="w-2.5 h-2.5" />
-                    Stop
-                  </button>
-                )}
+                <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
+                  Online
+                </span>
               </div>
             </div>
 
@@ -503,28 +434,6 @@ export function AiChatWidget() {
                               <p className="text-sm leading-relaxed">{msg.content}</p>
                             )}
                           </div>
-                          {msg.role === "assistant" && msg.content && !isLoading && (
-                            <button
-                              onClick={() => {
-                                if (lastSpokeId === msg.id) {
-                                  stopSpeaking();
-                                } else {
-                                  speakMessage(msg.content, msg.id);
-                                }
-                              }}
-                              className={`self-start ml-1 flex items-center gap-1 text-[10px] transition-colors ${
-                                lastSpokeId === msg.id ? "text-pink-400" : "text-muted-foreground/60 hover:text-pink-400"
-                              }`}
-                              title={lastSpokeId === msg.id ? "Stop speaking" : "Play voice"}
-                            >
-                              {lastSpokeId === msg.id ? (
-                                <VolumeX className="w-3 h-3" />
-                              ) : (
-                                <Volume2 className="w-3 h-3" />
-                              )}
-                              {lastSpokeId === msg.id ? "Playing..." : "Listen"}
-                            </button>
-                          )}
                         </div>
                       </motion.div>
                     ))}
