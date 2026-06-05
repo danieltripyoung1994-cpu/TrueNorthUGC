@@ -1,6 +1,7 @@
 import { Phone, Mail, MapPin, Clock, Sparkles, Send } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,6 +10,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Navbar } from "@/components/Navbar";
 import { motion, useReducedMotion } from "framer-motion";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Contact() {
   usePageMeta({ 
@@ -39,6 +41,7 @@ export default function Contact() {
       });
       
       if (response.ok) {
+        trackEvent("contact_form_submit", { subject: formData.subject }, ["ga4", "meta"]);
         toast({
           title: "Message sent!",
           description: "We'll get back to you as soon as possible.",
@@ -73,6 +76,22 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
+      <SchemaMarkup schema={{
+        type: "ContactPage",
+        data: {
+          name: "Contact TrueNorthUGC",
+          description: "Get in touch with TrueNorthUGC for creator marketplace inquiries.",
+          url: "https://www.truenorthugc.com/contact",
+          contactPoint: {
+            "@type": "ContactPoint",
+            telephone: "+1-226-220-1522",
+            contactType: "customer support",
+            email: "TrueNorthUGCcanada@gmail.com",
+            areaServed: "CA",
+            availableLanguage: ["English", "French"],
+          },
+        },
+      }} />
       <Navbar />
       <main className="container mx-auto px-4 py-12 relative">
         {!prefersReducedMotion && (

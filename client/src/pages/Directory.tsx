@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { CreatorCard } from "@/components/CreatorCard";
 import { useCreators } from "@/hooks/use-creators";
 import { Input } from "@/components/ui/input";
@@ -62,6 +63,16 @@ export default function Directory() {
   return (
     <PageTransition>
     <div className="min-h-screen bg-background overflow-hidden">
+      <SchemaMarkup
+        schema={{
+          type: "CollectionPage",
+          data: {
+            name: "Browse Canadian UGC Creators",
+            url: "https://www.truenorthugc.com/creators",
+            description: "Discover and hire talented Canadian UGC creators for your brand campaigns.",
+          },
+        }}
+      />
       <Navbar />
       
       <main className="container mx-auto px-4 py-6 sm:py-12 relative">

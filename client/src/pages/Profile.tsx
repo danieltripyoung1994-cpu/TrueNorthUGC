@@ -5,6 +5,8 @@ import { useCreator, useMyCreatorProfile } from "@/hooks/use-creators";
 import { useBrand } from "@/hooks/use-brand";
 import { useReviewsByCreator } from "@/hooks/use-reviews";
 import { useParams, useLocation, Redirect } from "wouter";
+import { usePageMeta } from "@/hooks/use-page-meta";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
 import {
   Share2, Link as LinkIcon, Settings, Youtube, Video, Star, MapPin,
   Globe, MessageCircle, CheckCircle, Languages, Briefcase, ExternalLink,
@@ -87,6 +89,19 @@ export default function Profile() {
   const isOwnProfile = user?.id === creator.userId;
   const profileUrl = window.location.href;
 
+  // SEO metadata for creator profile
+  const profileTitle = `${creator.name} — Canadian UGC Creator ${creator.location ? `in ${creator.location}` : ""} ${creator.niches?.length ? `| ${creator.niches[0]}` : ""}`;
+  const profileDescription = creator.bio || `Hire ${creator.name} for user-generated content campaigns. Canadian UGC creator ${creator.niches?.length ? `specializing in ${creator.niches.join(", ")}` : ""} ${creator.location ? `based in ${creator.location}` : ""}.`;
+  const profileKeywords = `UGC creator Canada, ${creator.name}, Canadian content creator, ${creator.niches?.join(", ") || "UGC"}, ${creator.location || "Canada"} creator, hire creator, brand collaboration`;
+
+  usePageMeta({
+    title: profileTitle,
+    description: profileDescription,
+    keywords: profileKeywords,
+    canonicalPath: `/creators/${creator.handle}`,
+    ogType: "profile",
+  });
+
   const shareToTwitter = () => {
     window.open(`https://twitter.com/intent/tweet?text=Check out ${creator.name}'s UGC portfolio on TrueNorthUGC!&url=${profileUrl}`, '_blank');
   };
@@ -147,6 +162,23 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
+      <SchemaMarkup
+        schema={{
+          type: "Person",
+          data: {
+            name: creator.name,
+            url: `https://www.truenorthugc.com/creators/${creator.handle}`,
+            image: creator.profileImage || undefined,
+            description: creator.bio || `Canadian UGC creator ${creator.niches?.length ? `specializing in ${creator.niches.join(", ")}` : ""}`,
+            jobTitle: creator.niches?.length ? `${creator.niches[0]} Content Creator` : "UGC Creator",
+            worksFor: { name: "TrueNorthUGC" },
+            address: creator.location ? {
+              addressCountry: "Canada",
+              addressLocality: creator.location,
+            } : undefined,
+          },
+        }}
+      />
       <Navbar />
       <main className="container mx-auto px-4 py-12 relative">
         <motion.div

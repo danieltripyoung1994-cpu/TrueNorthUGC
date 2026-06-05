@@ -17,6 +17,7 @@ const LaunchCampaign = lazy(() => import("@/pages/LaunchCampaign"));
 const Campaigns = lazy(() => import("@/pages/Campaigns"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const Brands = lazy(() => import("@/pages/Brands"));
+const ProgrammaticSEO = lazy(() => import("@/pages/ProgrammaticSEO"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function PageLoader() {
@@ -54,6 +55,8 @@ function Router() {
     <Suspense fallback={<PageLoader />}>
       <Switch>
         <Route path="/" component={Landing} />
+        <Route path="/city/:slug" component={ProgrammaticSEO} />
+        <Route path="/niche/:slug" component={ProgrammaticSEO} />
         <Route path="/directory" component={Directory} />
         <Route path="/creators" component={Directory} />
         <Route path="/creators/:handle" component={Profile} />

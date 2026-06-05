@@ -1,0 +1,359 @@
+MISSION:
+You are a senior SEO engineer, CRO specialist, full-stack performance engineer, and growth marketer.
+
+Your task is to fully optimize the TrueNorthUGC platform for:
+
+1. SEO (technical, on-page, programmatic, local, schema)
+2. ROI & conversions
+3. Organic traffic growth
+4. Marketplace indexing
+5. Creator acquisition
+6. Brand acquisition
+7. Site speed/Core Web Vitals
+8. Google ranking readiness
+9. Analytics + conversion tracking
+10. Revenue growth
+
+Business:
+TrueNorthUGC is a Canadian UGC marketplace connecting brands with creators for TikTok, Meta ads, product videos, short-form content, and creator collaborations.
+
+PRIMARY GOALS:
+- Rank for high-intent UGC keywords
+- Increase creator signups
+- Increase brand signups
+- Improve conversion rate
+- Improve domain authority
+- Improve time on site
+- Increase pages indexed by Google
+- Improve mobile SEO
+- Improve trust signals
+- Maximize ROI
+
+PHASE 1 — FULL SITE AUDIT
+
+Perform a complete audit of:
+
+TECHNICAL SEO:
+- Crawlability
+- Indexability
+- Metadata
+- Duplicate content
+- Broken links
+- Canonicals
+- URL structure
+- Site architecture
+- Internal linking
+- Sitemap
+- robots.txt
+- Open Graph tags
+- Twitter cards
+- Image optimization
+- Accessibility
+- Structured data
+- JavaScript rendering issues
+- Mobile performance
+- Core Web Vitals
+
+PERFORMANCE:
+- Largest Contentful Paint
+- Cumulative Layout Shift
+- Time to Interactive
+- Bundle size
+- Render blocking JS
+- Hydration issues
+- Lazy loading
+- Image compression
+- API bottlenecks
+- database inefficiencies
+
+UX / CRO:
+- CTA placement
+- signup friction
+- onboarding friction
+- bounce risks
+- weak messaging
+- trust signals
+- landing page clarity
+- conversion leaks
+
+OUTPUT:
+Create:
+SEO_AUDIT.md
+ROI_AUDIT.md
+FIX_PLAN.md
+
+Then implement fixes automatically.
+
+PHASE 2 — SEO IMPLEMENTATION
+
+Implement:
+
+1. ADVANCED METADATA
+
+Generate dynamic metadata for every page:
+
+Title formula:
+Primary Keyword | Benefit | TrueNorthUGC
+
+Meta descriptions:
+High CTR optimized.
+
+Examples:
+"Hire Canadian UGC Creators for TikTok, Meta & Shopify Ads. Find vetted creators fast on TrueNorthUGC."
+
+Add:
+- OpenGraph
+- Twitter metadata
+- favicon metadata
+- social preview images
+
+2. SCHEMA MARKUP
+
+Add JSON-LD schema:
+
+Homepage:
+Organization schema
+
+Marketplace pages:
+CollectionPage schema
+
+Creator profiles:
+Person schema
+
+Brand pages:
+Organization schema
+
+Reviews:
+Review schema
+
+FAQs:
+FAQ schema
+
+Articles:
+Article schema
+
+Breadcrumbs:
+Breadcrumb schema
+
+Include:
+sameAs
+socials
+logo
+description
+founder
+business info
+
+3. PROGRAMMATIC SEO
+
+Generate scalable SEO landing pages:
+
+/ugc-creators-canada
+/ugc-creators-calgary
+/ugc-creators-toronto
+/ugc-creators-vancouver
+/ugc-creators-edmonton
+/ugc-creators-montreal
+
+/hire-ugc-creators
+/hire-tiktok-creators
+/hire-shopify-ugc-creators
+/hire-meta-ad-creators
+/hire-beauty-ugc-creators
+/hire-fitness-ugc-creators
+/hire-tech-ugc-creators
+
+Each page should include:
+- 1200–2000 words
+- FAQ
+- internal links
+- CTAs
+- schema markup
+- SEO optimized headings
+- conversion copy
+
+4. BLOG SEO ENGINE
+
+Create content architecture for:
+
+Categories:
+- UGC Marketing
+- Creator Economy
+- Brand Growth
+- TikTok Ads
+- Shopify Marketing
+- Creator Guides
+
+Auto-generate 100 SEO articles.
+
+Target keywords:
+- best ugc platform canada
+- hire ugc creators
+- ugc creator jobs canada
+- canadian ugc creators
+- ugc rates canada
+- tiktok ad creators
+
+Each article:
+- optimized headings
+- FAQs
+- schema
+- internal links
+- CTA blocks
+
+5. INTERNAL LINKING ENGINE
+
+Automatically improve:
+- contextual links
+- breadcrumbs
+- related content
+- authority flow
+
+Reduce orphan pages.
+
+6. GOOGLE INDEXING
+
+Generate:
+robots.txt
+dynamic sitemap.xml
+
+Submit-friendly sitemap structure.
+
+Add:
+canonical URLs
+noindex where needed
+
+7. CORE WEB VITALS
+
+Optimize:
+- image loading
+- lazy loading
+- code splitting
+- bundle reduction
+- caching
+- database performance
+- server rendering
+- hydration issues
+
+Target:
+90+ Lighthouse SEO
+90+ Performance
+90+ Accessibility
+90+ Best Practices
+
+PHASE 3 — ROI / CONVERSION OPTIMIZATION
+
+Optimize homepage messaging.
+
+Current goal:
+Immediate clarity.
+
+Hero should explain in under 5 seconds:
+
+FOR BRANDS:
+"Hire Canadian UGC creators that convert."
+
+FOR CREATORS:
+"Get paid brand deals in Canada."
+
+Improve:
+- CTA placement
+- trust signals
+- testimonials
+- onboarding
+- signup flow
+- creator profile creation
+
+Reduce friction.
+
+Add:
+social proof
+numbers
+stats
+logos
+creator examples
+
+A/B test:
+Headlines
+Buttons
+Pricing
+Signup flow
+
+PHASE 4 — ANALYTICS
+
+Install and configure:
+
+- Google Analytics 4
+- Google Search Console
+- Microsoft Clarity
+- Meta Pixel
+- TikTok Pixel
+
+Track:
+- signup conversion
+- creator onboarding
+- brand onboarding
+- abandoned signup
+- CTA clicks
+- lead sources
+- SEO traffic
+
+Create dashboards.
+
+PHASE 5 — MARKETPLACE SEO
+
+Index creator profiles.
+
+Example:
+domain.com/creator/name-city-niche
+
+SEO optimize every profile:
+- metadata
+- schema
+- headings
+- bio optimization
+
+Index searchable creator pages.
+
+Create filtering pages:
+/beauty-ugc-creators
+/fitness-ugc-creators
+/shopify-ugc-creators
+
+PHASE 6 — TRUST + AUTHORITY
+
+Add:
+FAQ
+privacy
+terms
+contact
+about
+case studies
+success stories
+creator payouts transparency
+
+PHASE 7 — IMPLEMENTATION
+
+Do not just recommend changes.
+
+ACTUALLY IMPLEMENT THEM.
+
+Create commits after each phase.
+
+Never break production.
+
+Test everything.
+
+Maintain responsive design.
+
+Preserve current branding.
+
+At completion produce:
+
+1. SEO score improvements
+2. ROI improvements
+3. traffic opportunities
+4. keyword targets
+5. ranking roadmap
+6. conversion funnel report
+7. deployment checklist
+8. technical documentation
