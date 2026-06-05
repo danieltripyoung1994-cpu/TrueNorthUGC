@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { useQuery } from "@tanstack/react-query";
 import { type Brand } from "@shared/schema";
 import { Input } from "@/components/ui/input";
@@ -56,6 +57,16 @@ export default function Brands() {
   return (
     <PageTransition>
     <div className="min-h-screen bg-background overflow-hidden">
+      <SchemaMarkup
+        schema={{
+          type: "CollectionPage",
+          data: {
+            name: "Brand Directory - TrueNorthUGC",
+            url: "https://www.truenorthugc.com/brands",
+            description: "Discover Canadian brands looking for UGC creators. Connect with brands across beauty, tech, fitness, food, and more.",
+          },
+        }}
+      />
       <Navbar />
 
       <main className="container mx-auto px-4 py-6 sm:py-12 relative">

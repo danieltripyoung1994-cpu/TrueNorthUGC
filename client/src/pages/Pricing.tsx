@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Sparkles, Star, Crown, Zap, ArrowRight, Trophy } from "lucide-react";
 import { useLocation } from "wouter";
@@ -9,6 +10,7 @@ import { PageTransition } from "@/components/ui/page-transition";
 import { useQuery } from "@tanstack/react-query";
 import { Offer } from "@shared/schema";
 import { Badge } from "@/components/ui/badge";
+import { trackEvent } from "@/lib/analytics";
 
 const container = {
   hidden: { opacity: 0 },
@@ -136,6 +138,20 @@ export default function Pricing() {
   return (
     <PageTransition>
     <div className="min-h-screen bg-background overflow-hidden">
+      <SchemaMarkup schema={{
+        type: "Service",
+        data: {
+          name: "TrueNorthUGC Pricing Plans",
+          description: "Affordable pricing plans for Canadian UGC creators and brands.",
+          provider: { name: "TrueNorthUGC", url: "https://www.truenorthugc.com" },
+          areaServed: "CA",
+          offers: {
+            "@type": "Offer",
+            priceCurrency: "CAD",
+            availability: "https://schema.org/InStock",
+          },
+        },
+      }} />
       <Navbar />
       <main className="container mx-auto px-4 py-16 sm:py-24 relative">
         {/* Background decorations */}
@@ -327,7 +343,11 @@ export default function Pricing() {
                       <Button 
                         className={`w-full h-16 text-xl font-black rounded-3xl transition-all ${tier.popular ? 'bg-gradient-to-r from-pink-500 to-purple-500 border-0 shadow-2xl shadow-pink-500/40 hover:scale-[1.02] hover:shadow-pink-500/50' : ''}`} 
                         variant={tier.variant}
-                        onClick={() => (window.top || window).location.href = "/api/login"}
+                        onClick={() => {
+                          trackEvent("pricing_cta_click", { tier_name: tier.name, target: "creator" }, ["ga4", "meta"]);
+                          (window.top || window).location.href = "/api/login";
+                        }}
+                        data-testid={`button-pricing-creator-${tier.name.toLowerCase().replace(/\s+/g, "-")}`}
                       >
                         {tier.buttonText}
                         <ArrowRight className="ml-2 h-6 w-6" />
@@ -531,12 +551,14 @@ export default function Pricing() {
                         className={`w-full h-16 text-xl font-black rounded-3xl transition-all ${tier.popular ? 'bg-gradient-to-r from-pink-500 to-purple-500 border-0 shadow-2xl shadow-pink-500/40 hover:scale-[1.02] hover:shadow-pink-500/50' : ''}`} 
                         variant={tier.variant}
                         onClick={() => {
+                          trackEvent("pricing_cta_click", { tier_name: tier.name, target: "brand" }, ["ga4", "meta"]);
                           if (tier.name === "Campaign Starter") {
                             setLocation("/launch");
                           } else {
                             (window.top || window).location.href = "/api/login";
                           }
                         }}
+                        data-testid={`button-pricing-brand-${tier.name.toLowerCase().replace(/\s+/g, "-")}`}
                       >
                         {tier.buttonText}
                         <ArrowRight className="ml-2 h-6 w-6" />

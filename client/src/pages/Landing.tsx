@@ -14,6 +14,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { trackCTAClick } from "@/lib/analytics";
 
 const GlowOrb = ({ 
   className, 
@@ -286,7 +287,7 @@ export default function Landing() {
               transition={{ duration: 0.4, delay: 0.3, ease: "easeOut" }}
               className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 max-w-3xl text-balance font-medium leading-relaxed drop-shadow-lg px-4 sm:px-0"
             >
-              TrueNorthUGC is the premier platform for discovering authentic Canadian user-generated content creators. Find the perfect creator for your brand or showcase your talents to top companies.
+              Hire authentic Canadian UGC creators that actually convert. Or get paid brand deals that match your niche. Canada's only creator marketplace built exclusively for Canadians.
             </motion.p>
             
             {/* CTA Buttons */}
@@ -296,7 +297,7 @@ export default function Landing() {
               transition={{ duration: 0.4, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto justify-center px-4 sm:px-0"
             >
-              <Link href="/creators" className="w-full sm:w-auto group">
+              <Link href="/creators" className="w-full sm:w-auto group" onClick={() => trackCTAClick("browse_creators", "hero")}>
                 <Button 
                   size="lg" 
                   className="w-full sm:w-auto text-base sm:text-lg md:text-xl px-8 sm:px-12 py-7 sm:py-8 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-600 hover:via-purple-600 hover:to-cyan-600 shadow-2xl shadow-pink-500/30 relative overflow-hidden group border-0"
@@ -1043,14 +1044,15 @@ export default function Landing() {
                 href="/api/login"
                 target="_top"
                 variants={itemVariants}
+                onClick={() => trackCTAClick("join_as_creator", "cta_section")}
               >
-                <Button size="lg" variant="secondary" className="text-lg px-10 py-7 rounded-2xl w-full sm:w-auto shadow-xl">
+                <Button size="lg" variant="secondary" className="text-lg px-10 py-7 rounded-2xl w-full sm:w-auto shadow-xl" data-testid="button-cta-join-creator">
                   Join as Creator
                 </Button>
               </motion.a>
               <motion.div variants={itemVariants}>
-                <Link href="/pricing">
-                  <Button size="lg" variant="outline" className="text-lg px-10 py-7 rounded-2xl border-white/30 hover:bg-white/10 w-full sm:w-auto">
+                <Link href="/pricing" onClick={() => trackCTAClick("view_pricing", "cta_section")}>
+                  <Button size="lg" variant="outline" className="text-lg px-10 py-7 rounded-2xl border-white/30 hover:bg-white/10 w-full sm:w-auto" data-testid="button-cta-view-pricing">
                     View Pricing
                   </Button>
                 </Link>

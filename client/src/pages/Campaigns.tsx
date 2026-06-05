@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { SchemaMarkup } from "@/components/SchemaMarkup";
 import { CampaignCard } from "@/components/CampaignCard";
 import { useCampaigns } from "@/hooks/use-campaigns";
 import { type Campaign, type Brand } from "@shared/schema";
@@ -146,6 +147,16 @@ export default function Campaigns() {
   return (
     <PageTransition>
     <div className="min-h-screen bg-background overflow-hidden">
+      <SchemaMarkup
+        schema={{
+          type: "CollectionPage",
+          data: {
+            name: "UGC Campaigns - Find Brand Opportunities",
+            url: "https://www.truenorthugc.com/campaigns",
+            description: "Browse active UGC campaigns from Canadian brands seeking content creators.",
+          },
+        }}
+      />
       <Navbar />
       
       <main className="container mx-auto px-4 py-6 sm:py-12 relative">

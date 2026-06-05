@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { registerChatRoutes } from "./replit_integrations/chat";
+import { registerSEORoutes } from "./seo-routes";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { sendBulkEmails } from "./gmail";
@@ -13,6 +14,9 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  // SEO routes (sitemap, programmatic data)
+  registerSEORoutes(app);
+
   // Auth setup
   await setupAuth(app);
   registerAuthRoutes(app);
