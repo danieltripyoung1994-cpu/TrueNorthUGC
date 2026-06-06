@@ -1107,9 +1107,11 @@ export default function Landing() {
               <h4 className="font-bold text-lg mb-6">Platform</h4>
               <ul className="space-y-4 text-muted-foreground">
                 <li><Link href="/creators" className="hover:text-primary transition-colors animated-underline">Discover Creators</Link></li>
+                <li><Link href="/brands" className="hover:text-primary transition-colors animated-underline">Browse Brands</Link></li>
+                <li><Link href="/campaigns" className="hover:text-primary transition-colors animated-underline">Active Deals</Link></li>
                 <li><Link href="/pricing" className="hover:text-primary transition-colors animated-underline">Pricing</Link></li>
                 <li><a href="/api/login" target="_top" className="hover:text-primary transition-colors animated-underline">Join as Creator</a></li>
-                <li><a href="mailto:TrueNorthUGCcanada@gmail.com" className="hover:text-primary transition-colors animated-underline">Contact Support</a></li>
+                <li><Link href="/contact" className="hover:text-primary transition-colors animated-underline">Contact</Link></li>
               </ul>
             </div>
             <div>

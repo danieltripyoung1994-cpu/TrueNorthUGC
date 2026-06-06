@@ -10,37 +10,6 @@
       gtag('config', 'G-CEJ9WCLV23');
     </script>
 
-    <!-- Meta Pixel (async load - will be configured via env var) -->
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', 'PLACEHOLDER_PIXEL_ID');
-      fbq('track', 'PageView');
-    </script>
-    <noscript>
-      <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=PLACEHOLDER_PIXEL_ID&ev=PageView&noscript=1" alt="" />
-    </noscript>
-
-    <!-- TikTok Pixel (async load - will be configured via env var) -->
-    <script>
-      !function(w,d,t){
-        w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];
-        ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdOff","unholdOff"];
-        var s=/\btte_/.test(t)?"s":"";ttq.setAndDefer=function(t,t){t[t+1]=function(){ttq.push([t].concat(Array.prototype.slice.call(arguments,0)))}};
-        for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
-        ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js",o=d.createElement("script");o.id="ttq";o.type="text/javascript";o.async=!0;o.src=i+"?sdkid="+e+"&lib="+t;
-        var a=d.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a);};
-        ttq.load('PLACEHOLDER_TIKTOK_ID');
-        ttq.page();
-      }(window, document, 'ttq');
-    </script>
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>TrueNorthUGC - Canada's Premier UGC Creator Marketplace | Find Canadian Creators</title>
@@ -158,5 +127,49 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Meta Pixel — only loads when a real Pixel ID is configured -->
+    <script>
+      (function() {
+        var META_PIXEL_ID = 'PLACEHOLDER_PIXEL_ID';
+        if (!META_PIXEL_ID || META_PIXEL_ID === 'PLACEHOLDER_PIXEL_ID') return;
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window,document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', META_PIXEL_ID);
+        fbq('track', 'PageView');
+        var ns = document.createElement('noscript');
+        var img = document.createElement('img');
+        img.height = 1; img.width = 1; img.style.display = 'none';
+        img.src = 'https://www.facebook.com/tr?id=' + META_PIXEL_ID + '&ev=PageView&noscript=1';
+        img.alt = '';
+        ns.appendChild(img);
+        document.body.insertBefore(ns, document.body.firstChild);
+      })();
+    </script>
+
+    <!-- TikTok Pixel — only loads when a real Pixel ID is configured -->
+    <script>
+      (function() {
+        var TIKTOK_PIXEL_ID = 'PLACEHOLDER_TIKTOK_ID';
+        if (!TIKTOK_PIXEL_ID || TIKTOK_PIXEL_ID === 'PLACEHOLDER_TIKTOK_ID') return;
+        !function(w,d,t){
+          w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];
+          ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdOff","unholdOff"];
+          ttq.setAndDefer=function(t,e){t[e+1]=function(){ttq.push([e].concat(Array.prototype.slice.call(arguments,0)))}};
+          for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
+          ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js",o=d.createElement("script");
+          o.type="text/javascript";o.async=!0;o.src=i+"?sdkid="+e+"&lib="+t;
+          var a=d.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a);};
+          ttq.load(TIKTOK_PIXEL_ID);
+          ttq.page();
+        }(window,document,'ttq');
+      })();
+    </script>
   </body>
 </html>
