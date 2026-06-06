@@ -272,11 +272,11 @@ export default function Landing() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-              className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white drop-shadow-2xl leading-[1.05]"
+              className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white drop-shadow-2xl leading-[1.05]"
             >
-              Canada's <br className="hidden sm:block" />
+              Hire Canadian UGC<br className="hidden sm:block" />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 inline-block">
-                UGC Marketplace
+                Creators That Convert
               </span>
             </motion.h1>
             
@@ -287,8 +287,23 @@ export default function Landing() {
               transition={{ duration: 0.4, delay: 0.3, ease: "easeOut" }}
               className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 max-w-3xl text-balance font-medium leading-relaxed drop-shadow-lg px-4 sm:px-0"
             >
-              Hire authentic Canadian UGC creators that actually convert. Or get paid brand deals that match your niche. Canada's only creator marketplace built exclusively for Canadians.
+              Find vetted creators for TikTok, Meta ads, Shopify brands, product videos, and high-converting short-form content.
             </motion.p>
+
+            {/* Trust Bullets */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.35 }}
+              className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm sm:text-base text-white/80 px-4 sm:px-0"
+            >
+              {["Canadian creators", "Fast turnaround", "High-converting content", "Direct creator access"].map((item) => (
+                <span key={item} className="flex items-center gap-1.5">
+                  <span className="text-green-400 font-bold">✓</span>
+                  {item}
+                </span>
+              ))}
+            </motion.div>
             
             {/* CTA Buttons */}
             <motion.div 
@@ -297,31 +312,31 @@ export default function Landing() {
               transition={{ duration: 0.4, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto justify-center px-4 sm:px-0"
             >
-              <Link href="/creators" className="w-full sm:w-auto group" onClick={() => trackCTAClick("browse_creators", "hero")}>
+              <Link href="/creators" className="w-full sm:w-auto group" onClick={() => trackCTAClick("hire_creators", "hero")}>
                 <Button 
                   size="lg" 
                   className="w-full sm:w-auto text-base sm:text-lg md:text-xl px-8 sm:px-12 py-7 sm:py-8 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-600 hover:via-purple-600 hover:to-cyan-600 shadow-2xl shadow-pink-500/30 relative overflow-hidden group border-0"
-                  data-testid="button-browse-creators"
+                  data-testid="button-hire-creators"
                 >
                   <span className="relative z-10 flex items-center font-bold">
-                    Browse Creators
+                    Hire Creators
                     <Search className="h-5 w-5 sm:h-6 sm:w-6 ml-3" />
                   </span>
                 </Button>
               </Link>
-              <Link href="/pricing" className="w-full sm:w-auto group">
+              <a href="/api/login" target="_top" className="w-full sm:w-auto" onClick={() => trackCTAClick("become_creator", "hero")}>
                 <Button 
                   size="lg" 
                   variant="outline" 
                   className="w-full sm:w-auto text-base sm:text-lg md:text-xl px-8 sm:px-12 py-7 sm:py-8 rounded-2xl sm:rounded-3xl border-2 bg-white/5 hover:bg-white/15 text-white border-pink-500/50 hover:border-pink-500 backdrop-blur-xl relative overflow-hidden"
-                  data-testid="button-exclusive-offers"
+                  data-testid="button-become-creator"
                 >
                   <span className="relative z-10 flex items-center font-bold">
-                    Exclusive Offers
+                    Become a Creator
                     <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 ml-3" />
                   </span>
                 </Button>
-              </Link>
+              </a>
             </motion.div>
             
             {/* Scroll indicator */}
@@ -1098,10 +1113,13 @@ export default function Landing() {
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-lg mb-6">Legal</h4>
+              <h4 className="font-bold text-lg mb-6">Company</h4>
               <ul className="space-y-4 text-muted-foreground">
-                <li><a href="mailto:TrueNorthUGCcanada@gmail.com?subject=Privacy%20Policy%20Request" className="hover:text-primary transition-colors animated-underline">Privacy Policy</a></li>
-                <li><a href="mailto:TrueNorthUGCcanada@gmail.com?subject=Terms%20of%20Service%20Request" className="hover:text-primary transition-colors animated-underline">Terms of Service</a></li>
+                <li><Link href="/about" className="hover:text-primary transition-colors animated-underline">About Us</Link></li>
+                <li><Link href="/blog" className="hover:text-primary transition-colors animated-underline">Blog</Link></li>
+                <li><Link href="/tools/ugc-rate-calculator" className="hover:text-primary transition-colors animated-underline">Rate Calculator</Link></li>
+                <li><Link href="/privacy" className="hover:text-primary transition-colors animated-underline">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="hover:text-primary transition-colors animated-underline">Terms of Service</Link></li>
               </ul>
             </div>
           </motion.div>
