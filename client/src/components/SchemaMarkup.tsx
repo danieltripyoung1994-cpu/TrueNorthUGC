@@ -87,6 +87,18 @@ interface ProductSchema {
   };
 }
 
+interface ArticleSchema {
+  headline: string;
+  description: string;
+  url: string;
+  datePublished: string;
+  dateModified?: string;
+  author?: string;
+  publisher?: string;
+  image?: string;
+  keywords?: string[];
+}
+
 type SchemaType =
   | { type: "Organization"; data: OrganizationSchema }
   | { type: "Person"; data: PersonSchema }
@@ -95,6 +107,7 @@ type SchemaType =
   | { type: "FAQPage"; data: FAQPageSchema }
   | { type: "Review"; data: ReviewSchema }
   | { type: "Product"; data: ProductSchema }
+  | { type: "Article"; data: ArticleSchema }
   | { type: "WebSite"; data: { name: string; url: string; description?: string } }
   | { type: "Service"; data: { name: string; description: string; provider: string | { name: string; url?: string }; areaServed?: string; offers?: Record<string, any> } }
   | { type: "ContactPage"; data: { name: string; description?: string; url?: string; contactPoint?: Record<string, any> } };
@@ -252,6 +265,35 @@ function generateSchema(schema: SchemaType): object {
               ...schema.data.aggregateRating,
             }
           : undefined,
+      };
+
+    case "Article":
+      return {
+        ...base,
+        "@type": "Article",
+        headline: schema.data.headline,
+        description: schema.data.description,
+        url: schema.data.url,
+        datePublished: schema.data.datePublished,
+        dateModified: schema.data.dateModified || schema.data.datePublished,
+        author: {
+          "@type": "Organization",
+          name: schema.data.author || "TrueNorthUGC",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: schema.data.publisher || "TrueNorthUGC",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://www.truenorthugc.com/logo.png",
+          },
+        },
+        image: schema.data.image,
+        keywords: schema.data.keywords?.join(", "),
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": schema.data.url,
+        },
       };
 
     case "WebSite":
