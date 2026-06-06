@@ -63,14 +63,12 @@ export default function About() {
           data: {
             name: "TrueNorthUGC",
             url: "https://www.truenorthugc.com",
+            logo: "https://www.truenorthugc.com/logo.png",
             description: "Canada's premier UGC creator marketplace connecting brands with authentic Canadian content creators.",
-            foundingDate: "2025",
-            founder: "Daniel Young",
-            contactPoint: {
-              email: "TrueNorthUGCcanada@gmail.com",
-              phone: "1-226-220-1522",
-            },
-            address: { country: "CA" },
+            founder: { name: "Daniel Young" },
+            email: "TrueNorthUGCcanada@gmail.com",
+            telephone: "1-226-220-1522",
+            address: { addressCountry: "CA" },
           },
         }}
       />

@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { FeedbackWidget } from "@/components/FeedbackWidget";
 import { AiChatWidget } from "@/components/AiChatWidget";
+import { OnboardingModal } from "@/components/OnboardingModal";
 import logoImage from "@assets/Photoroom_20260131_221621_1769915813253.png";
 
 const Landing = lazy(() => import("@/pages/Landing"));
@@ -94,6 +95,7 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Router />
+        <OnboardingModal />
         <FeedbackWidget />
         <AiChatWidget />
       </TooltipProvider>
