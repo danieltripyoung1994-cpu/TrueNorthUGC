@@ -16,12 +16,29 @@ export function registerSEORoutes(app: Express) {
         { url: "/brands", priority: "0.8", changefreq: "daily" },
         { url: "/pricing", priority: "0.8", changefreq: "monthly" },
         { url: "/contact", priority: "0.7", changefreq: "monthly" },
-        { url: "/launch", priority: "0.6", changefreq: "monthly" },
+        { url: "/about", priority: "0.7", changefreq: "monthly" },
+        { url: "/blog", priority: "0.8", changefreq: "weekly" },
+        { url: "/tools/ugc-rate-calculator", priority: "0.9", changefreq: "monthly" },
+        { url: "/privacy", priority: "0.4", changefreq: "yearly" },
+        { url: "/terms", priority: "0.4", changefreq: "yearly" },
       ];
 
       // Programmatic SEO pages
       const cities = ["toronto", "vancouver", "montreal", "calgary", "edmonton", "ottawa", "winnipeg"];
       const niches = ["fitness", "beauty", "tech", "travel", "food", "fashion", "lifestyle", "gaming"];
+      const hirePages = ["ugc-creators", "tiktok-creators", "meta-ad-creators", "canadian-creators", "shopify-creators", "beauty-creators", "fitness-creators"];
+      const blogSlugs = [
+        "how-to-become-ugc-creator-canada",
+        "best-ugc-platform-canada",
+        "ugc-pricing-canada-2026",
+        "hire-ugc-creators-tiktok-ads",
+        "ugc-vs-influencer-marketing",
+        "canadian-ugc-creators-shopify",
+        "meta-ads-ugc-strategy-canada",
+        "ugc-content-brief-template",
+        "ugc-creator-rates-tiktok-instagram",
+        "how-to-find-ugc-creators-canada",
+      ];
       const programmaticUrls = [
         ...cities.map((city) => ({
           url: `/city/${city}`,
@@ -32,6 +49,16 @@ export function registerSEORoutes(app: Express) {
           url: `/niche/${niche}`,
           priority: "0.7",
           changefreq: "weekly",
+        })),
+        ...hirePages.map((slug) => ({
+          url: `/hire/${slug}`,
+          priority: "0.8",
+          changefreq: "weekly",
+        })),
+        ...blogSlugs.map((slug) => ({
+          url: `/blog/${slug}`,
+          priority: "0.7",
+          changefreq: "monthly",
         })),
       ];
 

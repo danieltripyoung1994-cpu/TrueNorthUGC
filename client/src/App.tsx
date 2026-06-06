@@ -17,6 +17,12 @@ const LaunchCampaign = lazy(() => import("@/pages/LaunchCampaign"));
 const Campaigns = lazy(() => import("@/pages/Campaigns"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const Brands = lazy(() => import("@/pages/Brands"));
+const About = lazy(() => import("@/pages/About"));
+const Terms = lazy(() => import("@/pages/Terms"));
+const Privacy = lazy(() => import("@/pages/Privacy"));
+const Blog = lazy(() => import("@/pages/Blog"));
+const BlogPost = lazy(() => import("@/pages/BlogPost"));
+const UGCRateCalculator = lazy(() => import("@/pages/UGCRateCalculator"));
 const ProgrammaticSEO = lazy(() => import("@/pages/ProgrammaticSEO"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
@@ -55,8 +61,11 @@ function Router() {
     <Suspense fallback={<PageLoader />}>
       <Switch>
         <Route path="/" component={Landing} />
+        {/* SEO programmatic pages — must come before /creators/:handle */}
         <Route path="/city/:slug" component={ProgrammaticSEO} />
         <Route path="/niche/:slug" component={ProgrammaticSEO} />
+        <Route path="/hire/:slug" component={ProgrammaticSEO} />
+        {/* Main pages */}
         <Route path="/directory" component={Directory} />
         <Route path="/creators" component={Directory} />
         <Route path="/creators/:handle" component={Profile} />
@@ -66,6 +75,13 @@ function Router() {
         <Route path="/campaigns" component={Campaigns} />
         <Route path="/brands" component={Brands} />
         <Route path="/contact" component={Contact} />
+        {/* New pages */}
+        <Route path="/about" component={About} />
+        <Route path="/terms" component={Terms} />
+        <Route path="/privacy" component={Privacy} />
+        <Route path="/blog" component={Blog} />
+        <Route path="/blog/:slug" component={BlogPost} />
+        <Route path="/tools/ugc-rate-calculator" component={UGCRateCalculator} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>

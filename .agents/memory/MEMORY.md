@@ -1,0 +1,3 @@
+- [SchemaMarkup FAQPage prop](seo-schema.md) — FAQPage schema requires `questions` key (not `faqs`): `data: { questions: [...] }` with `{ question, answer }` objects.
+- [ProgrammaticSEO hire pages](programmatic-seo.md) — `/hire/:slug` shares ProgrammaticSEO component; always guard with `isCity`/`isNiche`/`isHire` before accessing `cityData!`/`nicheData!`/`hireData!`.
+- [Growth plan pages](growth-plan-pages.md) — All 12-phase SEO/ROI pages implemented: /about, /terms, /privacy, /blog, /blog/:slug, /tools/ugc-rate-calculator, /hire/:slug (7 buyer intent pages), plus updated hero and footer.
