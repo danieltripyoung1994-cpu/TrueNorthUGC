@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Switch, Route } from "wouter";
+import { ClerkProvider } from "@clerk/clerk-react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -8,6 +9,8 @@ import { FeedbackWidget } from "@/components/FeedbackWidget";
 import { AiChatWidget } from "@/components/AiChatWidget";
 import { OnboardingModal } from "@/components/OnboardingModal";
 import logoImage from "@assets/Photoroom_20260131_221621_1769915813253.png";
+
+const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 const Landing = lazy(() => import("@/pages/Landing"));
 const Directory = lazy(() => import("@/pages/Directory"));
@@ -26,6 +29,10 @@ const BlogPost = lazy(() => import("@/pages/BlogPost"));
 const UGCRateCalculator = lazy(() => import("@/pages/UGCRateCalculator"));
 const ProgrammaticSEO = lazy(() => import("@/pages/ProgrammaticSEO"));
 const NotFound = lazy(() => import("@/pages/not-found"));
+
+// Clerk sign-in/sign-up pages
+const SignInPage = lazy(() => import("@/pages/SignInPage"));
+const SignUpPage = lazy(() => import("@/pages/SignUpPage"));
 
 function PageLoader() {
   return (
@@ -62,7 +69,10 @@ function Router() {
     <Suspense fallback={<PageLoader />}>
       <Switch>
         <Route path="/" component={Landing} />
-        {/* SEO programmatic pages — must come before /creators/:handle */}
+        {/* Clerk auth pages */}
+        <Route path="/sign-in" component={SignInPage} />
+        <Route path="/sign-up" component={SignUpPage} />
+        {/* SEO programmatic pages */}
         <Route path="/city/:slug" component={ProgrammaticSEO} />
         <Route path="/niche/:slug" component={ProgrammaticSEO} />
         <Route path="/hire/:slug" component={ProgrammaticSEO} />
@@ -90,16 +100,28 @@ function Router() {
 }
 
 function App() {
+  if (!CLERK_PUBLISHABLE_KEY) {
+    console.warn(
+      "Missing VITE_CLERK_PUBLISHABLE_KEY. Auth will not work. " +
+      "Get your key from https://dashboard.clerk.com and add it to .env"
+    );
+  }
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-        <OnboardingModal />
-        <FeedbackWidget />
-        <AiChatWidget />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <ClerkProvider
+      publishableKey={CLERK_PUBLISHABLE_KEY || ""}
+      afterSignOutUrl="/"
+    >
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+          <OnboardingModal />
+          <FeedbackWidget />
+          <AiChatWidget />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ClerkProvider>
   );
 }
 

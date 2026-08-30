@@ -1,47 +1,50 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type { User } from "@shared/models/auth";
+import { useUser, useClerk } from "@clerk/clerk-react";
+import { useEffect, useRef } from "react";
 
-async function fetchUser(): Promise<User | null> {
-  const response = await fetch("/api/auth/user", {
-    credentials: "include",
-  });
-
-  if (response.status === 401) {
-    return null;
-  }
-
-  if (!response.ok) {
-    throw new Error(`${response.status}: ${response.statusText}`);
-  }
-
-  return response.json();
-}
-
-async function logout(): Promise<void> {
-  window.location.href = "/api/logout";
-}
-
+/**
+ * Clerk-backed auth hook -- drop-in replacement for the old Replit OIDC version.
+ * Returns the same shape so consuming components don't need changes.
+ */
 export function useAuth() {
-  const queryClient = useQueryClient();
-  const { data: user, isLoading } = useQuery<User | null>({
-    queryKey: ["/api/auth/user"],
-    queryFn: fetchUser,
-    retry: false,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  });
+  const { isLoaded, isSignedIn, user: clerkUser } = useUser();
+  const { signOut } = useClerk();
+  const hasSynced = useRef(false);
 
-  const logoutMutation = useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
-      queryClient.setQueryData(["/api/auth/user"], null);
-    },
-  });
+  // Sync user profile to the backend DB on first sign-in
+  useEffect(() => {
+    if (!isSignedIn || !clerkUser || hasSynced.current) return;
+    hasSynced.current = true;
+
+    fetch("/api/auth/sync", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        firstName: clerkUser.firstName,
+        lastName: clerkUser.lastName,
+        email: clerkUser.primaryEmailAddress?.emailAddress ?? null,
+        profileImageUrl: clerkUser.imageUrl,
+      }),
+    }).catch((err) => console.warn("User sync failed:", err));
+  }, [isSignedIn, clerkUser]);
+
+  const mappedUser = clerkUser
+    ? {
+        id: clerkUser.id,
+        email: clerkUser.primaryEmailAddress?.emailAddress ?? null,
+        firstName: clerkUser.firstName ?? null,
+        lastName: clerkUser.lastName ?? null,
+        profileImageUrl: clerkUser.imageUrl ?? null,
+        createdAt: clerkUser.createdAt ? new Date(clerkUser.createdAt) : null,
+        updatedAt: clerkUser.updatedAt ? new Date(clerkUser.updatedAt) : null,
+      }
+    : null;
 
   return {
-    user,
-    isLoading,
-    isAuthenticated: !!user,
-    logout: logoutMutation.mutate,
-    isLoggingOut: logoutMutation.isPending,
+    user: mappedUser,
+    isLoading: !isLoaded,
+    isAuthenticated: !!isSignedIn,
+    logout: () => signOut({ redirectUrl: "/" }),
+    isLoggingOut: false,
   };
 }
