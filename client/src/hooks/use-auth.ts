@@ -2,7 +2,7 @@ import { useUser, useClerk } from "@clerk/clerk-react";
 import { useEffect, useRef } from "react";
 
 /**
- * Clerk-backed auth hook -- drop-in replacement for the old Replit OIDC version.
+ * Clerk-backed auth hook — drop-in replacement for the old Replit OIDC version.
  * Returns the same shape so consuming components don't need changes.
  */
 export function useAuth() {
