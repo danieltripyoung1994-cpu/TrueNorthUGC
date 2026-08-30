@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import compression from "compression";
+import { clerkMiddleware } from "./clerk-auth";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
@@ -28,6 +29,9 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: false }));
+
+// Clerk authentication middleware — parses session tokens on every request
+app.use(clerkMiddleware());
 
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
