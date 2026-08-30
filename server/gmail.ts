@@ -1,96 +1,89 @@
-// Gmail Integration - Connected via Replit Gmail connector
-import { google } from 'googleapis';
+import { google } from "googleapis";
 
-let connectionSettings: any;
+/**
+ * Gmail service using standard Google OAuth2 credentials.
+ *
+ * Required env vars:
+ *   GMAIL_CLIENT_ID        - Google OAuth client ID
+ *   GMAIL_CLIENT_SECRET    - Google OAuth client secret
+ *   GMAIL_REFRESH_TOKEN    - OAuth2 refresh token (from consent flow)
+ *   GMAIL_SENDER_EMAIL     - "From" address for outgoing mail
+ */
 
-async function getAccessToken() {
-  if (connectionSettings && connectionSettings.settings.expires_at && new Date(connectionSettings.settings.expires_at).getTime() > Date.now()) {
-    return connectionSettings.settings.access_token;
+function getOAuth2Client() {
+  const clientId = process.env.GMAIL_CLIENT_ID;
+  const clientSecret = process.env.GMAIL_CLIENT_SECRET;
+  const refreshToken = process.env.GMAIL_REFRESH_TOKEN;
+
+  if (!clientId || !clientSecret || !refreshToken) {
+    throw new Error(
+      "Gmail OAuth credentials not configured. " +
+        "Set GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, and GMAIL_REFRESH_TOKEN env vars."
+    );
   }
-  
-  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
-  const xReplitToken = process.env.REPL_IDENTITY 
-    ? 'repl ' + process.env.REPL_IDENTITY 
-    : process.env.WEB_REPL_RENEWAL 
-    ? 'depl ' + process.env.WEB_REPL_RENEWAL 
-    : null;
 
-  if (!xReplitToken) {
-    throw new Error('X_REPLIT_TOKEN not found for repl/depl');
-  }
-
-  connectionSettings = await fetch(
-    'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=google-mail',
-    {
-      headers: {
-        'Accept': 'application/json',
-        'X_REPLIT_TOKEN': xReplitToken
-      }
-    }
-  ).then(res => res.json()).then(data => data.items?.[0]);
-
-  const accessToken = connectionSettings?.settings?.access_token || connectionSettings.settings?.oauth?.credentials?.access_token;
-
-  if (!connectionSettings || !accessToken) {
-    throw new Error('Gmail not connected');
-  }
-  return accessToken;
+  const oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
+  oauth2Client.setCredentials({ refresh_token: refreshToken });
+  return oauth2Client;
 }
 
-// WARNING: Never cache this client.
-// Access tokens expire, so a new client must be created each time.
-// Always call this function again to get a fresh client.
-export async function getUncachableGmailClient() {
-  const accessToken = await getAccessToken();
-
-  const oauth2Client = new google.auth.OAuth2();
-  oauth2Client.setCredentials({
-    access_token: accessToken
-  });
-
-  return google.gmail({ version: 'v1', auth: oauth2Client });
-}
-
-// Helper function to send an email
-export async function sendEmail(to: string, subject: string, body: string) {
-  const gmail = await getUncachableGmailClient();
-  
-  const message = [
+function buildRawEmail(to: string, subject: string, htmlBody: string): string {
+  const senderEmail = process.env.GMAIL_SENDER_EMAIL || "noreply@truenorthugc.com";
+  const boundary = "boundary_" + Date.now();
+  const lines = [
+    `From: TrueNorthUGC <${senderEmail}>`,
     `To: ${to}`,
     `Subject: ${subject}`,
-    'Content-Type: text/html; charset=utf-8',
-    '',
-    body
-  ].join('\n');
-
-  const encodedMessage = Buffer.from(message)
-    .toString('base64')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
-
-  const result = await gmail.users.messages.send({
-    userId: 'me',
-    requestBody: {
-      raw: encodedMessage
-    }
-  });
-
-  return result.data;
+    `MIME-Version: 1.0`,
+    `Content-Type: multipart/alternative; boundary="${boundary}"`,
+    ``,
+    `--${boundary}`,
+    `Content-Type: text/html; charset="UTF-8"`,
+    `Content-Transfer-Encoding: 7bit`,
+    ``,
+    htmlBody,
+    ``,
+    `--${boundary}--`,
+  ];
+  const raw = lines.join("\r\n");
+  return Buffer.from(raw)
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
 }
 
-// Send bulk emails to multiple recipients
-export async function sendBulkEmails(recipients: string[], subject: string, body: string) {
-  const results: { email: string; success: boolean; error?: string }[] = [];
-  
-  for (const email of recipients) {
-    try {
-      await sendEmail(email, subject, body);
-      results.push({ email, success: true });
-    } catch (error: any) {
-      results.push({ email, success: false, error: error.message });
-    }
+export async function sendEmail(
+  to: string,
+  subject: string,
+  htmlBody: string
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  try {
+    const auth = getOAuth2Client();
+    const gmail = google.gmail({ version: "v1", auth });
+    const raw = buildRawEmail(to, subject, htmlBody);
+    const result = await gmail.users.messages.send({
+      userId: "me",
+      requestBody: { raw },
+    });
+    return { success: true, messageId: result.data.id ?? undefined };
+  } catch (error: any) {
+    console.error("Error sending email:", error);
+    return { success: false, error: error.message };
   }
-  
+}
+
+export async function sendBulkEmails(
+  emails: string[],
+  subject: string,
+  htmlBody: string
+): Promise<Array<{ email: string; success: boolean; messageId?: string; error?: string }>> {
+  const results = [];
+  for (const email of emails) {
+    const result = await sendEmail(email, subject, htmlBody);
+    results.push({ email, ...result });
+    // Small delay to avoid rate limits
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
   return results;
 }
